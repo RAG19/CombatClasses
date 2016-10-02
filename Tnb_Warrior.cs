@@ -289,6 +289,7 @@ public class WarriorArms
     public WarriorArms()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = WarriorArmsSettings.GetSettings();
         Main.DumpCurrentSettings<WarriorArmsSettings>(MySettings);
@@ -1148,6 +1149,7 @@ public class WarriorProtection
     public WarriorProtection()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = WarriorProtectionSettings.GetSettings();
         Main.DumpCurrentSettings<WarriorProtectionSettings>(MySettings);
@@ -1991,6 +1993,7 @@ public class WarriorFury
     public WarriorFury()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = WarriorFurySettings.GetSettings();
         Main.DumpCurrentSettings<WarriorFurySettings>(MySettings);

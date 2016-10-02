@@ -282,6 +282,7 @@ public class DeathknightBlood
     public DeathknightBlood()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = DeathknightBloodSettings.GetSettings();
         Main.DumpCurrentSettings<DeathknightBloodSettings>(MySettings);
@@ -880,6 +881,7 @@ public class DeathknightFrost
     public DeathknightFrost()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = DeathknightFrostSettings.GetSettings();
         Main.DumpCurrentSettings<DeathknightFrostSettings>(MySettings);
@@ -1391,6 +1393,7 @@ public class DeathknightUnholy
     public DeathknightUnholy()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = DeathknightUnholySettings.GetSettings();
         Main.DumpCurrentSettings<DeathknightUnholySettings>(MySettings);

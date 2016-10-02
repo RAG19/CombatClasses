@@ -289,6 +289,7 @@ public class RogueAssassination
     public RogueAssassination()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = RogueAssassinationSettings.GetSettings();
         Main.DumpCurrentSettings<RogueAssassinationSettings>(MySettings);
@@ -953,6 +954,7 @@ public class RogueOutlaw
     public RogueOutlaw()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = RogueOutlawSettings.GetSettings();
         Main.DumpCurrentSettings<RogueOutlawSettings>(MySettings);
@@ -1517,6 +1519,7 @@ public class RogueSubtlety
     public RogueSubtlety()
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
+        Main.InternalAggroRange = Main.InternalRange;
         Main.InternalLightHealingSpell = null;
         MySettings = RogueSubtletySettings.GetSettings();
         Main.DumpCurrentSettings<RogueSubtletySettings>(MySettings);
