@@ -5,6 +5,7 @@
 !.gitignore
 !script.pl
 !template.latex
+!*.cs
 
 # ...even if they are in subdirectories
 !*/
