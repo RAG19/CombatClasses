@@ -828,7 +828,7 @@ public class DeathknightFrost
 
     private readonly Spell DarkSuccor = new Spell(101568);
     private readonly Spell KillingMachine = new Spell(51128);
-    private readonly Spell Rime = new Spell(59057);
+    private readonly Spell Rime = new Spell(59052);
     private readonly Spell Razorice = new Spell(51714);
     private readonly Spell RuneofRazorice = new Spell(53343);
 
