@@ -1412,7 +1412,7 @@ public class RogueOutlaw
 
         public static RogueOutlawSettings GetSettings()
         {
-            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Rogue_Combat.xml";
+            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Rogue_Outlaw.xml";
             if (File.Exists(currentSettingsFile))
             {
                 return
