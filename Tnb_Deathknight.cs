@@ -836,7 +836,7 @@ public class DeathknightFrost
 
     #region Dots
 
-    private readonly Spell FrostFever = new Spell(55095);
+    private readonly Spell FrostFever = new Spell("Frost Fever");
 
     #endregion
 
@@ -1098,7 +1098,7 @@ public class DeathknightFrost
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
             if (MySettings.UseHowlingBlast && HowlingBlast.IsSpellUsable && HowlingBlast.IsHostileDistanceGood &&
-                ObjectManager.Target.UnitAura(FrostFever.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 1000)
+                ObjectManager.Target.UnitAura(FrostFever.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 1000)
             {
                 HowlingBlast.Cast();
                 return;
