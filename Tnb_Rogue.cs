@@ -1231,8 +1231,8 @@ public class RogueOutlaw
                 ObjectManager.Me.Energy >= 25 &&
                 //you have max combo points and
                 GetFreeComboPoints() == 0 &&
-                //you don't have the True Bearing Buff or less then 2 different Roll the Bones Buffs
-                (!TrueBearing.HaveBuff || GetRolltheBonesBuffs() < 2))
+                //you don't have the True Bearing Buff and less then 2 different Roll the Bones Buffs
+                !TrueBearing.HaveBuff && GetRolltheBonesBuffs() < 2)
             {
                 RolltheBones.Cast();
                 return;
