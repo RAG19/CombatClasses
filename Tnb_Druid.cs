@@ -2533,7 +2533,7 @@ public class DruidGuardian
             }
             //Increase Armor for Rage
             if ((ObjectManager.Me.HealthPercent < MySettings.UseIronfurBelowHealthPercentage ||
-                ObjectManager.Me.Rage < MySettings.UseIronfurAboveRagePercentage) &&
+                ObjectManager.Me.Rage > MySettings.UseIronfurAboveRagePercentage) &&
                 Ironfur.IsSpellUsable && ObjectManager.Me.Rage >= 45)
             {
                 Ironfur.Cast();
