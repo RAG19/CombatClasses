@@ -2718,7 +2718,7 @@ public class DruidGuardian
         /* Defensive Cooldowns */
         public int UseBarkskinBelowPercentage = 75;
         public int UseIronfurBelowHealthPercentage = 0;
-        public int UseIronfurAboveRagePercentage = 0;
+        public int UseIronfurAboveRagePercentage = 100;
         public int UseMarkofUrsolBelowPercentage = 0;
         //public bool UseEntanglingRoots = true;
         //public bool UseMassEntanglement = true;
