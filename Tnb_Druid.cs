@@ -382,11 +382,10 @@ public class DruidBalance
             else
             {
                 //Self Heal for Damage Dealer
-                if (nManager.Products.Products.ProductName == "Damage Dealer" &&
-                    HealingTouch.IsSpellUsable && ObjectManager.Me.HealthPercent < 90 &&
-                    ObjectManager.Target.Guid == ObjectManager.Me.Guid)
+                if (nManager.Products.Products.ProductName == "Damage Dealer" && Main.InternalLightHealingSpell.IsSpellUsable &&
+                    ObjectManager.Me.HealthPercent < 90 && ObjectManager.Target.Guid == ObjectManager.Me.Guid)
                 {
-                    HealingTouch.CastOnSelf();
+                    Main.InternalLightHealingSpell.CastOnSelf();
                     return;
                 }
             }
@@ -1026,11 +1025,10 @@ public class DruidFeral
             else
             {
                 //Self Heal for Damage Dealer
-                if (nManager.Products.Products.ProductName == "Damage Dealer" &&
-                    HealingTouch.IsSpellUsable && ObjectManager.Me.HealthPercent < 90 &&
-                    ObjectManager.Target.Guid == ObjectManager.Me.Guid)
+                if (nManager.Products.Products.ProductName == "Damage Dealer" && Main.InternalLightHealingSpell.IsSpellUsable &&
+                    ObjectManager.Me.HealthPercent < 90 && ObjectManager.Target.Guid == ObjectManager.Me.Guid)
                 {
-                    HealingTouch.CastOnSelf();
+                    Main.InternalLightHealingSpell.CastOnSelf();
                     return;
                 }
             }
@@ -1095,8 +1093,8 @@ public class DruidFeral
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            //Cast Healing Touch when it will expire shortly or
-            if (ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).AuraTimeLeftInMs < 1000 ||
+            //Cast Healing Touch when it would expire before you could use it or
+            if (ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).AuraTimeLeftInMs < 2000 ||
                 //you have less than 10% Health
                 ObjectManager.Me.Health < 10)
             {
@@ -1320,7 +1318,7 @@ public class DruidFeral
                 }
             }
             //4. Maintain Thrash when
-            if (MySettings.UseThrash && Thrash.IsSpellUsable &&
+            if (MySettings.UseThrash && Thrash.IsSpellUsable && ObjectManager.Me.Energy >= 50 &&
                 //it has less than 5 seconds remaining and
                 ObjectManager.Target.UnitAura(106830, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
                 //there are multiple targets in range.
@@ -2416,11 +2414,10 @@ public class DruidGuardian
             else
             {
                 //Self Heal for Damage Dealer
-                if (nManager.Products.Products.ProductName == "Damage Dealer" &&
-                    HealingTouch.IsSpellUsable && ObjectManager.Me.HealthPercent < 90 &&
-                    ObjectManager.Target.Guid == ObjectManager.Me.Guid)
+                if (nManager.Products.Products.ProductName == "Damage Dealer" && Main.InternalLightHealingSpell.IsSpellUsable &&
+                    ObjectManager.Me.HealthPercent < 90 && ObjectManager.Target.Guid == ObjectManager.Me.Guid)
                 {
-                    HealingTouch.CastOnSelf();
+                    Main.InternalLightHealingSpell.CastOnSelf();
                     return;
                 }
             }
@@ -2455,8 +2452,9 @@ public class DruidGuardian
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
             //Frenzied Regeneration
-            if (FrenziedRegeneration.IsSpellUsable && DefensiveTimer.IsReady && (ObjectManager.Me.HealthPercent < MySettings.UseFrenziedRegenerationBelowPercentage ||
-                                                                                 (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
+            if (FrenziedRegeneration.IsSpellUsable && DefensiveTimer.IsReady && ObjectManager.Me.Rage >= 10 &&
+                (ObjectManager.Me.HealthPercent < MySettings.UseFrenziedRegenerationBelowPercentage ||
+                (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
             {
                 FrenziedRegeneration.CastOnSelf();
             }
@@ -2526,17 +2524,19 @@ public class DruidGuardian
                 }
             }
             //Mitigate Magic Damage for Rage
-            if (MarkofUrsol.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseMarkofUrsolBelowPercentage &&
+            if (ObjectManager.Me.HealthPercent < MySettings.UseMarkofUrsolBelowPercentage &&
+                ObjectManager.Me.Rage >= 45 && MarkofUrsol.IsSpellUsable &&
                 !MarkofUrsol.HaveBuff)
             {
                 MarkofUrsol.Cast();
                 DefensiveTimer = new Timer(1000 * 6);
             }
             //Increase Armor for Rage
-            if (Ironfur.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseIronfurBelowPercentage)
+            if ((ObjectManager.Me.HealthPercent < MySettings.UseIronfurBelowHealthPercentage ||
+                ObjectManager.Me.Rage < MySettings.UseIronfurAboveRagePercentage) &&
+                Ironfur.IsSpellUsable && ObjectManager.Me.Rage >= 45)
             {
                 Ironfur.Cast();
-                DefensiveTimer = new Timer(1000 * 6);
             }
             return false;
         }
@@ -2619,7 +2619,7 @@ public class DruidGuardian
 
             //Growl
             if (MySettings.UseGrowl && Growl.IsSpellUsable && Growl.IsHostileDistanceGood &&
-                ObjectManager.Target.Target != ObjectManager.Me.Guid)
+               !ObjectManager.Target.IsTargetingMe)
             {
                 Growl.Cast();
                 return;
@@ -2650,7 +2650,8 @@ public class DruidGuardian
                 Mangle.Cast();
                 return;
             }
-            if (MySettings.UseThrash && Thrash.IsSpellUsable && Thrash.IsHostileDistanceGood)
+            if (MySettings.UseThrash && Thrash.IsSpellUsable &&
+                ObjectManager.Me.Energy >= 50 && Thrash.IsHostileDistanceGood)
             {
                 Thrash.Cast();
                 return;
@@ -2666,7 +2667,8 @@ public class DruidGuardian
                 Pulverize.Cast();
                 return;
             }
-            if (MySettings.UseMaul && Maul.IsSpellUsable && Maul.IsHostileDistanceGood && ObjectManager.Me.RagePercentage > 90)
+            if (MySettings.UseMaul && Maul.IsSpellUsable &&
+                ObjectManager.Me.RagePercentage > 90 && Maul.IsHostileDistanceGood)
             {
                 Maul.Cast();
                 return;
@@ -2715,7 +2717,8 @@ public class DruidGuardian
 
         /* Defensive Cooldowns */
         public int UseBarkskinBelowPercentage = 75;
-        public int UseIronfurBelowPercentage = 0;
+        public int UseIronfurBelowHealthPercentage = 0;
+        public int UseIronfurAboveRagePercentage = 0;
         public int UseMarkofUrsolBelowPercentage = 0;
         //public bool UseEntanglingRoots = true;
         //public bool UseMassEntanglement = true;
@@ -2764,7 +2767,8 @@ public class DruidGuardian
             AddControlInWinForm("Use Lunar Beam", "UseLunarBeam", "Offensive Cooldowns");
             /* Defensive Cooldowns */
             AddControlInWinForm("Use Barkskin", "UseBarkskinBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
-            AddControlInWinForm("Use Ironfur", "UseIronfurBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
+            AddControlInWinForm("Use Ironfur", "UseIronfurBelowHealthPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
+            AddControlInWinForm("Use Ironfur", "UseIronfurAboveRagePercentage", "Defensive Cooldowns", "AbovePercentage", "Rage");
             AddControlInWinForm("Use Mark of Ursol", "UseMarkofUrsolBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
             AddControlInWinForm("Use Mighty Bash", "UseMightyBashBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
             AddControlInWinForm("Use SurvivalInstincts", "UseSurvivalInstinctsBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
