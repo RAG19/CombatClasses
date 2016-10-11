@@ -70,23 +70,20 @@ public class Main : ICombatClass
             if (!InternalLoop)
                 InternalLoop = true;
             Logging.WriteFight("Loading TnB API");
-            Logging.NewFile();
+            //Logging.NewFile();
 
-            /**
+            /**/
             ShowMethods(typeof(WoWUnit));
             ShowMethods(typeof(WoWPlayer));
             ShowMethods(typeof(Spell));
-            ShowMethods(typeof(nManager));
             ShowMethods(typeof(ObjectManager));
             ShowMethods(typeof(CombatClass));
             ShowMethods(typeof(HealerClass));
             ShowMethods(typeof(Fight));
             ShowMethods(typeof(MountTask));
             ShowMethods(typeof(Logging));
-            ShowMethods(typeof(Timer));
             ShowMethods(typeof(Usefuls));
             /**/
-            ShowMethods(typeof(Usefuls));
 
             Logging.NewFile();
             Dispose();

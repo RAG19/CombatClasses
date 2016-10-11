@@ -477,7 +477,7 @@ public class DruidBalance
 
             //Offensive Spells
             if (MySettings.UseStarfall && Starfall.IsSpellUsable && Starfall.IsHostileDistanceGood &&
-                ObjectManager.GetUnitInSpellRange(15f) > 2)
+                ObjectManager.Target.GetUnitInSpellRange(15f) > 2)
             {
                 Starfall.CastAtPosition(ObjectManager.Target.Position);
                 return;
@@ -1065,10 +1065,10 @@ public class DruidFeral
             //1. Priority: Rake
             if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood && ObjectManager.Target.IsStunnable)
             {
-                Logging.Write("CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach);
-                Logging.Write("Target Distance: " + ObjectManager.Target.GetDistance);
-                Logging.Write("Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
                 Logging.Write("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood);
+                Logging.Write("Target Distance: " + ObjectManager.Target.GetDistance);
+                Logging.Write("CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach);
+                Logging.Write("Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
                 Rake.Cast();
                 return;
             }
@@ -1277,19 +1277,17 @@ public class DruidFeral
                 //Rip is active and has less than 8 seconds remaining
                 ObjectManager.Target.AuraIsActiveAndExpireInLessThanMs(Rip.Id, 8000))
             {
-                if (CastHealingTouch())
+                if (CastHealingTouch() || ObjectManager.Me.Energy < 25)
                     return;
                 FerociousBite.Cast();
                 return;
             }
-            //2. Maintain Savage Roar when
-            if (MySettings.UseSavageRoar && SavageRoar.IsSpellUsable &&
-                //you don't have the Buff or
-                (!SavageRoar.HaveBuff ||
+            //2. Maintain Savage Roar when you don't have the Buff or
+            if (MySettings.UseSavageRoar && SavageRoar.IsSpellUsable && (!SavageRoar.HaveBuff ||
                 //you have max Combo Points and less than 8 seconds remaining.
                 (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
             {
-                if (CastHealingTouch())
+                if (CastHealingTouch() || ObjectManager.Me.Energy < 40)
                     return;
                 SavageRoar.Cast();
                 return;
@@ -1318,12 +1316,14 @@ public class DruidFeral
                 }
             }
             //4. Maintain Thrash when
-            if (MySettings.UseThrash && Thrash.IsSpellUsable && ObjectManager.Me.Energy >= 50 &&
+            if (MySettings.UseThrash && Thrash.IsSpellUsable &&
                 //it has less than 5 seconds remaining and
                 ObjectManager.Target.UnitAura(106830, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
                 //there are multiple targets in range.
                 ObjectManager.GetUnitInSpellRange(Thrash.MaxRangeHostile) > 1)
             {
+                if (ObjectManager.Me.Energy < 50)
+                    return;
                 Thrash.Cast();
                 return;
             }
@@ -1335,6 +1335,8 @@ public class DruidFeral
                 (ObjectManager.Me.ComboPoint < ObjectManager.Me.MaxComboPoint &&
                 ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
+                if (ObjectManager.Me.Energy < 35)
+                    return;
                 Rake.Cast();
                 return;
             }
@@ -1345,70 +1347,76 @@ public class DruidFeral
                 //it has less than 5 seconds remaining.
                 ObjectManager.Target.UnitAura(Moonfire.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000)
             {
+                if (ObjectManager.Me.Energy < 30)
+                    return;
                 Moonfire.Cast();
                 return;
             }
-            //7. Generate Combo Points when you have less than 5
-            if (ObjectManager.Me.ComboPoint < 5)
+            //Spend Combo Points on Finishers
+            if (ObjectManager.Me.ComboPoint >= 5)
             {
-                //7a. Cast Brutal Slash when (max Charges OR multiple Enemies)
-                if (MySettings.UseBrutalSlash && BrutalSlash.IsSpellUsable &&
-                    //you have 3 charges or
-                    (BrutalSlash.GetSpellCharges == 3 ||
-                     //there are 3 or more Targets in range.
-                     ObjectManager.GetUnitInSpellRange(BrutalSlash.MaxRangeHostile) >= 3))
-                {
-                    BrutalSlash.Cast();
-                    return;
-                }
-                //7b. Cast Swipe when
-                if (MySettings.UseSwipe && Swipe.IsSpellUsable && Swipe.IsHostileDistanceGood &&
-                    //there are 3 or more Targets in range.
-                    ObjectManager.GetUnitInSpellRange(BrutalSlash.MaxRangeHostile) >= 3)
-                {
-                    Swipe.Cast();
-                    return;
-                }
-                //7c. Cast Shred
-                if (MySettings.UseShred && Shred.IsSpellUsable && Shred.IsHostileDistanceGood)
-                {
-                    Shred.Cast();
-                    return;
-                }
-            }
-            //8. Spend Combo Points when you have 5
-            else
-            {
-                //8a. Apply/Refresh Rip when
+                //7. Apply/Refresh Rip when
                 if (MySettings.UseRip && Rip.IsSpellUsable && Rip.IsHostileDistanceGood &&
                     //you have less than 8 seconds remaining or
                     (ObjectManager.Target.UnitAura(1079, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 ||
                      //you have Blood Talons Buff.
                      BloodtalonsBuff.HaveBuff))
                 {
-                    if (CastHealingTouch())
+                    if (CastHealingTouch() || ObjectManager.Me.Energy < 30)
                         return;
                     Rip.Cast();
                     return;
                 }
-                //8b. Cast Ferocious Bite when
+                //8. Cast Ferocious Bite when
                 if (MySettings.UseFerociousBite && FerociousBite.IsSpellUsable && FerociousBite.IsHostileDistanceGood &&
                     //your Savage Roar Buff has more than 10 seconds remaining (if talented) and
                     (!SavageRoar.KnownSpell || ObjectManager.Target.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000) &&
                     //your Rip Buff has more than 10 seconds remaining.
                     ObjectManager.Target.UnitAura(Rip.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000)
                 {
-                    if (CastHealingTouch())
+                    if (CastHealingTouch() || ObjectManager.Me.Energy < 25)
                         return;
                     FerociousBite.Cast();
                     return;
                 }
             }
-            //9. Cast Moonfire when
+            //9. Cast Brutal Slash when (max Charges OR multiple Enemies)
+            if (MySettings.UseBrutalSlash && BrutalSlash.IsSpellUsable &&
+                //you have 3 charges or
+                (BrutalSlash.GetSpellCharges == 3 ||
+                 //there are 3 or more Targets in range.
+                 ObjectManager.GetUnitInSpellRange(BrutalSlash.MaxRangeHostile) >= 3))
+            {
+                if (ObjectManager.Me.Energy < 20)
+                    return;
+                BrutalSlash.Cast();
+                return;
+            }
+            //10. Cast Swipe when
+            if (MySettings.UseSwipe && Swipe.IsSpellUsable && Swipe.IsHostileDistanceGood &&
+                //there are 3 or more Targets in range.
+                ObjectManager.GetUnitInSpellRange(BrutalSlash.MaxRangeHostile) >= 3)
+            {
+                if (ObjectManager.Me.Energy < 45)
+                    return;
+                Swipe.Cast();
+                return;
+            }
+            //11. Cast Shred
+            if (MySettings.UseShred && Shred.IsSpellUsable && Shred.IsHostileDistanceGood)
+            {
+                if (ObjectManager.Me.Energy < 40)
+                    return;
+                Shred.Cast();
+                return;
+            }
+            //12. Cast Moonfire when
             if (MySettings.UseMoonfire && Moonfire.IsSpellUsable && Moonfire.IsHostileDistanceGood &&
                 //you have the Lunar Inspiration Talent or have it forced in the Settings
-                (LunarInspiration.HaveBuff) || MySettings.UseMoonfireWihtoutTalent)
+                (LunarInspiration.HaveBuff || MySettings.UseMoonfireWihtoutTalent))
             {
+                if (ObjectManager.Me.Energy < 30)
+                    return;
                 Moonfire.Cast();
                 return;
             }
@@ -2266,7 +2274,7 @@ public class DruidGuardian
 
     private readonly Spell BearForm = new Spell("Bear Form");
     private readonly Spell CatForm = new Spell("Cat Form");
-    private readonly Spell GalacticGuardian = new Spell(213708);
+    private readonly Spell GalacticGuardianBuff = new Spell(213708);
 
     #endregion
 
@@ -2432,15 +2440,11 @@ public class DruidGuardian
             Logging.WriteFight("Combat:");
             CombatMode = true;
         }
-        //All Ranges
         Heal();
-        if (Defensive())
+        if (AgroManagement() || Defensive() || Shapeshift() || Offensive())
             return;
-        if (ObjectManager.Target.IsAlive && Shapeshift())
-            return;
-        AgroManagement();
-        BurstBuffs();
-        GCDCycle();
+        ;
+        Rotation();
     }
 
     private void Heal()
@@ -2472,6 +2476,34 @@ public class DruidGuardian
                     Rejuvenation.CastOnSelf();
                 }
             }
+        }
+        finally
+        {
+            Memory.WowMemory.GameFrameUnLock();
+        }
+    }
+
+    private bool AgroManagement()
+    {
+        Usefuls.SleepGlobalCooldown();
+
+        try
+        {
+            Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
+
+            //Cast Growl when you are in a party and the target of your target is a low health player
+            if (MySettings.UseGrowlBelowToTPercentage > 0 && Growl.IsSpellUsable &&
+                Growl.IsHostileDistanceGood)
+            {
+                WoWObject obj = ObjectManager.GetObjectByGuid(ObjectManager.Target.Target);
+                if (obj.IsValid && obj.Type == WoWObjectType.Player &&
+                    new WoWPlayer(obj.GetBaseAddress).HealthPercent < MySettings.UseGrowlBelowToTPercentage)
+                {
+                    Growl.Cast();
+                    return false;
+                }
+            }
+            return false;
         }
         finally
         {
@@ -2574,7 +2606,7 @@ public class DruidGuardian
         }
     }
 
-    private void BurstBuffs()
+    private bool Offensive()
     {
         Usefuls.SleepGlobalCooldown();
 
@@ -2602,6 +2634,7 @@ public class DruidGuardian
                 BristlingFur.Cast();
                 DefensiveTimer = new Timer(1000 * 8);
             }
+            return false;
         }
         finally
         {
@@ -2609,73 +2642,63 @@ public class DruidGuardian
         }
     }
 
-    private void AgroManagement()
-    {
-        Usefuls.SleepGlobalCooldown();
-
-        try
-        {
-            Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-
-            //Growl
-            if (MySettings.UseGrowl && Growl.IsSpellUsable && Growl.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
-            {
-                Growl.Cast();
-                return;
-            }
-        }
-        finally
-        {
-            Memory.WowMemory.GameFrameUnLock();
-        }
-    }
-
-    private void GCDCycle()
+    private void Rotation()
     {
         Usefuls.SleepGlobalCooldown();
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-
+            
+            //Use Moonfire if you have a Galactic Guardian proc (if you have chosen this talent).
             if (MySettings.UseMoonfire && Moonfire.IsSpellUsable && Moonfire.IsHostileDistanceGood &&
-                ObjectManager.Me.UnitAura(GalacticGuardian.Id).IsValid)
+                ObjectManager.Me.UnitAura(GalacticGuardianBuff.Id).IsValid)
             {
-                Logging.Write("GalacticGuardian.HaveBuff");
                 Moonfire.Cast();
                 return;
             }
+            //Use Thrash on cooldown when you have multiple targets.
+            if (MySettings.UseThrash && Thrash.IsSpellUsable && ObjectManager.Me.GetUnitInSpellRange(8f) > 1)
+            {
+                Thrash.Cast();
+                return;
+            }
+            //Use Mangle on cooldown.
             if (MySettings.UseMangle && Mangle.IsSpellUsable && Mangle.IsHostileDistanceGood)
             {
                 Mangle.Cast();
                 return;
             }
-            if (MySettings.UseThrash && Thrash.IsSpellUsable &&
-                ObjectManager.Me.Energy >= 50 && Thrash.IsHostileDistanceGood)
+            //Use Thrash on cooldown.
+            if (MySettings.UseThrash && Thrash.IsSpellUsable && Thrash.IsHostileDistanceGood)
             {
                 Thrash.Cast();
                 return;
             }
+            //Maintain Moonfire on the target.
             if (MySettings.UseMoonfire && Moonfire.IsSpellUsable && Moonfire.IsHostileDistanceGood &&
-                ObjectManager.Target.UnitAura(164812, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000)
+                ObjectManager.Target.UnitAura(Moonfire.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000)
             {
                 Moonfire.Cast();
                 return;
             }
-            if (MySettings.UsePulverize && Thrash.TargetBuffStack >= 2 && Pulverize.IsSpellUsable && Pulverize.IsHostileDistanceGood)
+            //Cast Pulverize when possible.
+            if (MySettings.UsePulverize && Thrash.TargetBuffStack >= 2 &&
+                Pulverize.IsSpellUsable && Pulverize.IsHostileDistanceGood)
             {
                 Pulverize.Cast();
                 return;
             }
+            //Use Swipe.
+            if (MySettings.UseSwipe && Swipe.IsSpellUsable && Swipe.IsHostileDistanceGood)
+            {
+                Swipe.Cast();
+                return;
+            }
+            //Use Maul when you are close to maximum Rage.
             if (MySettings.UseMaul && Maul.IsSpellUsable &&
                 ObjectManager.Me.RagePercentage > 90 && Maul.IsHostileDistanceGood)
             {
                 Maul.Cast();
-                return;
-            }
-            if (MySettings.UseSwipe && Swipe.IsSpellUsable && Swipe.IsHostileDistanceGood)
-            {
-                Swipe.Cast();
                 return;
             }
         }
@@ -2735,7 +2758,7 @@ public class DruidGuardian
         /* Utility Cooldowns */
         public bool UseDash = true;
         //public bool UseDisplacerBeast = true;
-        public bool UseGrowl = true;
+        public int UseGrowlBelowToTPercentage = 20;
         public bool UseStampedingRoar = true;
 
         /* Game Settings */
@@ -2777,7 +2800,7 @@ public class DruidGuardian
             AddControlInWinForm("Use Restoration Affinity", "UseRestorationAffinityBelowPercentage", "Healing Spells", "BelowPercentage", "Life");
             /* Utility Cooldowns */
             AddControlInWinForm("Use Dash", "UseDash", "Utility Cooldowns");
-            AddControlInWinForm("Use Growl", "UseGrowl", "Utility Cooldowns");
+            AddControlInWinForm("Use Growl", "UseGrowlBelowToTPercentage", "Utility Spells", "BelowPercentage", "Target of Target Life");
             AddControlInWinForm("Use Stampeding Roar", "UseStampedingRoar", "Utility Cooldowns");
             /* Game Settings */
             AddControlInWinForm("Use Trinket One", "UseTrinketOne", "Game Settings");
