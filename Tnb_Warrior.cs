@@ -399,7 +399,7 @@ public class WarriorArms
             if (MySettings.UseVictoryRush && VictoryRush.IsSpellUsable &&
                 VictoryRush.IsHostileDistanceGood && ObjectManager.Me.HealthPercent < 70)
             {
-                VictoryRush.CastOnSelf();
+                VictoryRush.Cast();
                 return true;
             }
             return false;
@@ -1045,7 +1045,7 @@ public class WarriorProtection
                 (ImpendingVictory.HaveBuff && ObjectManager.Me.Rage >= 10 &&
                 ObjectManager.Me.HealthPercent < 85)))
             {
-                VictoryRush.CastOnSelf();
+                VictoryRush.Cast();
                 return true;
             }
             return false;
@@ -1678,7 +1678,7 @@ public class WarriorFury
             if (MySettings.UseVictoryRush && VictoryRush.IsSpellUsable &&
                 VictoryRush.IsHostileDistanceGood && ObjectManager.Me.HealthPercent < 70)
             {
-                VictoryRush.CastOnSelf();
+                VictoryRush.Cast();
                 return true;
             }
             return false;
