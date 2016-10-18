@@ -27,7 +27,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
-    internal static float Version = 1.0f;
+    internal static float Version = 1.001f;
 
     #region ICombatClass Members
 
@@ -535,12 +535,17 @@ public class PriestDiscipline
                 PowerInfusion.Cast();
             }
             //Cast Shadowfiend / Mindbender
-            if (MySettings.UseShadowfiend_Mindbender && Shadowfiend.IsSpellUsable)
+            if (Mindbender.KnownSpell)
             {
-                if (Mindbender.HaveBuff)
+                if (MySettings.UseMindbender && Mindbender.IsSpellUsable)
+                {
                     Mindbender.Cast();
-                else
-                    Shadowfiend.Cast();
+                    return true;
+                }
+            }
+            else if (MySettings.UseShadowfiend && Shadowfiend.IsSpellUsable)
+            {
+                Shadowfiend.Cast();
                 return true;
             }
             return false;
@@ -700,8 +705,9 @@ public class PriestDiscipline
         public bool UseSmite = true;
 
         /* Offensive Cooldowns */
+        public bool UseMindbender = true;
         public bool UsePowerInfusion = true;
-        public bool UseShadowfiend_Mindbender = true;
+        public bool UseShadowfiend = true;
 
         /* Atonement Spells */
         public bool UsePlea = true;
@@ -750,8 +756,9 @@ public class PriestDiscipline
             AddControlInWinForm("Use Shadow Word: Pain & Purge the Wicked", "UseShadowWordPain_PurgetheWicked", "Offensive Spells");
             AddControlInWinForm("Use Smite", "UseSmite", "Offensive Spells");
             /* Offensive Cooldowns */
+            AddControlInWinForm("Use Mindbender", "UseMindbender", "Offensive Cooldowns");
             AddControlInWinForm("Use Power Infusion", "UsePowerInfusion", "Offensive Cooldowns");
-            AddControlInWinForm("Use Shadowfiend & Mindbender", "UseShadowfiend_Mindbender", "Offensive Cooldowns");
+            AddControlInWinForm("Use Shadowfiend", "UseShadowfiend", "Offensive Cooldowns");
             /* Atonement Spells */
             AddControlInWinForm("Use Plea", "UsePlea", "Atonement Spells");
             AddControlInWinForm("Use Power Word: Radiance", "UsePowerWordRadiance", "Atonement Spells");
@@ -1652,14 +1659,21 @@ public class PriestShadow
                 return;
             }
             //3. Cast Shadowfiend / Mindbender when
-            if (MySettings.UseShadowfiend_Mindbender && Shadowfiend.IsSpellUsable &&
-                //you have low Voidform stacks.
-                Voidform.BuffStack <= 50)
+            if (Mindbender.KnownSpell)
             {
-                if (Mindbender.HaveBuff)
+                if (MySettings.UseMindbender && Mindbender.IsSpellUsable &&
+                    //you have low Voidform stacks.
+                    Voidform.BuffStack <= 50)
+                {
                     Mindbender.Cast();
-                else
-                    Shadowfiend.Cast();
+                    return;
+                }
+            }
+            else if (MySettings.UseShadowfiend && Shadowfiend.IsSpellUsable &&
+                    //you have low Voidform stacks.
+                    Voidform.BuffStack <= 50)
+            {
+                Shadowfiend.Cast();
                 return;
             }
             //4. Cast Shadow Word: Death when you are in Void form and
@@ -1683,14 +1697,21 @@ public class PriestShadow
                 return;
             }
             //6. Cast Shadowfiend / Mindbender when
-            if (MySettings.UseShadowfiend_Mindbender && Shadowfiend.IsSpellUsable &&
-                //you have low Voidform stacks.
-                Voidform.BuffStack <= 50)
+            if (Mindbender.KnownSpell)
             {
-                if (Mindbender.HaveBuff)
+                if (MySettings.UseMindbender && Mindbender.IsSpellUsable &&
+                    //you have high Voidform stacks.
+                    Voidform.BuffStack > 50)
+                {
                     Mindbender.Cast();
-                else
-                    Shadowfiend.Cast();
+                    return;
+                }
+            }
+            else if (MySettings.UseShadowfiend && Shadowfiend.IsSpellUsable &&
+                    //you have high Voidform stacks.
+                    Voidform.BuffStack > 50)
+            {
+                Shadowfiend.Cast();
                 return;
             }
             //7. Cast Shadow Crash
@@ -1774,8 +1795,9 @@ public class PriestShadow
         public bool UseVoidEruption = true;
 
         /* Offensive Cooldowns */
+        public bool UseMindbender = true;
         public bool UsePowerInfusion = true;
-        public bool UseShadowfiend_Mindbender = true;
+        public bool UseShadowfiend = true;
         public bool UseSurrendertoMadness = false;
 
         /* Defensive Spells */
@@ -1817,8 +1839,9 @@ public class PriestShadow
             AddControlInWinForm("Use Void Bolt", "UseVoidBolt", "Offensive Spells");
             AddControlInWinForm("Use Void Eruption", "UseVoidEruption", "Offensive Spells");
             /* Offensive Cooldowns */
+            AddControlInWinForm("Use Mindbender", "UseMindbender", "Offensive Cooldowns");
             AddControlInWinForm("Use Power Infusion", "UsePowerInfusion", "Offensive Cooldowns");
-            AddControlInWinForm("Use Shadowfiend & Mindbender", "UseShadowfiend_Mindbender", "Offensive Cooldowns");
+            AddControlInWinForm("Use Shadowfiend", "UseShadowfiend", "Offensive Cooldowns");
             AddControlInWinForm("Use Surrender to Madness", "UseSurrendertoMadness", "Offensive Cooldowns");
             /* Defensive Spells */
             AddControlInWinForm("Use Dispersion", "UseDispersionBelowPercentage", "Defensive Spells", "BelowPercentage", "Life");
