@@ -28,6 +28,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
+    internal static float Version = 0.5f;
 
     #region ICombatClass Members
 
@@ -200,6 +201,7 @@ public class Main : ICombatClass
             FieldInfo field = mySettings.GetType().GetFields(bindingFlags)[i];
             Logging.WriteDebug(field.Name + " = " + field.GetValue(mySettings));
         }
+        Logging.WriteDebug("Loaded " + ObjectManager.Me.WowSpecialization() + " Combat Class " + Version.ToString("0.0###"));
 
         // Last field is intentionnally ommited because it's a backing field.
     }
@@ -840,7 +842,7 @@ public class DruidFeral
 
     #region Talents
 
-    private readonly Spell Bloodtalons = new Spell("Bloodtalons");
+    private readonly Spell Bloodtalons = new Spell(155672);
     private readonly Spell LunarInspiration = new Spell("Lunar Inspiration");
     private readonly Spell Predator = new Spell("Predator");
     private readonly Spell Sabertooth = new Spell("Sabertooth");
@@ -1065,10 +1067,7 @@ public class DruidFeral
             //1. Priority: Rake
             if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood && ObjectManager.Target.IsStunnable)
             {
-                Logging.Write("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood);
-                Logging.Write("Target Distance: " + ObjectManager.Target.GetDistance);
-                Logging.Write("CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach);
-                Logging.Write("Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
+                Logging.WriteDebug("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood + ", Target Distance: " + ObjectManager.Target.GetDistance + ", CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach + ", Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
                 Rake.Cast();
                 return;
             }
@@ -1180,8 +1179,8 @@ public class DruidFeral
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            //Cast Incarnation: King of the Jungle
-            if (MySettings.UseIncarnation && Incarnation.IsSpellUsable && !Incarnation.HaveBuff)
+            //Cast Incarnation: King of the Jungle when you have the Tiger's Fury Buff
+            if (MySettings.UseIncarnation && Incarnation.IsSpellUsable && !Incarnation.HaveBuff && TigersFury.HaveBuff)
             {
                 Incarnation.Cast();
                 return true;
@@ -1242,11 +1241,11 @@ public class DruidFeral
                 ElunesGuidance.Cast();
                 return true;
             }
-            //Apply Tigers Fury when
+            //Apply Tiger's Fury when
             if (MySettings.UseTigersFury && TigersFury.IsSpellUsable &&
-                //no Buff uptime will be lost and you have less than 40 Energy or
+                //no Buff uptime will be lost and you have less than 30 Energy or
                 ((ObjectManager.Me.UnitAura(TigersFury.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 2333 &&
-                ObjectManager.Me.Energy < 40) ||
+                ObjectManager.Me.Energy < 30) ||
                 //you can use the Predator Talent
                 (Predator.HaveBuff && ObjectManager.Target.HealthPercent < 20 && ObjectManager.Target.IsAlive &&
                 (Rake.HaveBuff || Rip.HaveBuff || AshamanesFrenzy.HaveBuff))))
@@ -1269,6 +1268,18 @@ public class DruidFeral
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
+
+            //Logging
+            if ((SavageRoar.KnownSpell && !ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).IsValid) ||
+                (Bloodtalons.HaveBuff && ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid) ||
+                ObjectManager.Me.ComboPoint >= 5)
+            {
+                string log = "";
+                log += (SavageRoar.KnownSpell && !ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).IsValid) ? "Savage Roar isn't active! " : "";
+                log += (Bloodtalons.HaveBuff && ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid) ? "Bloodtalons is active! " : "";
+                log += "Combo points: " + ObjectManager.Me.ComboPoint;
+                Logging.Write(log);
+            }
 
             //1. Cast Ferocious Bite when
             if (MySettings.UseFerociousBite && FerociousBite.IsSpellUsable && FerociousBite.IsHostileDistanceGood &&
@@ -1320,7 +1331,7 @@ public class DruidFeral
                 //it has less than 5 seconds remaining and
                 ObjectManager.Target.UnitAura(106830, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
                 //there are multiple targets in range.
-                ObjectManager.GetUnitInSpellRange(Thrash.MaxRangeHostile) > 1)
+                ObjectManager.Me.GetUnitInSpellRange(Thrash.MaxRangeHostile) > 1)
             {
                 if (ObjectManager.Me.Energy < 50)
                     return;
@@ -1329,10 +1340,11 @@ public class DruidFeral
             }
             //5. Maintain Rake when
             if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood &&
-                //it has less than 5 seconds remaining or
-                (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 ||
-                //you are not capping Combo Points and you have the Blood Talons Buff.
-                (ObjectManager.Me.ComboPoint < ObjectManager.Me.MaxComboPoint &&
+                //it isn't on the target or
+                (!Rake.TargetHaveBuffFromMe ||
+                //it has less than 5 seconds remaining and
+                (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
+                //you have the Blood Talons Buff.
                 ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
                 if (ObjectManager.Me.Energy < 35)
@@ -1355,12 +1367,14 @@ public class DruidFeral
             //Spend Combo Points on Finishers
             if (ObjectManager.Me.ComboPoint >= 5)
             {
-                //7. Apply/Refresh Rip when
+                //7. Maintain Rip when
                 if (MySettings.UseRip && Rip.IsSpellUsable && Rip.IsHostileDistanceGood &&
-                    //you have less than 8 seconds remaining or
-                    (ObjectManager.Target.UnitAura(1079, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 ||
+                    //it isn't on the target or
+                    (!Rip.TargetHaveBuffFromMe ||
+                    //it has less than 8 seconds remaining and
+                    (ObjectManager.Target.UnitAura(Rip.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 &&
                      //you have Blood Talons Buff.
-                     BloodtalonsBuff.HaveBuff))
+                     ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
                 {
                     if (CastHealingTouch() || ObjectManager.Me.Energy < 30)
                         return;
@@ -1370,9 +1384,9 @@ public class DruidFeral
                 //8. Cast Ferocious Bite when
                 if (MySettings.UseFerociousBite && FerociousBite.IsSpellUsable && FerociousBite.IsHostileDistanceGood &&
                     //your Savage Roar Buff has more than 10 seconds remaining (if talented) and
-                    (!SavageRoar.KnownSpell || ObjectManager.Target.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000) &&
+                    (!MySettings.UseSavageRoar || !SavageRoar.KnownSpell || ObjectManager.Target.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000) &&
                     //your Rip Buff has more than 10 seconds remaining.
-                    ObjectManager.Target.UnitAura(Rip.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000)
+                    (!MySettings.UseRip || !Rip.KnownSpell || ObjectManager.Target.UnitAura(Rip.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000))
                 {
                     if (CastHealingTouch() || ObjectManager.Me.Energy < 25)
                         return;
@@ -2443,7 +2457,6 @@ public class DruidGuardian
         Heal();
         if (AgroManagement() || Defensive() || Shapeshift() || Offensive())
             return;
-        ;
         Rotation();
     }
 

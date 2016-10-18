@@ -27,6 +27,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
+    internal static float Version = 0.5f;
 
     #region ICombatClass Members
 
@@ -178,6 +179,7 @@ public class Main : ICombatClass
             FieldInfo field = mySettings.GetType().GetFields(bindingFlags)[i];
             Logging.WriteDebug(field.Name + " = " + field.GetValue(mySettings));
         }
+        Logging.WriteDebug("Loaded " + ObjectManager.Me.WowSpecialization() + " Combat Class " + Version.ToString("0.0###"));
 
         // Last field is intentionnally ommited because it's a backing field.
     }
