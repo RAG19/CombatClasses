@@ -809,6 +809,7 @@ public class MonkWindwalker
     #region Utility Spells
 
     private readonly Spell Detox = new Spell("Detox");
+    private readonly Spell EnergizingElixir = new Spell("Energizing Elixir");
     private readonly Spell LegSweep = new Spell("Leg Sweep");
     private readonly Spell Paralysis = new Spell("Paralysis");
     private readonly Spell Provoke = new Spell("Provoke"); //No GCD
@@ -1047,6 +1048,13 @@ public class MonkWindwalker
             {
                 StormEarthandFire.Cast();
             }
+            //Cast Energizing Elixir when
+            if (ObjectManager.Me.Energy < MySettings.UseEnergizingElixirBelowEnergyPecentage &&
+                ObjectManager.Me.Chi < MySettings.UseEnergizingElixirBelowChiPecentage &&
+                StormEarthandFire.IsSpellUsable)
+            {
+                EnergizingElixir.Cast();
+            }
             return false;
         }
         finally
@@ -1198,6 +1206,8 @@ public class MonkWindwalker
         public int UseEffuseBelowPercentage = 0;
 
         /* Utility Spells */
+        public int UseEnergizingElixirBelowEnergyPecentage = 20;
+        public int UseEnergizingElixirBelowChiPecentage = 0;
         public bool UseProvoke = false;
         public bool UseTigersLust = true;
 
@@ -1239,6 +1249,8 @@ public class MonkWindwalker
             /* Healing Spell */
             AddControlInWinForm("Use Effuse", "UseEffuseBelowPercentage", "Healing Spells", "BelowPercentage", "Life");
             /* Utility Spells */
+            AddControlInWinForm("Use Energizing Elixir", "UseEnergizingElixirBelowEnergyPecentage", "Utility Spells", "BelowPercentage", "Energy");
+            AddControlInWinForm("Use Energizing Elixir", "UseEnergizingElixirBelowChiPecentage", "Utility Spells", "BelowPercentage", "Chi");
             AddControlInWinForm("Use Provoke", "UseProvoke", "Utility Spells");
             AddControlInWinForm("Use Tiger's Lust", "UseTigersLust", "Utility Spells");
             /* Game Settings */
