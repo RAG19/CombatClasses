@@ -1207,7 +1207,7 @@ public class MonkWindwalker
 
         /* Utility Spells */
         public int UseEnergizingElixirBelowEnergyPecentage = 20;
-        public int UseEnergizingElixirBelowChiPecentage = 0;
+        public int UseEnergizingElixirBelowChiPecentage = 1;
         public bool UseProvoke = false;
         public bool UseTigersLust = true;
 
