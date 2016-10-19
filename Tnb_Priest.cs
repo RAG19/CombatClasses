@@ -1583,7 +1583,7 @@ public class PriestShadow
                 BloodFury.Cast();
             }
             //Cast Power Infusion when Voidform is active
-            if (MySettings.UsePowerInfusion && PowerInfusion.IsSpellUsable && Voidform.HaveBuff)
+            if (MySettings.UsePowerInfusion && PowerInfusion.IsSpellUsable && ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
                 PowerInfusion.Cast();
             }
@@ -1635,8 +1635,9 @@ public class PriestShadow
             //Use Void Eruption
             if (MySettings.UseVoidEruption && VoidEruption.IsSpellUsable &&
                 ((LegacyoftheVoid.HaveBuff && ObjectManager.Me.Insanity >= 70) ||
-                ObjectManager.Me.Insanity >= 100) && !Voidform.HaveBuff)
+                ObjectManager.Me.Insanity >= 100) && !ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
+                Logging.WriteDebug("Casting Void Eruption:");
                 VoidEruption.Cast();
                 return;
             }
@@ -1644,7 +1645,7 @@ public class PriestShadow
             //1. Use Void Torrent when
             if (MySettings.UseVoidTorrent && VoidTorrent.IsSpellUsable && VoidTorrent.IsHostileDistanceGood &&
                 //Voidform is active
-                Voidform.HaveBuff)
+                ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
                 VoidTorrent.Cast();
                 return;
@@ -1653,8 +1654,9 @@ public class PriestShadow
             if (MySettings.UseVoidBolt && VoidBolt.IsSpellUsable &&
                 CombatClass.InSpellRange(ObjectManager.Target, 0, 40) &&
                 //Voidform is active
-                Voidform.HaveBuff)
+                ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
+                Logging.WriteDebug("Casting Void Bolt:");
                 VoidBolt.Cast();
                 return;
             }
@@ -1680,7 +1682,7 @@ public class PriestShadow
             if (MySettings.UseShadowWordDeath && ShadowWordDeath.IsSpellUsable &&
                 ShadowWordDeath.IsHostileDistanceGood &&
                 ((ReaperofSouls.HaveBuff && ObjectManager.Target.HealthPercent < 35) ||
-                ObjectManager.Target.HealthPercent < 20) && Voidform.HaveBuff &&
+                ObjectManager.Target.HealthPercent < 20) && ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid &&
                 //you have 2 charges or
                 (ShadowWordDeath.GetSpellCharges >= 2 ||
                 //you will not fall out of Voidform in 2 seconds and Mind Blast is off cooldown.
@@ -1723,7 +1725,7 @@ public class PriestShadow
             //8. Cast Shadow Word: Void when
             if (MySettings.UseShadowWordVoid && ShadowWordVoid.IsSpellUsable && ShadowWordVoid.IsHostileDistanceGood &&
                 //you have 3 charges or Voidform is active.
-                (ShadowWordVoid.GetSpellCharges == 3 || Voidform.HaveBuff))
+                (ShadowWordVoid.GetSpellCharges == 3 || ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid))
             {
                 ShadowWordVoid.CastAtPosition(ObjectManager.Target.Position);
                 return;
