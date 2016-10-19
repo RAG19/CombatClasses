@@ -1000,7 +1000,7 @@ public class WarlockDemonology
 
     private Timer DefensiveTimer = new Timer(0);
     private Timer StunTimer = new Timer(0);
-    private static List<Timer> SummonTimers;
+    private List<Timer> SummonTimers = new List<Timer>();
     private int SummonedDemons = 0;
 
     #endregion
@@ -1099,16 +1099,6 @@ public class WarlockDemonology
         {
             try
             {
-                SummonedDemons = (ObjectManager.Pet.Health > 0) ? 1 : 0;
-                SummonedDemons += (!ImpsAliveTimer.IsReady) ? 4 : 0;
-                foreach (Timer timer in SummonTimers)
-                {
-                    if (timer.IsReady)
-                        SummonTimers.Remove(timer);
-                    else
-                        SummonedDemons++;
-                }
-
                 if (!ObjectManager.Me.IsDeadMe)
                 {
                     if (!ObjectManager.Me.IsMounted)
@@ -1217,7 +1207,7 @@ public class WarlockDemonology
                         SummonInfernal.IsHostileDistanceGood)
                     {
                         SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
-                        DemonicEmpowermentTimer.Reset();
+                        DemonicEmpowermentTimer.ForceReady();
                         return true;
                     }
                     //Summon Doomguard
@@ -1225,7 +1215,7 @@ public class WarlockDemonology
                         SummonDoomguard.IsHostileDistanceGood)
                     {
                         SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
-                        DemonicEmpowermentTimer.Reset();
+                        DemonicEmpowermentTimer.ForceReady();
                         return true;
                     }
                 }
@@ -1247,6 +1237,7 @@ public class WarlockDemonology
             Logging.WriteFight("Combat:");
             CombatMode = true;
         }
+        UpdateSummonedDemons();
         Healing();
         if (Defensive() || Pet() || Offensive())
             return;
@@ -1384,6 +1375,10 @@ public class WarlockDemonology
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
+            //Logging
+            //Logging.WriteDebug("SummonedDemons == " + SummonedDemons);
+            //Logging.WriteDebug("DemonicEmpowermentTimer.IsReady == " + DemonicEmpowermentTimer.IsReady);
+
             //Apply Doom
             if (MySettings.UseDoom && Doom.IsSpellUsable && Doom.IsHostileDistanceGood &&
                 !Doom.TargetHaveBuff)
@@ -1424,7 +1419,7 @@ public class WarlockDemonology
                 ObjectManager.Target.GetUnitInSpellRange(10f) >= 4)
             {
                 SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
@@ -1433,7 +1428,7 @@ public class WarlockDemonology
                 SummonDoomguard.IsHostileDistanceGood && !GrimoireofSupremacy.HaveBuff)
             {
                 SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
@@ -1441,7 +1436,7 @@ public class WarlockDemonology
             if (MySettings.UseSummonDarkglare && SummonDarkglare.IsSpellUsable)
             {
                 SummonDarkglare.Cast();
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 12));
                 return;
             }
@@ -1449,35 +1444,35 @@ public class WarlockDemonology
             if (MySettings.UseGrimoireImp && GrimoireImp.IsSpellUsable && GrimoireImp.IsHostileDistanceGood)
             {
                 GrimoireImp.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireFelguard && GrimoireFelguard.IsSpellUsable && GrimoireFelguard.IsHostileDistanceGood)
             {
                 GrimoireFelguard.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireFelhunter && GrimoireFelhunter.IsSpellUsable && GrimoireFelhunter.IsHostileDistanceGood)
             {
                 GrimoireFelhunter.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireSuccubus && GrimoireSuccubus.IsSpellUsable && GrimoireSuccubus.IsHostileDistanceGood)
             {
                 GrimoireSuccubus.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireVoidwalker && GrimoireVoidwalker.IsSpellUsable && GrimoireVoidwalker.IsHostileDistanceGood)
             {
                 GrimoireVoidwalker.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
@@ -1485,7 +1480,7 @@ public class WarlockDemonology
             if (MySettings.UseGrimoireofService && GrimoireofService.IsSpellUsable && GrimoireofService.IsHostileDistanceGood)
             {
                 GrimoireofService.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
@@ -1494,7 +1489,7 @@ public class WarlockDemonology
                 !ObjectManager.Me.GetMove && CallDreadstalkers.IsHostileDistanceGood)
             {
                 CallDreadstalkers.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 SummonTimers.Add(new Timer(1000 * 12));
                 SummonTimers.Add(new Timer(1000 * 12));
                 return;
@@ -1506,7 +1501,7 @@ public class WarlockDemonology
                 ObjectManager.Me.SoulShards >= 4)
             {
                 HandofGuldan.CastAtPosition(ObjectManager.Target.Position);
-                DemonicEmpowermentTimer.Reset();
+                DemonicEmpowermentTimer.ForceReady();
                 ImpsAliveTimer = new Timer(1000 * 12);
                 ImplosionTimer = new Timer(1000 * (12 - 1));
                 return;
@@ -1564,6 +1559,19 @@ public class WarlockDemonology
         finally
         {
             Memory.WowMemory.GameFrameUnLock();
+        }
+    }
+
+    private void UpdateSummonedDemons()
+    {
+        SummonedDemons = (ObjectManager.Pet.Health > 0) ? 1 : 0;
+        SummonedDemons += (!ImpsAliveTimer.IsReady) ? 4 : 0;
+        for (int i = SummonTimers.Count - 1; i >= 0; i--)
+        {
+            if (SummonTimers[i].IsReady)
+                SummonTimers.RemoveAt(i);
+            else
+                SummonedDemons++;
         }
     }
 
