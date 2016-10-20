@@ -224,6 +224,17 @@ public class WarlockAffliction
 
     #endregion
 
+    #region Pets
+
+    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
+    private readonly Spell SummonFelhunter = new Spell("Summon Felhunter");
+    private readonly Spell SummonImp = new Spell("Summon Imp");
+    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
+    private readonly Spell SummonSuccubus = new Spell("Summon Succubus");
+    private readonly Spell SummonVoidwalker = new Spell("Summon Voidwalker");
+
+    #endregion
+
     #region Buffs
 
     private readonly Spell DemonicPower = new Spell("Demonic Power");
@@ -271,9 +282,6 @@ public class WarlockAffliction
     private readonly Spell GrimoireVoidwalker = new Spell("Grimoire: Voidwalker");
     private readonly Spell GrimoireofService = new Spell("Grimoire of Service");
     private readonly Spell SoulHarvest = new Spell("Soul Harvest"); //No GCD
-    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
-    private readonly Spell SummonImp = new Spell("Summon Imp");
-    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
 
     #endregion
 
@@ -408,7 +416,7 @@ public class WarlockAffliction
             Pet();
         }
     }
-
+    
     // For Summoning permanent Pets (always return after Casting)
     private bool Pet()
     {
@@ -418,24 +426,49 @@ public class WarlockAffliction
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (GrimoireofSupremacy.HaveBuff)
+            if ((ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid) &&
+                ObjectManager.Me.SoulShards >= 1)
             {
-                if (ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid)
+                if (GrimoireofSupremacy.HaveBuff)
                 {
-                    //Summon Infernal
-                    if (MySettings.UseSummonInfernal && SummonInfernal.IsSpellUsable &&
-                        SummonInfernal.IsHostileDistanceGood)
-                    {
-                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
-                        return true;
-                    }
                     //Summon Doomguard
-                    if (MySettings.UseSummonDoomguard && SummonDoomguard.IsSpellUsable &&
+                    if (MySettings.UseSummonDoomguardAsPet && SummonDoomguard.IsSpellUsable &&
                         SummonDoomguard.IsHostileDistanceGood)
                     {
                         SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
                         return true;
                     }
+                    //Summon Infernal
+                    if (MySettings.UseSummonInfernalAsPet && SummonInfernal.IsSpellUsable &&
+                    SummonInfernal.IsHostileDistanceGood)
+                    {
+                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
+                        return true;
+                    }
+                }
+                //Summon Felhunter
+                if (MySettings.UseSummonFelhunterAsPet && SummonFelhunter.IsSpellUsable)
+                {
+                    SummonFelhunter.Cast();
+                    return true;
+                }
+                //Summon Imp
+                if (MySettings.UseSummonImpAsPet && SummonImp.IsSpellUsable)
+                {
+                    SummonImp.Cast();
+                    return true;
+                }
+                //Summon Succubus
+                if (MySettings.UseSummonSuccubusAsPet && SummonSuccubus.IsSpellUsable)
+                {
+                    SummonSuccubus.Cast();
+                    return true;
+                }
+                //Summon Voidwalker
+                if (MySettings.UseSummonVoidwalkerAsPet && SummonVoidwalker.IsSpellUsable)
+                {
+                    SummonVoidwalker.Cast();
+                    return true;
                 }
             }
             return false;
@@ -868,6 +901,14 @@ public class WarlockAffliction
         public int UseStoneformBelowPercentage = 50;
         public int UseWarStompBelowPercentage = 50;
 
+        /* Pets */
+        public bool UseSummonDoomguardAsPet = true;
+        public bool UseSummonFelhunterAsPet = true;
+        public bool UseSummonInfernalAsPet = false;
+        public bool UseSummonImpAsPet = false;
+        public bool UseSummonSuccubusAsPet = false;
+        public bool UseSummonVoidwalkerAsPet = false;
+
         /* Dots */
         public bool UseAgony = true;
         public bool UseCorruption = true;
@@ -905,7 +946,6 @@ public class WarlockAffliction
         public int UseHealthstoneBelowPercentage = 25;
         public int UseDrainLife_SoulBelowPercentage = 25;
         
-
         /* Utility Spells */
         public int StartBurningRushAbovePercentage = 99;
         public int StopBurningRushBelowPercentage = 60;
@@ -928,6 +968,13 @@ public class WarlockAffliction
             AddControlInWinForm("Use Gift of the Naaru", "UseGiftoftheNaaruBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use Stone Form", "UseStoneformBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use War Stomp", "UseWarStompBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
+            /* Summon Pet */
+            AddControlInWinForm("Use Summon Doomguard", "UseSummonDoomguardAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Infernal", "UseSummonInfernalAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Felhunter", "UseSummonFelhunterAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Imp", "UseSummonImpAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Succubus", "UseSummonSuccubusAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Voidwalker", "UseSummonVoidwalkerAsPet", "Summon Pet");
             /* Dots */
             AddControlInWinForm("Use Agony", "UseAgony", "Dots");
             AddControlInWinForm("Use Corruption", "UseCorruption", "Dots");
@@ -1023,6 +1070,18 @@ public class WarlockDemonology
 
     #endregion
 
+    #region Pets
+
+    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
+    private readonly Spell SummonFelguard = new Spell("Summon Felguard");
+    private readonly Spell SummonFelhunter = new Spell("Summon Felhunter");
+    private readonly Spell SummonImp = new Spell("Summon Imp");
+    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
+    private readonly Spell SummonSuccubus = new Spell("Summon Succubus");
+    private readonly Spell SummonVoidwalker = new Spell("Summon Voidwalker");
+
+    #endregion
+
     #region Artifact Spells
 
     private readonly Spell ThalkielsConsumption = new Spell("Thal'kiel's Consumption");
@@ -1057,9 +1116,6 @@ public class WarlockDemonology
     private readonly Spell GrimoireVoidwalker = new Spell("Grimoire: Voidwalker");
     private readonly Spell GrimoireofService = new Spell("Grimoire of Service");
     private readonly Spell SoulHarvest = new Spell("Soul Harvest"); //No GCD
-    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
-    private readonly Spell SummonImp = new Spell("Summon Imp");
-    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
 
     #endregion
 
@@ -1198,26 +1254,62 @@ public class WarlockDemonology
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (GrimoireofSupremacy.HaveBuff)
+            if ((ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid) &&
+                ObjectManager.Me.SoulShards >= 1)
             {
-                if (ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid)
+                if (GrimoireofSupremacy.HaveBuff)
                 {
-                    //Summon Infernal
-                    if (MySettings.UseSummonInfernal && SummonInfernal.IsSpellUsable &&
-                        SummonInfernal.IsHostileDistanceGood)
-                    {
-                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
-                        DemonicEmpowermentTimer.ForceReady();
-                        return true;
-                    }
                     //Summon Doomguard
-                    if (MySettings.UseSummonDoomguard && SummonDoomguard.IsSpellUsable &&
+                    if (MySettings.UseSummonDoomguardAsPet && SummonDoomguard.IsSpellUsable &&
                         SummonDoomguard.IsHostileDistanceGood)
                     {
                         SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
                         DemonicEmpowermentTimer.ForceReady();
                         return true;
                     }
+                    //Summon Infernal
+                    if (MySettings.UseSummonInfernalAsPet && SummonInfernal.IsSpellUsable &&
+                    SummonInfernal.IsHostileDistanceGood)
+                    {
+                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
+                        DemonicEmpowermentTimer.ForceReady();
+                        return true;
+                    }
+                }
+                //Summon Felhunter
+                if (MySettings.UseSummonFelguardAsPet && SummonFelguard.IsSpellUsable)
+                {
+                    SummonFelguard.Cast();
+                    DemonicEmpowermentTimer.ForceReady();
+                    return true;
+                }
+                //Summon Felhunter
+                if (MySettings.UseSummonFelhunterAsPet && SummonFelhunter.IsSpellUsable)
+                {
+                    SummonFelhunter.Cast();
+                    DemonicEmpowermentTimer.ForceReady();
+                    return true;
+                }
+                //Summon Imp
+                if (MySettings.UseSummonImpAsPet && SummonImp.IsSpellUsable)
+                {
+                    SummonImp.Cast();
+                    DemonicEmpowermentTimer.ForceReady();
+                    return true;
+                }
+                //Summon Succubus
+                if (MySettings.UseSummonSuccubusAsPet && SummonSuccubus.IsSpellUsable)
+                {
+                    SummonSuccubus.Cast();
+                    DemonicEmpowermentTimer.ForceReady();
+                    return true;
+                }
+                //Summon Voidwalker
+                if (MySettings.UseSummonVoidwalkerAsPet && SummonVoidwalker.IsSpellUsable)
+                {
+                    SummonVoidwalker.Cast();
+                    DemonicEmpowermentTimer.ForceReady();
+                    return true;
                 }
             }
             return false;
@@ -1589,6 +1681,15 @@ public class WarlockDemonology
         public int UseStoneformBelowPercentage = 50;
         public int UseWarStompBelowPercentage = 50;
 
+        /* Pets */
+        public bool UseSummonDoomguardAsPet = true;
+        public bool UseSummonFelguardAsPet = true;
+        public bool UseSummonFelhunterAsPet = false;
+        public bool UseSummonInfernalAsPet = false;
+        public bool UseSummonImpAsPet = false;
+        public bool UseSummonSuccubusAsPet = false;
+        public bool UseSummonVoidwalkerAsPet = false;
+
         /* Artifact Spells */
         public bool UseThalkielsConsumption = true;
 
@@ -1613,6 +1714,7 @@ public class WarlockDemonology
         public bool UseSoulHarvest = true;
         public bool UseSummonDoomguard = true;
         public bool UseSummonInfernal = true;
+        
 
         /* Defensive Spells */
         public int UseDarkPactBelowPercentage = 70;
@@ -1645,6 +1747,14 @@ public class WarlockDemonology
             AddControlInWinForm("Use Gift of the Naaru", "UseGiftoftheNaaruBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use Stone Form", "UseStoneformBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use War Stomp", "UseWarStompBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
+            /* Summon Pet */
+            AddControlInWinForm("Use Summon Doomguard", "UseSummonDoomguardAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Infernal", "UseSummonInfernalAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Felguard", "UseSummonFelguardAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Felhunter", "UseSummonFelhunterAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Imp", "UseSummonImpAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Succubus", "UseSummonSuccubusAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Voidwalker", "UseSummonVoidwalkerAsPet", "Summon Pet");
             /* Artifact Spells */
             AddControlInWinForm("Use Thal'kiel's Consumption", "UseThalkielsConsumption", "Artifact Spells");
             /* Offensive Spells */
@@ -1738,8 +1848,19 @@ public class WarlockDestruction
 
     #endregion
 
-    #region Dots
+    #region Pets
     
+    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
+    private readonly Spell SummonFelhunter = new Spell("Summon Felhunter");
+    private readonly Spell SummonImp = new Spell("Summon Imp");
+    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
+    private readonly Spell SummonSuccubus = new Spell("Summon Succubus");
+    private readonly Spell SummonVoidwalker = new Spell("Summon Voidwalker");
+
+    #endregion
+
+    #region Dots
+
     private readonly Spell ImmolateDot = new Spell(157736);
 
     #endregion
@@ -1784,9 +1905,6 @@ public class WarlockDestruction
     private readonly Spell GrimoireVoidwalker = new Spell("Grimoire: Voidwalker");
     private readonly Spell GrimoireofService = new Spell("Grimoire of Service");
     private readonly Spell SoulHarvest = new Spell("Soul Harvest"); //No GCD
-    private readonly Spell SummonDoomguard = new Spell("Summon Doomguard");
-    private readonly Spell SummonImp = new Spell("Summon Imp");
-    private readonly Spell SummonInfernal = new Spell("Summon Infernal");
 
     #endregion
 
@@ -1916,6 +2034,7 @@ public class WarlockDestruction
         }
     }
 
+
     // For Summoning permanent Pets (always return after Casting)
     private bool Pet()
     {
@@ -1925,25 +2044,49 @@ public class WarlockDestruction
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (GrimoireofSupremacy.HaveBuff)
+            if ((ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid) &&
+                ObjectManager.Me.SoulShards >= 1)
             {
-                if (ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid)
+                if (GrimoireofSupremacy.HaveBuff)
                 {
-                    //Summon Infernal
-                    if (MySettings.UseSummonInfernal && SummonInfernal.IsSpellUsable &&
-                        SummonInfernal.IsHostileDistanceGood /*&&
-                        (!LordofFlamesTrait.HaveBuff || !LordofFlamesBuff.HaveBuff)*/)
-                    {
-                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
-                        return true;
-                    }
                     //Summon Doomguard
-                    if (MySettings.UseSummonDoomguard && SummonDoomguard.IsSpellUsable &&
+                    if (MySettings.UseSummonDoomguardAsPet && SummonDoomguard.IsSpellUsable &&
                         SummonDoomguard.IsHostileDistanceGood)
                     {
                         SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
                         return true;
                     }
+                    //Summon Infernal
+                    if (MySettings.UseSummonInfernalAsPet && SummonInfernal.IsSpellUsable &&
+                    SummonInfernal.IsHostileDistanceGood)
+                    {
+                        SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
+                        return true;
+                    }
+                }
+                //Summon Felhunter
+                if (MySettings.UseSummonFelhunterAsPet && SummonFelhunter.IsSpellUsable)
+                {
+                    SummonFelhunter.Cast();
+                    return true;
+                }
+                //Summon Imp
+                if (MySettings.UseSummonImpAsPet && SummonImp.IsSpellUsable)
+                {
+                    SummonImp.Cast();
+                    return true;
+                }
+                //Summon Succubus
+                if (MySettings.UseSummonSuccubusAsPet && SummonSuccubus.IsSpellUsable)
+                {
+                    SummonSuccubus.Cast();
+                    return true;
+                }
+                //Summon Voidwalker
+                if (MySettings.UseSummonVoidwalkerAsPet && SummonVoidwalker.IsSpellUsable)
+                {
+                    SummonVoidwalker.Cast();
+                    return true;
                 }
             }
             return false;
@@ -2288,6 +2431,14 @@ public class WarlockDestruction
         public int UseStoneformBelowPercentage = 50;
         public int UseWarStompBelowPercentage = 50;
 
+        /* Pets */
+        public bool UseSummonDoomguardAsPet = true;
+        public bool UseSummonFelhunterAsPet = false;
+        public bool UseSummonInfernalAsPet = false;
+        public bool UseSummonImpAsPet = true;
+        public bool UseSummonSuccubusAsPet = false;
+        public bool UseSummonVoidwalkerAsPet = false;
+
         /* Dots */
         public bool UseAgony = true;
         public bool UseCorruption = true;
@@ -2352,6 +2503,13 @@ public class WarlockDestruction
             AddControlInWinForm("Use Gift of the Naaru", "UseGiftoftheNaaruBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use Stone Form", "UseStoneformBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
             AddControlInWinForm("Use War Stomp", "UseWarStompBelowPercentage", "Professions & Racials", "BelowPercentage", "Life");
+            /* Summon Pet */
+            AddControlInWinForm("Use Summon Doomguard", "UseSummonDoomguardAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Infernal", "UseSummonInfernalAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Felhunter", "UseSummonFelhunterAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Imp", "UseSummonImpAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Succubus", "UseSummonSuccubusAsPet", "Summon Pet");
+            AddControlInWinForm("Use Summon Voidwalker", "UseSummonVoidwalkerAsPet", "Summon Pet");
             /* Artifact Spells */
             AddControlInWinForm("Use Dimensional Rift", "UseDimensionalRift", "Artifact Spells");
             /* Offensive Spells */
