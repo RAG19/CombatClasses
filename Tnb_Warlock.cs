@@ -707,14 +707,13 @@ public class WarlockAffliction
             }
             //Maintain Corruption
             if (MySettings.UseCorruption && Corruption.IsSpellUsable && Corruption.IsHostileDistanceGood &&
-                ObjectManager.Target.AuraTimeLeft(CorruptionDot.Id, true) <= 1000 * 14 / 3)
+                !ObjectManager.Target.UnitAura(CorruptionDot.Ids, ObjectManager.Me.Guid).IsValid)
             {
                 Corruption.Cast();
                 return;
             }
             //Maintain Siphon Life
-            if (MySettings.UseSiphonLife && SiphonLife.IsSpellUsable &&
-                !ObjectManager.Me.GetMove && SiphonLife.IsHostileDistanceGood &&
+            if (MySettings.UseSiphonLife && SiphonLife.IsSpellUsable && SiphonLife.IsHostileDistanceGood &&
                 ObjectManager.Target.AuraTimeLeft(SiphonLifeDot.Id, true) <= 1000 * 10 / 3)
             {
                 SiphonLife.Cast();
@@ -750,7 +749,7 @@ public class WarlockAffliction
                 //Maintain Corruption
                 if (MySettings.UseCorruption && Corruption.IsSpellUsable &&
                     SoulEffigy.CreatedBySpellInRange((uint)Corruption.MaxRangeHostile) &&
-                    SummonedSoulEffigy.AuraTimeLeft(CorruptionDot.Id, true) <= 1000 * 14 / 3)
+                    !SummonedSoulEffigy.UnitAura(CorruptionDot.Ids, ObjectManager.Me.Guid).IsValid)
                 {
                     Lua.RunMacroText("/target " + SoulEffigy.NameInGame);
                     Corruption.Cast();
