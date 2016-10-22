@@ -261,7 +261,7 @@ public class PaladinHoly
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -307,7 +307,7 @@ public class PaladinHoly
 
     private void Patrolling()
     {
-        if (!ObjectManager.Me.IsMounted)
+       if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
         {
             Heal();
         }
@@ -315,7 +315,7 @@ public class PaladinHoly
 
     private void Buffs()
     {
-        if (!ObjectManager.Me.IsMounted)
+       if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
         {
             if (MySettings.UseAlchFlask && !ObjectManager.Me.HaveBuff(79638) && !ObjectManager.Me.HaveBuff(79640) && !ObjectManager.Me.HaveBuff(79639)
                 && !ItemsManager.IsItemOnCooldown(75525) && ItemsManager.GetItemCount(75525) > 0)
@@ -693,7 +693,7 @@ public class PaladinProtection
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1246,7 +1246,7 @@ public class PaladinRetribution
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1297,7 +1297,7 @@ public class PaladinRetribution
 
     private void Patrolling()
     {
-        if (!ObjectManager.Me.IsMounted)
+       if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
         {
             if (MySettings.UseFlaskOrBattleElixir && MySettings.FlaskOrBattleElixir != string.Empty)
                 if (!SpellManager.HaveBuffLua(ItemsManager.GetItemSpell(MySettings.FlaskOrBattleElixir)) &&
@@ -1314,7 +1314,7 @@ public class PaladinRetribution
 
     private void Buffs()
     {
-        if (!ObjectManager.Me.IsMounted)
+       if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
         {
             if (MySettings.UseFlaskOrBattleElixir && MySettings.FlaskOrBattleElixir != string.Empty)
                 if (!SpellManager.HaveBuffLua(ItemsManager.GetItemSpell(MySettings.FlaskOrBattleElixir)) &&

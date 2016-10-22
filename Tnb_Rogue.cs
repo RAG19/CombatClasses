@@ -304,7 +304,7 @@ public class RogueAssassination
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -983,7 +983,7 @@ public class RogueOutlaw
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1553,7 +1553,7 @@ public class RogueSubtlety
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {

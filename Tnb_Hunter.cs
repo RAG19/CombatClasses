@@ -326,7 +326,7 @@ public class HunterMarksmanship
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1036,7 +1036,7 @@ public class HunterBeastMastery
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1758,7 +1758,7 @@ public class HunterSurvival
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {

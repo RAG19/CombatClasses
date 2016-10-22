@@ -268,7 +268,7 @@ public class DemonHunterHavoc
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -840,7 +840,7 @@ public class DemonHunterVengeance
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {

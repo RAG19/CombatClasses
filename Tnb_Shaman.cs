@@ -300,7 +300,7 @@ public class ShamanEnhancement
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -956,7 +956,7 @@ public class ShamanRestoration
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1816,7 +1816,7 @@ public class ShamanElemental
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                    if (!ObjectManager.Me.IsMounted)
+                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
