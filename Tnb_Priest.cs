@@ -1307,7 +1307,7 @@ public class PriestShadow
     private readonly Spell ShadowWordPain = new Spell("Shadow Word: Pain");
     private readonly Spell ShadowWordVoid = new Spell("Shadow Word: Void");
     private readonly Spell VampiricTouch = new Spell("Vampiric Touch");
-    private readonly Spell VoidBolt = new Spell("Void Bolt");
+    private readonly Spell VoidBolt = new Spell(228266);
     private readonly Spell VoidEruption = new Spell("Void Eruption");
 
     #endregion
@@ -1637,7 +1637,6 @@ public class PriestShadow
                 ((LegacyoftheVoid.HaveBuff && ObjectManager.Me.Insanity >= 70) ||
                 ObjectManager.Me.Insanity >= 100) && !ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
-                Logging.WriteDebug("Casting Void Eruption:");
                 VoidEruption.Cast();
                 return;
             }
@@ -1656,8 +1655,7 @@ public class PriestShadow
                 //Voidform is active
                 ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
-                Logging.WriteDebug("Casting Void Bolt:");
-                VoidBolt.Cast();
+                VoidEruption.Cast();
                 return;
             }
             //3. Cast Shadowfiend / Mindbender when
