@@ -290,7 +290,7 @@ public class MageArcane
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -326,7 +326,7 @@ public class MageArcane
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -865,7 +865,7 @@ public class MageFire
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -901,7 +901,7 @@ public class MageFire
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -1419,7 +1419,7 @@ public class MageFrost
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1455,7 +1455,7 @@ public class MageFrost
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack

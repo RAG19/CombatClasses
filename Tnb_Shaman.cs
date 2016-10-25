@@ -300,7 +300,7 @@ public class ShamanEnhancement
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -338,7 +338,7 @@ public class ShamanEnhancement
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (MySettings.UseSpiritWalk && SpiritWalk.IsSpellUsable)
@@ -956,7 +956,7 @@ public class ShamanRestoration
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1816,7 +1816,7 @@ public class ShamanElemental
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1853,7 +1853,7 @@ public class ShamanElemental
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (WindRushTotem.IsSpellUsable && MySettings.UseWindRushTotem)

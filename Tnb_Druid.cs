@@ -323,7 +323,7 @@ public class DruidBalance
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -362,7 +362,7 @@ public class DruidBalance
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 //Travel Form while swimming
                 if (MySettings.UseAquaticTravelFormOOC && Usefuls.IsSwimming && TravelForm.IsSpellUsable)
@@ -960,7 +960,7 @@ public class DruidFeral
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -999,7 +999,7 @@ public class DruidFeral
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 //Travel Form while swimming
                 if (MySettings.UseAquaticTravelFormOOC && Usefuls.IsSwimming && TravelForm.IsSpellUsable)
@@ -1721,7 +1721,7 @@ public class DruidRestoration
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -2393,7 +2393,7 @@ public class DruidGuardian
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -2432,7 +2432,7 @@ public class DruidGuardian
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 //Travel Form while swimming
                 if (MySettings.UseAquaticTravelFormOOC && Usefuls.IsSwimming && TravelForm.IsSpellUsable)

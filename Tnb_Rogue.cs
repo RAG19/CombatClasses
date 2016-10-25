@@ -304,7 +304,7 @@ public class RogueAssassination
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -340,7 +340,7 @@ public class RogueAssassination
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !Sprint.HaveBuff) // doesn't stack
@@ -417,7 +417,8 @@ public class RogueAssassination
             if (MySettings.UseGarrote && Garrote.IsSpellUsable &&
                 ObjectManager.Me.Energy >= 45 && Garrote.IsHostileDistanceGood &&
                 //you have the Nightstalker or Subterfuge Talent
-                (Nightstalker.HaveBuff || Subterfuge.HaveBuff))
+                (Nightstalker.HaveBuff || Subterfuge.HaveBuff) &&
+                !Garrote.TargetHaveBuffFromMe)
             {
                 Garrote.Cast();
                 return;
@@ -426,7 +427,7 @@ public class RogueAssassination
             if (MySettings.UseCheapShot && CheapShot.IsSpellUsable &&
                 ObjectManager.Me.Energy >= 40 && CheapShot.IsHostileDistanceGood &&
                 //the target is stunnable
-                ObjectManager.Target.IsStunnable)
+                ObjectManager.Target.IsStunnable && !ObjectManager.Target.IsStunned)
             {
                 CheapShot.Cast();
                 StunTimer = new Timer(1000 * 4);
@@ -434,7 +435,8 @@ public class RogueAssassination
             }
             //4. Cast Garrote
             if (MySettings.UseGarrote && Garrote.IsSpellUsable &&
-                ObjectManager.Me.Energy >= 45 && Garrote.IsHostileDistanceGood)
+                ObjectManager.Me.Energy >= 45 && Garrote.IsHostileDistanceGood &&
+                !Garrote.TargetHaveBuffFromMe)
             {
                 Garrote.Cast();
                 return;
@@ -668,7 +670,7 @@ public class RogueAssassination
                 //it has 6 or less seconds remaining and
                 ObjectManager.Target.UnitAura(Garrote.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 6000 &&
                 //except during Exsanguinate.
-                !Exsanguinate.TargetHaveBuff)
+                !Exsanguinate.TargetHaveBuffFromMe)
             {
                 Garrote.Cast();
                 return;
@@ -709,7 +711,7 @@ public class RogueAssassination
                 //it has 8 or less seconds remaining and
                 ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000 &&
                 //except during Exsanguinate.
-                !Exsanguinate.TargetHaveBuff)
+                !Exsanguinate.TargetHaveBuffFromMe)
             {
                 Rupture.Cast();
                 return;
@@ -983,7 +985,7 @@ public class RogueOutlaw
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1019,7 +1021,7 @@ public class RogueOutlaw
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !Sprint.HaveBuff) // doesn't stack
@@ -1553,7 +1555,7 @@ public class RogueSubtlety
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1589,7 +1591,7 @@ public class RogueSubtlety
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !Sprint.HaveBuff) // doesn't stack

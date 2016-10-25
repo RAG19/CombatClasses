@@ -330,7 +330,7 @@ public class WarlockAffliction
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -366,7 +366,7 @@ public class WarlockAffliction
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !BurningRush.HaveBuff) // doesn't stack
@@ -1156,7 +1156,7 @@ public class WarlockDemonology
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1192,7 +1192,7 @@ public class WarlockDemonology
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !BurningRush.HaveBuff) // doesn't stack
@@ -1946,7 +1946,7 @@ public class WarlockDestruction
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1982,7 +1982,7 @@ public class WarlockDestruction
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff && !BurningRush.HaveBuff) // doesn't stack

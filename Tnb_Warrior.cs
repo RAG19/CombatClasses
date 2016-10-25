@@ -307,7 +307,7 @@ public class WarriorArms
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -343,7 +343,7 @@ public class WarriorArms
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -951,7 +951,7 @@ public class WarriorProtection
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -987,7 +987,7 @@ public class WarriorProtection
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -1586,7 +1586,7 @@ public class WarriorFury
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1622,7 +1622,7 @@ public class WarriorFury
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove)
+        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack

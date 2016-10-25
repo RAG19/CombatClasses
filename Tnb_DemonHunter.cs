@@ -268,7 +268,7 @@ public class DemonHunterHavoc
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -307,7 +307,7 @@ public class DemonHunterHavoc
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 //Movement Buffs
                 if (MySettings.UseNetherwalkOOC && Netherwalk.IsSpellUsable && !Netherwalk.HaveBuff)
@@ -840,7 +840,7 @@ public class DemonHunterVengeance
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -879,7 +879,7 @@ public class DemonHunterVengeance
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 //Movement Buffs
             }

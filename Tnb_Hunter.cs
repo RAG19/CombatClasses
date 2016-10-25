@@ -326,7 +326,7 @@ public class HunterMarksmanship
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -365,7 +365,7 @@ public class HunterMarksmanship
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 if (!Darkflight.HaveBuff && !AspectoftheCheetah.HaveBuff)
                 {
@@ -1036,7 +1036,7 @@ public class HunterBeastMastery
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1075,7 +1075,7 @@ public class HunterBeastMastery
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 if (!Darkflight.HaveBuff && !AspectoftheCheetah.HaveBuff)
                 {
@@ -1758,7 +1758,7 @@ public class HunterSurvival
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted && !Usefuls.PlayerUsingVehicle)
+                   if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1797,7 +1797,7 @@ public class HunterSurvival
                 CombatMode = false;
             }
 
-            if (ObjectManager.Me.GetMove)
+            if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
             {
                 if (!Darkflight.HaveBuff && !AspectoftheCheetah.HaveBuff)
                 {
