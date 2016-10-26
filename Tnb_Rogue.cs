@@ -84,7 +84,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Rogue Specialisation checking
+                #region Rogue Specialisation checking
 
                 case WoWClass.Rogue:
 
@@ -153,7 +153,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -168,7 +168,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -245,6 +245,8 @@ public class RogueAssassination
     private readonly Spell DeathfromAbove = new Spell("Death from Above");
     private readonly Spell Envenom = new Spell("Envenom");
     private readonly Spell Exsanguinate = new Spell("Exsanguinate");
+    private bool GarroteHasExsanguinateBuff = false;
+    private bool RuptureHasExsanguinateBuff = false;
     private readonly Spell FanofKnives = new Spell("Fan of Knives");
     private readonly Spell Garrote = new Spell("Garrote");
     private readonly Spell Mutilate = new Spell("Mutilate");
@@ -430,7 +432,7 @@ public class RogueAssassination
                 ObjectManager.Target.IsStunnable && !ObjectManager.Target.IsStunned)
             {
                 CheapShot.Cast();
-                StunTimer = new Timer(1000*4);
+                StunTimer = new Timer(1000 * 4);
                 return;
             }
             //4. Cast Garrote
@@ -495,7 +497,7 @@ public class RogueAssassination
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -503,14 +505,14 @@ public class RogueAssassination
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000*5);
+                    DefensiveTimer = new Timer(1000 * 5);
                     return true;
                 }
             }
@@ -519,14 +521,14 @@ public class RogueAssassination
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000*5);
+                DefensiveTimer = new Timer(1000 * 5);
                 return true;
             }
             //Evasion
             if (ObjectManager.Me.HealthPercent < MySettings.UseEvasionBelowPercentage && Evasion.IsSpellUsable)
             {
                 Evasion.Cast();
-                DefensiveTimer = new Timer(1000*10);
+                DefensiveTimer = new Timer(1000 * 10);
                 return true;
             }
             return false;
@@ -638,7 +640,7 @@ public class RogueAssassination
                 ObjectManager.Target.IsStunnable && StunTimer.IsReady)
             {
                 KidneyShot.Cast();
-                StunTimer = new Timer(1000*1 + ObjectManager.Me.ComboPoint);
+                StunTimer = new Timer(1000 * 1 + ObjectManager.Me.ComboPoint);
                 return;
             }
             //Cast Kingsbane when
@@ -660,6 +662,8 @@ public class RogueAssassination
                 //Kingsbane Dot is up
                 Kingsbane.TargetHaveBuff)
             {
+                GarroteHasExsanguinateBuff = true;
+                RuptureHasExsanguinateBuff = true;
                 Exsanguinate.Cast();
                 return;
             }
@@ -668,12 +672,15 @@ public class RogueAssassination
             if (MySettings.UseGarrote && Garrote.IsSpellUsable &&
                 ObjectManager.Me.Energy >= 45 && Garrote.IsHostileDistanceGood &&
                 //it has 6 or less seconds remaining and
-                ObjectManager.Target.UnitAura(Garrote.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 6000 &&
-                //except during Exsanguinate.
-                !Exsanguinate.TargetHaveBuffFromMe)
+                ObjectManager.Target.UnitAura(Garrote.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 6000)
             {
-                Garrote.Cast();
-                return;
+                //it won't reset Exsanguinate
+                if (!Garrote.TargetHaveBuffFromMe || !GarroteHasExsanguinateBuff)
+                {
+                    GarroteHasExsanguinateBuff = false;
+                    Garrote.Cast();
+                    return;
+                }
             }
             //2. Cast Marked for Death (when talented) when
             if (MySettings.UseMarkedforDeath && MarkedforDeath.IsSpellUsable && MarkedforDeath.IsHostileDistanceGood &&
@@ -709,12 +716,15 @@ public class RogueAssassination
                 //you have max combo points and
                 GetFreeComboPoints() == 0 &&
                 //it has 8 or less seconds remaining and
-                ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000 &&
-                //except during Exsanguinate.
-                !Exsanguinate.TargetHaveBuffFromMe)
+                ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000)
             {
-                Rupture.Cast();
-                return;
+                //it won't reset Exsanguinate
+                if (!Rupture.TargetHaveBuffFromMe || !RuptureHasExsanguinateBuff)
+                {
+                    RuptureHasExsanguinateBuff = false;
+                    Rupture.Cast();
+                    return;
+                }
             }
             //3. Cast Envenom when
             if (MySettings.UseEnvenom && Envenom.IsSpellUsable &&
@@ -754,7 +764,7 @@ public class RogueAssassination
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueAssassinationSettings
@@ -1118,7 +1128,7 @@ public class RogueOutlaw
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1126,14 +1136,14 @@ public class RogueOutlaw
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000*5);
+                    DefensiveTimer = new Timer(1000 * 5);
                     return true;
                 }
             }
@@ -1142,14 +1152,14 @@ public class RogueOutlaw
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000*5);
+                DefensiveTimer = new Timer(1000 * 5);
                 return true;
             }
             //Riposte
             if (ObjectManager.Me.HealthPercent < MySettings.UseRiposteBelowPercentage && Riposte.IsSpellUsable)
             {
                 Riposte.Cast();
-                DefensiveTimer = new Timer(1000*10);
+                DefensiveTimer = new Timer(1000 * 10);
                 return true;
             }
             return false;
@@ -1227,7 +1237,7 @@ public class RogueOutlaw
                 ObjectManager.Target.IsStunnable && StealthBuff.HaveBuff)
             {
                 CheapShot.Cast();
-                StunTimer = new Timer(1000*4);
+                StunTimer = new Timer(1000 * 4);
                 return;
             }
             //1. Apply Roll the Bones when
@@ -1337,7 +1347,7 @@ public class RogueOutlaw
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueOutlawSettings
@@ -1688,7 +1698,7 @@ public class RogueSubtlety
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1696,14 +1706,14 @@ public class RogueSubtlety
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000*5);
+                    DefensiveTimer = new Timer(1000 * 5);
                     return true;
                 }
             }
@@ -1712,14 +1722,14 @@ public class RogueSubtlety
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000*5);
+                DefensiveTimer = new Timer(1000 * 5);
                 return true;
             }
             //Evasion
             if (ObjectManager.Me.HealthPercent < MySettings.UseEvasionBelowPercentage && Evasion.IsSpellUsable)
             {
                 Evasion.Cast();
-                DefensiveTimer = new Timer(1000*10);
+                DefensiveTimer = new Timer(1000 * 10);
                 return true;
             }
             return false;
@@ -1857,7 +1867,7 @@ public class RogueSubtlety
                 ObjectManager.Target.IsStunnable && StunTimer.IsReady)
             {
                 KidneyShot.Cast();
-                StunTimer = new Timer(1000*1 + ObjectManager.Me.ComboPoint);
+                StunTimer = new Timer(1000 * 1 + ObjectManager.Me.ComboPoint);
                 return;
             }
             //Cast Goremaw's Bite when
@@ -1897,13 +1907,13 @@ public class RogueSubtlety
                     return;
                 }
                 else if (MySettings.UseBackstap && Backstab.IsSpellUsable &&
-                         ObjectManager.Me.Energy >= 35 && Backstab.IsHostileDistanceGood)
+                    ObjectManager.Me.Energy >= 35 && Backstab.IsHostileDistanceGood)
                 {
                     Backstab.Cast();
                     return;
                 }
             }
-                //Spend combo points if they are capping.
+            //Spend combo points if they are capping.
             else
             {
                 //Apply Enveloping Shadows when
@@ -1948,7 +1958,7 @@ public class RogueSubtlety
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueSubtletySettings

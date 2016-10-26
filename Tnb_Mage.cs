@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Mage Specialisation checking
+                #region Mage Specialisation checking
 
                 case WoWClass.Mage:
 
@@ -155,7 +155,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -405,7 +405,7 @@ public class MageArcane
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -413,7 +413,7 @@ public class MageArcane
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Ice Barrier
@@ -980,7 +980,7 @@ public class MageFire
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -988,7 +988,7 @@ public class MageFire
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Ice Barrier
@@ -1534,7 +1534,7 @@ public class MageFrost
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1542,7 +1542,7 @@ public class MageFrost
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Ice Barrier

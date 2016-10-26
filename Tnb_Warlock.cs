@@ -84,7 +84,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Warlock Specialisation checking
+                #region Warlock Specialisation checking
 
                 case WoWClass.Warlock:
 
@@ -156,7 +156,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -171,7 +171,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -515,7 +515,7 @@ public class WarlockAffliction
             {
                 Logging.WriteFight("Use Healthstone.");
                 ItemsManager.UseItem("Healthstone");
-                HealthstoneTimer = new Timer(1000*60);
+                HealthstoneTimer = new Timer(1000 * 60);
                 return true;
             }
             //Channel Drain Life & Drain Soul
@@ -550,7 +550,7 @@ public class WarlockAffliction
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -558,7 +558,7 @@ public class WarlockAffliction
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDarkPactBelowPercentage && DarkPact.IsSpellUsable)
@@ -631,7 +631,7 @@ public class WarlockAffliction
                 //Maintain Unstable Affliction when you have the Contagion Talent
                 if (MySettings.UseUnstableAffliction && UnstableAffliction.IsSpellUsable &&
                     !ObjectManager.Me.GetMove && UnstableAffliction.IsHostileDistanceGood &&
-                    ObjectManager.Target.AuraTimeLeft(UnstableAfflictionDot.Id, true) <= 1000*8/3)
+                    ObjectManager.Target.AuraTimeLeft(UnstableAfflictionDot.Id, true) <= 1000 * 8 / 3)
                 {
                     UnstableAffliction.Cast();
                     return;
@@ -700,7 +700,7 @@ public class WarlockAffliction
             }
             //Maintain Agony
             if (MySettings.UseAgony && Agony.IsSpellUsable && Agony.IsHostileDistanceGood &&
-                ObjectManager.Target.AuraTimeLeft(AgonyDot.Id, true) <= 1000*18/3)
+                ObjectManager.Target.AuraTimeLeft(AgonyDot.Id, true) <= 1000 * 18 / 3)
             {
                 Agony.Cast();
                 return;
@@ -714,7 +714,7 @@ public class WarlockAffliction
             }
             //Maintain Siphon Life
             if (MySettings.UseSiphonLife && SiphonLife.IsSpellUsable && SiphonLife.IsHostileDistanceGood &&
-                ObjectManager.Target.AuraTimeLeft(SiphonLifeDot.Id, true) <= 1000*10/3)
+                ObjectManager.Target.AuraTimeLeft(SiphonLifeDot.Id, true) <= 1000 * 10 / 3)
             {
                 SiphonLife.Cast();
                 return;
@@ -738,8 +738,8 @@ public class WarlockAffliction
                 }
                 //Maintain Agony
                 if (MySettings.UseAgony && Agony.IsSpellUsable &&
-                    SoulEffigy.CreatedBySpellInRange((uint) Agony.MaxRangeHostile) &&
-                    SummonedSoulEffigy.AuraTimeLeft(AgonyDot.Id, true) <= 1000*18/3)
+                    SoulEffigy.CreatedBySpellInRange((uint)Agony.MaxRangeHostile) &&
+                    SummonedSoulEffigy.AuraTimeLeft(AgonyDot.Id, true) <= 1000 * 18 / 3)
                 {
                     Lua.RunMacroText("/target " + SoulEffigy.NameInGame);
                     Agony.Cast();
@@ -748,7 +748,7 @@ public class WarlockAffliction
                 }
                 //Maintain Corruption
                 if (MySettings.UseCorruption && Corruption.IsSpellUsable &&
-                    SoulEffigy.CreatedBySpellInRange((uint) Corruption.MaxRangeHostile) &&
+                    SoulEffigy.CreatedBySpellInRange((uint)Corruption.MaxRangeHostile) &&
                     !SummonedSoulEffigy.UnitAura(CorruptionDot.Ids, ObjectManager.Me.Guid).IsValid)
                 {
                     Lua.RunMacroText("/target " + SoulEffigy.NameInGame);
@@ -758,8 +758,8 @@ public class WarlockAffliction
                 }
                 //Maintain Siphon Life
                 if (MySettings.UseSiphonLife && SiphonLife.IsSpellUsable && !ObjectManager.Me.GetMove &&
-                    SoulEffigy.CreatedBySpellInRange((uint) SiphonLife.MaxRangeHostile) &&
-                    SummonedSoulEffigy.AuraTimeLeft(SiphonLifeDot.Id, true) <= 1000*10/3)
+                    SoulEffigy.CreatedBySpellInRange((uint)SiphonLife.MaxRangeHostile) &&
+                    SummonedSoulEffigy.AuraTimeLeft(SiphonLifeDot.Id, true) <= 1000 * 10 / 3)
                 {
                     Lua.RunMacroText("/target " + SoulEffigy.NameInGame);
                     SiphonLife.Cast();
@@ -815,7 +815,7 @@ public class WarlockAffliction
                     return;
                 }
             }
-                //Summon Grimoire
+            //Summon Grimoire
             else if (MySettings.UseGrimoireImp && GrimoireImp.IsSpellUsable && GrimoireImp.IsHostileDistanceGood)
             {
                 GrimoireImp.CastAtPosition(ObjectManager.Target.Position);
@@ -1233,6 +1233,7 @@ public class WarlockDemonology
             if (MySettings.UseCreateHealthstone && ItemsManager.GetItemCount(5512) == 0 &&
                 Usefuls.GetContainerNumFreeSlots > 0 && CreateHealthstone.IsSpellUsable)
             {
+
                 Logging.WriteFight("Create Healthstone");
                 CreateHealthstone.Cast();
                 /*Others.SafeSleep(500);
@@ -1355,7 +1356,7 @@ public class WarlockDemonology
             {
                 Logging.WriteFight("Use Healthstone.");
                 ItemsManager.UseItem("Healthstone");
-                HealthstoneTimer = new Timer(1000*60);
+                HealthstoneTimer = new Timer(1000 * 60);
                 return true;
             }
             //Channel Drain Life
@@ -1390,7 +1391,7 @@ public class WarlockDemonology
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1398,7 +1399,7 @@ public class WarlockDemonology
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDarkPactBelowPercentage && DarkPact.IsSpellUsable)
@@ -1498,7 +1499,7 @@ public class WarlockDemonology
                 DemonicEmpowermentTimer.IsReady)
             {
                 DemonicEmpowerment.Cast();
-                DemonicEmpowermentTimer = new Timer(1000*12);
+                DemonicEmpowermentTimer = new Timer(1000 * 12);
                 return;
             }
 
@@ -1510,7 +1511,7 @@ public class WarlockDemonology
             {
                 SummonInfernal.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             //Summon Doomguard
@@ -1519,7 +1520,7 @@ public class WarlockDemonology
             {
                 SummonDoomguard.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             //Summon Darkglare
@@ -1527,7 +1528,7 @@ public class WarlockDemonology
             {
                 SummonDarkglare.Cast();
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*12));
+                SummonTimers.Add(new Timer(1000 * 12));
                 return;
             }
             //Summon Grimoire
@@ -1535,35 +1536,35 @@ public class WarlockDemonology
             {
                 GrimoireImp.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireFelguard && GrimoireFelguard.IsSpellUsable && GrimoireFelguard.IsHostileDistanceGood)
             {
                 GrimoireFelguard.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireFelhunter && GrimoireFelhunter.IsSpellUsable && GrimoireFelhunter.IsHostileDistanceGood)
             {
                 GrimoireFelhunter.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireSuccubus && GrimoireSuccubus.IsSpellUsable && GrimoireSuccubus.IsHostileDistanceGood)
             {
                 GrimoireSuccubus.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             else if (MySettings.UseGrimoireVoidwalker && GrimoireVoidwalker.IsSpellUsable && GrimoireVoidwalker.IsHostileDistanceGood)
             {
                 GrimoireVoidwalker.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             //Summon Grimoire of Service
@@ -1571,7 +1572,7 @@ public class WarlockDemonology
             {
                 GrimoireofService.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*25));
+                SummonTimers.Add(new Timer(1000 * 25));
                 return;
             }
             //Summon Dreadstalkers
@@ -1580,8 +1581,8 @@ public class WarlockDemonology
             {
                 CallDreadstalkers.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                SummonTimers.Add(new Timer(1000*12));
-                SummonTimers.Add(new Timer(1000*12));
+                SummonTimers.Add(new Timer(1000 * 12));
+                SummonTimers.Add(new Timer(1000 * 12));
                 return;
             }
             //Cast Hand of Guldan when
@@ -1592,8 +1593,8 @@ public class WarlockDemonology
             {
                 HandofGuldan.CastAtPosition(ObjectManager.Target.Position);
                 DemonicEmpowermentTimer.ForceReady();
-                ImpsAliveTimer = new Timer(1000*12);
-                ImplosionTimer = new Timer(1000*(12 - 1));
+                ImpsAliveTimer = new Timer(1000 * 12);
+                ImplosionTimer = new Timer(1000 * (12 - 1));
                 return;
             }
             //Apply Soul Harvest when you don't use it to Buff Thal'kiel's Consumption
@@ -2131,7 +2132,7 @@ public class WarlockDestruction
             {
                 Logging.WriteFight("Use Healthstone.");
                 ItemsManager.UseItem("Healthstone");
-                HealthstoneTimer = new Timer(1000*60);
+                HealthstoneTimer = new Timer(1000 * 60);
                 return true;
             }
             //Channel Drain Life
@@ -2166,7 +2167,7 @@ public class WarlockDestruction
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -2174,7 +2175,7 @@ public class WarlockDestruction
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDarkPactBelowPercentage && DarkPact.IsSpellUsable)
@@ -2265,7 +2266,7 @@ public class WarlockDestruction
                     return;
                 }
             }
-                //Summon Grimoire
+            //Summon Grimoire
             else if (MySettings.UseGrimoireImp && GrimoireImp.IsSpellUsable && GrimoireImp.IsHostileDistanceGood)
             {
                 GrimoireImp.CastAtPosition(ObjectManager.Target.Position);
@@ -2300,7 +2301,7 @@ public class WarlockDestruction
             //Maintain Immolate
             if (MySettings.UseImmolate && Immolate.IsSpellUsable &&
                 !ObjectManager.Me.GetMove && Immolate.IsHostileDistanceGood &&
-                ObjectManager.Target.AuraTimeLeft(ImmolateDot.Id, true) <= 1000*21/3)
+                ObjectManager.Target.AuraTimeLeft(ImmolateDot.Id, true) <= 1000 * 21 / 3)
             {
                 Immolate.Cast();
                 return;
@@ -2350,7 +2351,7 @@ public class WarlockDestruction
                 //you have the Eradication Talent and
                 Eradication.HaveBuff &&
                 //it won't cap it's duration [1000 * (duration / 3) + casttime]
-                ObjectManager.Me.AuraTimeLeft(EradicationBuff.Id, true) <= 1000*(6/3) + 3)
+                ObjectManager.Me.AuraTimeLeft(EradicationBuff.Id, true) <= 1000 * (6 / 3) + 3)
             {
                 ChaosBolt.Cast();
                 return;

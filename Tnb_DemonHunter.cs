@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region DemonHunter Specialisation checking
+                #region DemonHunter Specialisation checking
 
                 case WoWClass.DemonHunter:
 
@@ -131,7 +131,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -146,7 +146,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -554,7 +554,7 @@ public class DemonHunterHavoc
                     return;
                 }
             }
-                //Multiple Target
+            //Multiple Target
             else
             {
                 if (MySettings.UseFuryoftheIllidari && FuryoftheIllidari.IsSpellUsable && FuryoftheIllidari.IsHostileDistanceGood &&
@@ -949,13 +949,13 @@ public class DemonHunterVengeance
                                                   ObjectManager.Me.HealthPercent < MySettings.UseDemonSpikesBelowPercentage))
                 {
                     DemonSpikes.Cast();
-                    DefensiveTimer = new Timer(1000*6);
+                    DefensiveTimer = new Timer(1000 * 6);
                     return true;
                 }
                 if (FieryBrand.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFieryBrandBelowPercentage)
                 {
                     FieryBrand.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
             }
@@ -970,7 +970,7 @@ public class DemonHunterVengeance
                 !EmpowerWards.HaveBuff)
             {
                 EmpowerWards.Cast();
-                DefensiveTimer = new Timer(1000*6);
+                DefensiveTimer = new Timer(1000 * 6);
                 return true;
             }
             return false;
@@ -1017,7 +1017,7 @@ public class DemonHunterVengeance
 
             //Growl
             if (MySettings.UseTorment && Torment.IsSpellUsable && Torment.IsHostileDistanceGood &&
-                !ObjectManager.Target.IsTargetingMe)
+               !ObjectManager.Target.IsTargetingMe)
             {
                 Torment.Cast();
                 return;
@@ -1097,13 +1097,13 @@ public class DemonHunterVengeance
                     if (MySettings.UseSigilofFlame && SigilofFlame.IsSpellUsable && SigilofFlame.IsHostileDistanceGood)
                     {
                         SigilofFlame.Cast();
-                        SigilofFlameTimer = new Timer(1000*8);
+                        SigilofFlameTimer = new Timer(1000 * 8);
                         return;
                     }
                     if (FlameCrash.HaveBuff && MySettings.UseInfernalStrike && InfernalStrike.IsSpellUsable && InfernalStrike.IsHostileDistanceGood)
                     {
                         InfernalStrike.Cast();
-                        SigilofFlameTimer = new Timer(1000*8);
+                        SigilofFlameTimer = new Timer(1000 * 8);
                         return;
                     }
                 }
@@ -1113,7 +1113,7 @@ public class DemonHunterVengeance
                     return;
                 }
             }
-                //Multiple Target
+            //Multiple Target
             else
             {
                 if (MySettings.UseSpiritBomb && SpiritBomb.IsSpellUsable && SpiritBomb.IsHostileDistanceGood &&
@@ -1138,13 +1138,13 @@ public class DemonHunterVengeance
                     if (MySettings.UseSigilofFlame && SigilofFlame.IsSpellUsable && SigilofFlame.IsHostileDistanceGood)
                     {
                         SigilofFlame.CastAtPosition(ObjectManager.Target.Position);
-                        SigilofFlameTimer = new Timer(1000*8);
+                        SigilofFlameTimer = new Timer(1000 * 8);
                         return;
                     }
                     if (FlameCrash.HaveBuff && MySettings.UseInfernalStrike && InfernalStrike.IsSpellUsable && InfernalStrike.IsHostileDistanceGood)
                     {
                         InfernalStrike.CastAtPosition(ObjectManager.Target.Position);
-                        SigilofFlameTimer = new Timer(1000*8);
+                        SigilofFlameTimer = new Timer(1000 * 8);
                         return;
                     }
                 }
@@ -1162,7 +1162,7 @@ public class DemonHunterVengeance
                 {
                     InfernalStrike.CastAtPosition(ObjectManager.Target.Position);
                     if (FlameCrash.HaveBuff)
-                        SigilofFlameTimer = new Timer(1000*8);
+                        SigilofFlameTimer = new Timer(1000 * 8);
                     return;
                 }
             }

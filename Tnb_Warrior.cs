@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Warrior Specialisation checking
+                #region Warrior Specialisation checking
 
                 case WoWClass.Warrior:
 
@@ -152,7 +152,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -167,7 +167,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -423,7 +423,7 @@ public class WarriorArms
 
             //Toggle Defensive Stance
             if (((ObjectManager.Me.HealthPercent < MySettings.UseDefensiveStanceBelowPercentage && !DefensiveStance.HaveBuff) ||
-                 (ObjectManager.Me.HealthPercent >= MySettings.UseDefensiveStanceBelowPercentage && DefensiveStance.HaveBuff)) &&
+                (ObjectManager.Me.HealthPercent >= MySettings.UseDefensiveStanceBelowPercentage && DefensiveStance.HaveBuff)) &&
                 DefensiveStance.IsSpellUsable)
             {
                 DefensiveStance.Cast();
@@ -436,7 +436,7 @@ public class WarriorArms
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                     //Storm Bolt
@@ -444,7 +444,7 @@ public class WarriorArms
                         StormBolt.IsSpellUsable && StormBolt.IsHostileDistanceGood)
                     {
                         StormBolt.Cast();
-                        StunTimer = new Timer(1000*4);
+                        StunTimer = new Timer(1000 * 4);
                         return true;
                     }
                 }
@@ -452,7 +452,7 @@ public class WarriorArms
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
             }
@@ -461,14 +461,14 @@ public class WarriorArms
             if (ObjectManager.Me.HealthPercent < MySettings.UseDiebytheSwordBelowPercentage && DiebytheSword.IsSpellUsable)
             {
                 DiebytheSword.Cast();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             //Commanding Shout
             if (ObjectManager.Me.HealthPercent < MySettings.UseCommandingShoutBelowPercentage && CommandingShout.IsSpellUsable)
             {
                 CommandingShout.Cast();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             return false;
@@ -614,7 +614,7 @@ public class WarriorArms
                 //Maintain Rend when
                 if (MySettings.UseRend && Rend.IsSpellUsable &&
                     HaveRage(15) && Rend.IsHostileDistanceGood &&
-                    ObjectManager.Target.AuraTimeLeft(Rend.Id, true) <= 1000*15/3 &&
+                    ObjectManager.Target.AuraTimeLeft(Rend.Id, true) <= 1000 * 15 / 3 &&
                     //Colossus Smash Dot is absent
                     !ColossusSmash.TargetHaveBuffFromMe)
                 {
@@ -1044,8 +1044,8 @@ public class WarriorProtection
             //Victory Rush / Impending Victory
             if (MySettings.UseVictoryRush_ImpendingVictory && VictoryRush.IsSpellUsable &&
                 VictoryRush.IsHostileDistanceGood && (ObjectManager.Me.HealthPercent < 70 ||
-                                                      (ImpendingVictory.HaveBuff && ObjectManager.Me.Rage >= 10 &&
-                                                       ObjectManager.Me.HealthPercent < 85)))
+                (ImpendingVictory.HaveBuff && ObjectManager.Me.Rage >= 10 &&
+                ObjectManager.Me.HealthPercent < 85)))
             {
                 VictoryRush.Cast();
                 return true;
@@ -1075,7 +1075,7 @@ public class WarriorProtection
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                     //Storm Bolt
@@ -1083,7 +1083,7 @@ public class WarriorProtection
                         StormBolt.IsSpellUsable && StormBolt.IsHostileDistanceGood)
                     {
                         StormBolt.Cast();
-                        StunTimer = new Timer(1000*4);
+                        StunTimer = new Timer(1000 * 4);
                         return true;
                     }
                 }
@@ -1091,16 +1091,16 @@ public class WarriorProtection
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Demoralizing Shout
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDemoralizingShoutBelowPercentage &&
                     DemoralizingShout.IsSpellUsable && (!BoomingVoice.HaveBuff ||
-                                                        (ObjectManager.Me.MaxRage - ObjectManager.Me.Rage) >= 50))
+                    (ObjectManager.Me.MaxRage - ObjectManager.Me.Rage) >= 50))
                 {
                     DemoralizingShout.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
             }
@@ -1114,7 +1114,7 @@ public class WarriorProtection
             if (ObjectManager.Me.HealthPercent < MySettings.UseShieldWallBelowPercentage && ShieldWall.IsSpellUsable)
             {
                 ShieldWall.Cast();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             //Spell Reflection
@@ -1259,7 +1259,7 @@ public class WarriorProtection
             //Cast Intercept
             if (MySettings.UseIntercept && Intercept.IsSpellUsable &&
                 ((ObjectManager.Target.IsHostile && Intercept.IsHostileDistanceGood) ||
-                 Intercept.IsFriendDistanceGood))
+                Intercept.IsFriendDistanceGood))
             {
                 Intercept.Cast();
                 return;
@@ -1298,7 +1298,7 @@ public class WarriorProtection
             if (MySettings.UseShieldSlam && ShieldSlam.IsSpellUsable && ShieldSlam.IsHostileDistanceGood)
             {
                 ShieldSlam.Cast();
-                RevengeTimer = new Timer(1000*7.5);
+                RevengeTimer = new Timer(1000 * 7.5);
                 return;
             }
             //Cast Revenge when Shield Slam has under 1.5 seconds left on its cooldown.
@@ -1708,7 +1708,7 @@ public class WarriorFury
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                     //Storm Bolt
@@ -1716,7 +1716,7 @@ public class WarriorFury
                         StormBolt.IsSpellUsable && StormBolt.IsHostileDistanceGood)
                     {
                         StormBolt.Cast();
-                        StunTimer = new Timer(1000*4);
+                        StunTimer = new Timer(1000 * 4);
                         return true;
                     }
                 }
@@ -1724,7 +1724,7 @@ public class WarriorFury
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
             }
@@ -1733,14 +1733,14 @@ public class WarriorFury
             if (ObjectManager.Me.HealthPercent < MySettings.UseEnragedRegenerationBelowPercentage && EnragedRegeneration.IsSpellUsable)
             {
                 EnragedRegeneration.Cast();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             //Commanding Shout
             if (ObjectManager.Me.HealthPercent < MySettings.UseCommandingShoutBelowPercentage && CommandingShout.IsSpellUsable)
             {
                 CommandingShout.Cast();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             return false;
@@ -1801,7 +1801,7 @@ public class WarriorFury
                     BerserkerRage.Cast();
 
                 BattleCry.Cast();
-                BattleCryHalfCD = new Timer(1000*30);
+                BattleCryHalfCD = new Timer(1000 * 30);
             }
             //Apply Bloodbath between Battle Cries
             if (MySettings.UseBloodbath && Bloodbath.IsSpellUsable && BattleCryHalfCD.IsReady)
@@ -1960,7 +1960,7 @@ public class WarriorFury
             //Maintain Frenzy
             if (MySettings.UseFuriousSlash && FuriousSlash.IsSpellUsable &&
                 FuriousSlash.IsHostileDistanceGood && Frenzy.HaveBuff &&
-                (FrenzyBuff.BuffStack < 3 || ObjectManager.Me.UnitAura(FrenzyBuff.Id).AuraTimeLeftInMs < 1000*10/3))
+                (FrenzyBuff.BuffStack < 3 || ObjectManager.Me.UnitAura(FrenzyBuff.Id).AuraTimeLeftInMs < 1000 * 10 / 3))
             {
                 FuriousSlash.Cast();
                 return;

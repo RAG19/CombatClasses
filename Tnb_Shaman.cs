@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Shaman Specialisation checking
+                #region Shaman Specialisation checking
 
                 case WoWClass.Shaman:
 
@@ -154,7 +154,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -169,7 +169,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -485,13 +485,13 @@ public class ShamanEnhancement
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                     if (LightningSurgeTotem.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseLightningSurgeTotemBelowPercentage)
                     {
                         LightningSurgeTotem.CastAtPosition(ObjectManager.Target.Position);
-                        StunTimer = new Timer(1000*7);
+                        StunTimer = new Timer(1000 * 7);
                         return true;
                     }
                 }
@@ -499,13 +499,13 @@ public class ShamanEnhancement
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 if (AstralShift.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseAstralShiftBelowPercentage)
                 {
                     AstralShift.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
             }
@@ -1077,7 +1077,7 @@ public class ShamanRestoration
             && !ObjectManager.Me.InCombat && MySettings.UseWaterWalking)
         {
             WaterWalking.CastOnSelf();
-            _waterWalkingTimer = new Timer(1000*60*9);
+            _waterWalkingTimer = new Timer(1000 * 60 * 9);
             return;
         }
         if (MySettings.UseWaterShield && !WaterShield.HaveBuff && WaterShield.KnownSpell && WaterShield.IsSpellUsable &&
@@ -1153,7 +1153,7 @@ public class ShamanRestoration
         if (ObjectManager.Target.GetDistance < MySettings.DoAvoidMeleeDistance && ObjectManager.Target.InCombat)
         {
             Logging.WriteFight("Too Close. Moving Back");
-            var maxTimeTimer = new Timer(1000*2);
+            var maxTimeTimer = new Timer(1000 * 2);
             MovementsAction.MoveBackward(true);
             while (ObjectManager.Target.GetDistance < 2 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady)
                 Others.SafeSleep(300);
@@ -1174,7 +1174,7 @@ public class ShamanRestoration
             && AirTotemReady() && MySettings.UseCapacitorTotem)
         {
             CapacitorTotem.Cast();
-            _onCd = new Timer(1000*5);
+            _onCd = new Timer(1000 * 5);
             return;
         }
         if (ObjectManager.Me.HealthPercent < 50 && StoneBulwarkTotem.KnownSpell &&
@@ -1182,7 +1182,7 @@ public class ShamanRestoration
             && EarthTotemReady() && MySettings.UseStoneBulwarkTotem)
         {
             StoneBulwarkTotem.Cast();
-            _onCd = new Timer(1000*10);
+            _onCd = new Timer(1000 * 10);
             return;
         }
         if (ObjectManager.Me.HealthPercent < 70 && SpiritLinkTotem.KnownSpell &&
@@ -1190,7 +1190,7 @@ public class ShamanRestoration
             && AirTotemReady() && MySettings.UseSpiritLinkTotem)
         {
             SpiritLinkTotem.Cast();
-            _onCd = new Timer(1000*6);
+            _onCd = new Timer(1000 * 6);
             return;
         }
         if (ObjectManager.Me.HealthPercent <= MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable &&
@@ -1198,7 +1198,7 @@ public class ShamanRestoration
             && MySettings.UseWarStomp)
         {
             WarStomp.Cast();
-            _onCd = new Timer(1000*2);
+            _onCd = new Timer(1000 * 2);
             return;
         }
         if (ObjectManager.Me.HealthPercent <= MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable &&
@@ -1206,14 +1206,14 @@ public class ShamanRestoration
             && MySettings.UseStoneform)
         {
             Stoneform.Cast();
-            _onCd = new Timer(1000*8);
+            _onCd = new Timer(1000 * 8);
             return;
         }
         if (ObjectManager.Me.HealthPercent < 70 && AstralShift.KnownSpell && AstralShift.IsSpellUsable
             && MySettings.UseAstralShift)
         {
             AstralShift.Cast();
-            _onCd = new Timer(1000*6);
+            _onCd = new Timer(1000 * 6);
         }
     }
 
@@ -1456,7 +1456,7 @@ public class ShamanRestoration
                 && MySettings.UseFlameShock && (!FlameShock.TargetHaveBuff || _flameShockTimer.IsReady))
             {
                 FlameShock.Cast();
-                _flameShockTimer = new Timer(1000*27);
+                _flameShockTimer = new Timer(1000 * 27);
                 return;
             }
             if (LavaBurst.KnownSpell && LavaBurst.IsSpellUsable && LavaBurst.IsHostileDistanceGood
@@ -1907,7 +1907,7 @@ public class ShamanElemental
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            int leveldif = (int) ObjectManager.Me.Level - (int) ObjectManager.Target.Level;
+            int leveldif = (int)ObjectManager.Me.Level - (int)ObjectManager.Target.Level;
 
             if (ObjectManager.Target.HealthPercent == 100 && leveldif > MySettings.TryOneshotLevelDifference)
             {
@@ -2020,14 +2020,14 @@ public class ShamanElemental
                     LightningSurgeTotem.IsSpellUsable && MySettings.UseLightningSurgeTotem)
                 {
                     LightningSurgeTotem.CastAtPosition(ObjectManager.Target.Position);
-                    StunTimer = new Timer(1000*7);
+                    StunTimer = new Timer(1000 * 7);
                     return;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage &&
                     WarStomp.IsSpellUsable && MySettings.UseWarStomp)
                 {
                     WarStomp.Cast();
-                    StunTimer = new Timer(1000*2);
+                    StunTimer = new Timer(1000 * 2);
                     return;
                 }
             }
@@ -2081,7 +2081,7 @@ public class ShamanElemental
                 Logging.Write("Target.GetUnitInSpellRange(8f) == " + ObjectManager.Target.GetUnitInSpellRange(8f));
 
                 Earthquake.Cast();
-                EarthquakeCooldown = new Timer(1000*10);
+                EarthquakeCooldown = new Timer(1000 * 10);
                 return;
             }
             if (ObjectManager.Me.Maelstrom > 90 && EarthShock.IsHostileDistanceGood &&

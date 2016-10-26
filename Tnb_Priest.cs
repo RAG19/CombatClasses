@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                    #region Priest Specialisation checking
+                #region Priest Specialisation checking
 
                 case WoWClass.Priest:
 
@@ -155,7 +155,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                    #endregion
+                #endregion
 
                 default:
                     Dispose();
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T) mySettings : default(T);
+        mySettings = mySettings is T ? (T)mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -431,7 +431,7 @@ public class PriestDiscipline
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.CastOnSelf();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -439,7 +439,7 @@ public class PriestDiscipline
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.CastOnSelf();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Shining Force
@@ -447,14 +447,14 @@ public class PriestDiscipline
                     ObjectManager.Me.GetUnitInSpellRange(10f) >= 1)
                 {
                     ShiningForce.CastOnSelf();
-                    DefensiveTimer = new Timer(1000*3);
+                    DefensiveTimer = new Timer(1000 * 3);
                     return true;
                 }
                 //Fade
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFadeBelowPercentage && Fade.IsSpellUsable)
                 {
                     Fade.CastOnSelf();
-                    DefensiveTimer = new Timer(1000*10);
+                    DefensiveTimer = new Timer(1000 * 10);
                     return true;
                 }
                 //Power Word: Shield
@@ -483,7 +483,7 @@ public class PriestDiscipline
             if (ObjectManager.Me.HealthPercent < MySettings.UsePainSuppressionBelowPercentage && PainSuppression.IsSpellUsable)
             {
                 PainSuppression.CastOnSelf();
-                DefensiveTimer = new Timer(1000*8);
+                DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
             //Power Word: Barrier
@@ -491,7 +491,7 @@ public class PriestDiscipline
                 PowerWordBarrier.IsSpellUsable)
             {
                 PowerWordBarrier.CastOnSelf();
-                DefensiveTimer = new Timer(1000*10);
+                DefensiveTimer = new Timer(1000 * 10);
                 return true;
             }
             return false;
@@ -1033,7 +1033,7 @@ public class PriestHoly
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1041,7 +1041,7 @@ public class PriestHoly
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Shining Force
@@ -1049,14 +1049,14 @@ public class PriestHoly
                     ObjectManager.Me.GetUnitInSpellRange(10f) >= 1)
                 {
                     ShiningForce.CastOnSelf();
-                    DefensiveTimer = new Timer(1000*3);
+                    DefensiveTimer = new Timer(1000 * 3);
                     return true;
                 }
                 //Fade
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFadeBelowPercentage && Fade.IsSpellUsable)
                 {
                     Fade.Cast();
-                    DefensiveTimer = new Timer(1000*10);
+                    DefensiveTimer = new Timer(1000 * 10);
                     return true;
                 }
             }
@@ -1513,7 +1513,7 @@ public class PriestShadow
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000*2.5);
+                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
@@ -1521,14 +1521,14 @@ public class PriestShadow
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000*8);
+                    DefensiveTimer = new Timer(1000 * 8);
                     return true;
                 }
                 //Fade
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFadeBelowPercentage && Fade.IsSpellUsable)
                 {
                     Fade.Cast();
-                    DefensiveTimer = new Timer(1000*10);
+                    DefensiveTimer = new Timer(1000 * 10);
                     return true;
                 }
                 //Power Word: Shield
@@ -1544,7 +1544,7 @@ public class PriestShadow
             if (ObjectManager.Me.HealthPercent < MySettings.UseDispersionBelowPercentage && Dispersion.IsSpellUsable)
             {
                 Dispersion.Cast();
-                DefensiveTimer = new Timer(1000*6);
+                DefensiveTimer = new Timer(1000 * 6);
                 return true;
             }
             return false;
@@ -1635,7 +1635,7 @@ public class PriestShadow
             //Use Void Eruption
             if (MySettings.UseVoidEruption && VoidEruption.IsSpellUsable &&
                 ((LegacyoftheVoid.HaveBuff && ObjectManager.Me.Insanity >= 70) ||
-                 ObjectManager.Me.Insanity >= 100) && !ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
+                ObjectManager.Me.Insanity >= 100) && !ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid)
             {
                 VoidEruption.Cast();
                 return;
@@ -1670,8 +1670,8 @@ public class PriestShadow
                 }
             }
             else if (MySettings.UseShadowfiend && Shadowfiend.IsSpellUsable &&
-                     //you have low Voidform stacks.
-                     Voidform.BuffStack <= 50)
+                    //you have low Voidform stacks.
+                    Voidform.BuffStack <= 50)
             {
                 Shadowfiend.Cast();
                 return;
@@ -1680,11 +1680,11 @@ public class PriestShadow
             if (MySettings.UseShadowWordDeath && ShadowWordDeath.IsSpellUsable &&
                 ShadowWordDeath.IsHostileDistanceGood &&
                 ((ReaperofSouls.HaveBuff && ObjectManager.Target.HealthPercent < 35) ||
-                 ObjectManager.Target.HealthPercent < 20) && ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid &&
+                ObjectManager.Target.HealthPercent < 20) && ObjectManager.Me.UnitAura(Voidform.Id, ObjectManager.Me.Guid).IsValid &&
                 //you have 2 charges or
                 (ShadowWordDeath.GetSpellCharges >= 2 ||
-                 //you will not fall out of Voidform in 2 seconds and Mind Blast is off cooldown.
-                 (ObjectManager.Me.Insanity > 9*2 && MindBlast.IsSpellUsable)))
+                //you will not fall out of Voidform in 2 seconds and Mind Blast is off cooldown.
+                (ObjectManager.Me.Insanity > 9 * 2 && MindBlast.IsSpellUsable)))
             {
                 ShadowWordDeath.Cast();
                 return;
@@ -1708,8 +1708,8 @@ public class PriestShadow
                 }
             }
             else if (MySettings.UseShadowfiend && Shadowfiend.IsSpellUsable &&
-                     //you have high Voidform stacks.
-                     Voidform.BuffStack > 50)
+                    //you have high Voidform stacks.
+                    Voidform.BuffStack > 50)
             {
                 Shadowfiend.Cast();
                 return;
