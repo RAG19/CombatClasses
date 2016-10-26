@@ -83,83 +83,83 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region DeathKnight Specialisation checking
+                    #region DeathKnight Specialisation checking
 
                 case WoWClass.DeathKnight:
 
-                if (wowSpecialization == WoWSpecialization.DeathknightBlood)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.DeathknightBlood)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Blood.xml";
-                        var currentSetting = new DeathknightBlood.DeathknightBloodSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<DeathknightBlood.DeathknightBloodSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Blood.xml";
+                            var currentSetting = new DeathknightBlood.DeathknightBloodSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DeathknightBlood.DeathknightBloodSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Loading Deathknight Blood Combat class...");
+                            InternalRange = 5.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightBlood);
+                            new DeathknightBlood();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.DeathknightUnholy || wowSpecialization == WoWSpecialization.None)
                     {
-                        Logging.WriteFight("Loading Deathknight Blood Combat class...");
-                        InternalRange = 5.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightBlood);
-                        new DeathknightBlood();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Unholy.xml";
+                            var currentSetting = new DeathknightUnholy.DeathknightUnholySettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DeathknightUnholy.DeathknightUnholySettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Deathknight Unholy Combat class...");
+                            InternalRange = 5.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightUnholy);
+                            new DeathknightUnholy();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.DeathknightFrost)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Frost.xml";
+                            var currentSetting = new DeathknightFrost.DeathknightFrostSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DeathknightFrost.DeathknightFrostSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Deathknight Frost Combat class...");
+                            InternalRange = 5.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightFrost);
+                            new DeathknightFrost();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.DeathknightUnholy || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Unholy.xml";
-                        var currentSetting = new DeathknightUnholy.DeathknightUnholySettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DeathknightUnholy.DeathknightUnholySettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Deathknight Unholy Combat class...");
-                        InternalRange = 5.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightUnholy);
-                        new DeathknightUnholy();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.DeathknightFrost)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Deathknight_Frost.xml";
-                        var currentSetting = new DeathknightFrost.DeathknightFrostSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DeathknightFrost.DeathknightFrostSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Deathknight Frost Combat class...");
-                        InternalRange = 5.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DeathknightFrost);
-                        new DeathknightFrost();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -296,7 +296,7 @@ public class DeathknightBlood
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -435,13 +435,13 @@ public class DeathknightBlood
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseAsphyxiateBelowPercentage && Asphyxiate.IsSpellUsable)
                     {
                         Asphyxiate.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -449,43 +449,43 @@ public class DeathknightBlood
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseBloodMirrorBelowPercentage && BloodMirror.IsSpellUsable && BloodMirror.IsHostileDistanceGood)
                 {
                     BloodMirror.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDancingRuneWeaponBelowPercentage && DancingRuneWeapon.IsSpellUsable)
                 {
                     DancingRuneWeapon.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseMarkofBloodBelowPercentage && MarkofBlood.IsSpellUsable && MarkofBlood.IsHostileDistanceGood)
                 {
                     MarkofBlood.Cast();
-                    DefensiveTimer = new Timer(1000 * 25);
+                    DefensiveTimer = new Timer(1000*25);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseRuneTapBelowPercentage && RuneTap.IsSpellUsable)
                 {
                     RuneTap.Cast();
-                    DefensiveTimer = new Timer(1000 * 3);
+                    DefensiveTimer = new Timer(1000*3);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseTombstoneBelowPercentage && Tombstone.IsSpellUsable)
                 {
                     Tombstone.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseVampiricBloodBelowPercentage && VampiricBlood.IsSpellUsable)
                 {
                     VampiricBlood.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                     return true;
                 }
             }
@@ -493,7 +493,7 @@ public class DeathknightBlood
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;
@@ -550,21 +550,21 @@ public class DeathknightBlood
 
             //Dark Command
             if (MySettings.UseDarkCommand && DarkCommand.IsSpellUsable && DarkCommand.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 DarkCommand.Cast();
                 return true;
             }
             //Death Grip
             if (MySettings.UseDeathGrip && DeathGrip.IsSpellUsable && DeathGrip.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 DeathGrip.Cast();
                 return true;
             }
             //Gorefiend's Grasp
             if (MySettings.UseGorefiendsGrasp && GorefiendsGrasp.IsSpellUsable && GorefiendsGrasp.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 GorefiendsGrasp.Cast();
                 return true;
@@ -638,7 +638,7 @@ public class DeathknightBlood
                     }
                 }
             }
-            //Multiple Targets
+                //Multiple Targets
             else
             {
                 if (MySettings.UseDeathandDecay && DeathandDecay.IsSpellUsable && DeathandDecay.IsHostileDistanceGood)
@@ -895,7 +895,7 @@ public class DeathknightFrost
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1017,7 +1017,7 @@ public class DeathknightFrost
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                 }
@@ -1025,7 +1025,7 @@ public class DeathknightFrost
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -1033,7 +1033,7 @@ public class DeathknightFrost
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;
@@ -1157,7 +1157,7 @@ public class DeathknightFrost
                     return;
                 }
             }
-            //Multiple Targets
+                //Multiple Targets
             else
             {
                 if (MySettings.UseFrostscythe && Frostscythe.IsSpellUsable && Frostscythe.IsHostileDistanceGood)
@@ -1407,7 +1407,7 @@ public class DeathknightUnholy
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1529,13 +1529,13 @@ public class DeathknightUnholy
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseAsphyxiateBelowPercentage && Asphyxiate.IsSpellUsable)
                     {
                         Asphyxiate.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -1543,7 +1543,7 @@ public class DeathknightUnholy
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -1551,7 +1551,7 @@ public class DeathknightUnholy
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;

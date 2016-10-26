@@ -84,103 +84,103 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Druid Specialisation checking
+                    #region Druid Specialisation checking
 
                 case WoWClass.Druid:
 
-                if (wowSpecialization == WoWSpecialization.DruidFeral || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.DruidFeral || wowSpecialization == WoWSpecialization.None)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Feral.xml";
-                        var currentSetting = new DruidFeral.DruidFeralSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<DruidFeral.DruidFeralSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Feral.xml";
+                            var currentSetting = new DruidFeral.DruidFeralSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DruidFeral.DruidFeralSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Druid Feral Found");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidFeral);
+                            new DruidFeral();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.DruidGuardian)
                     {
-                        Logging.WriteFight("Druid Feral Found");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidFeral);
-                        new DruidFeral();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Guardian.xml";
+                            var currentSetting = new DruidGuardian.DruidGuardianSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DruidGuardian.DruidGuardianSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Feral Guardian Found");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidGuardian);
+                            new DruidGuardian();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.DruidBalance)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Balance.xml";
+                            var currentSetting = new DruidBalance.DruidBalanceSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DruidBalance.DruidBalanceSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Druid Balance Found");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidBalance);
+                            new DruidBalance();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.DruidRestoration)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Restoration.xml";
+                            var currentSetting = new DruidRestoration.DruidRestorationSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DruidRestoration.DruidRestorationSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Druid Restoration Found");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidRestoration);
+                            new DruidRestoration();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.DruidGuardian)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Guardian.xml";
-                        var currentSetting = new DruidGuardian.DruidGuardianSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DruidGuardian.DruidGuardianSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Feral Guardian Found");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidGuardian);
-                        new DruidGuardian();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.DruidBalance)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Balance.xml";
-                        var currentSetting = new DruidBalance.DruidBalanceSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DruidBalance.DruidBalanceSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Druid Balance Found");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidBalance);
-                        new DruidBalance();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.DruidRestoration)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Druid_Restoration.xml";
-                        var currentSetting = new DruidRestoration.DruidRestorationSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DruidRestoration.DruidRestorationSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Druid Restoration Found");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DruidRestoration);
-                        new DruidRestoration();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -191,7 +191,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -323,7 +323,7 @@ public class DruidBalance
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -521,13 +521,13 @@ public class DruidBalance
                     if (MightyBash.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseMightyBashBelowPercentage)
                     {
                         MightyBash.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2);
+                        StunTimer = new Timer(1000*2);
                     }
                 }
                 if (Barkskin.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBarkskinBelowPercentage)
@@ -960,7 +960,7 @@ public class DruidFeral
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1079,11 +1079,12 @@ public class DruidFeral
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-            
+
             //1. Priority: Rake
             if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood && ObjectManager.Target.IsStunnable)
             {
-                Logging.WriteDebug("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood + ", Target Distance: " + ObjectManager.Target.GetDistance + ", CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach + ", Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
+                Logging.WriteDebug("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood + ", Target Distance: " + ObjectManager.Target.GetDistance + ", CombatReach - Me: " + ObjectManager.Me.GetCombatReach +
+                                   ", Target: " + ObjectManager.Target.GetCombatReach + ", Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
                 Rake.Cast();
                 return;
             }
@@ -1163,13 +1164,13 @@ public class DruidFeral
                     if (MightyBash.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseMightyBashBelowPercentage)
                     {
                         MightyBash.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2);
+                        StunTimer = new Timer(1000*2);
                     }
                 }
                 //Mitigate Damage
@@ -1261,10 +1262,10 @@ public class DruidFeral
             if (MySettings.UseTigersFury && TigersFury.IsSpellUsable &&
                 //no Buff uptime will be lost and you have less than 30 Energy or
                 ((ObjectManager.Me.UnitAura(TigersFury.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 2333 &&
-                ObjectManager.Me.Energy < 30) ||
-                //you can use the Predator Talent
-                (Predator.HaveBuff && ObjectManager.Target.HealthPercent < 20 && ObjectManager.Target.IsAlive &&
-                (Rake.HaveBuff || Rip.HaveBuff || AshamanesFrenzy.HaveBuff))))
+                  ObjectManager.Me.Energy < 30) ||
+                 //you can use the Predator Talent
+                 (Predator.HaveBuff && ObjectManager.Target.HealthPercent < 20 && ObjectManager.Target.IsAlive &&
+                  (Rake.HaveBuff || Rip.HaveBuff || AshamanesFrenzy.HaveBuff))))
             {
                 TigersFury.Cast();
                 return true;
@@ -1280,7 +1281,7 @@ public class DruidFeral
     private void Rotation()
     {
         Usefuls.SleepGlobalCooldown();
-        
+
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
@@ -1311,8 +1312,8 @@ public class DruidFeral
             }
             //2. Maintain Savage Roar when you don't have the Buff or
             if (MySettings.UseSavageRoar && SavageRoar.IsSpellUsable && (!SavageRoar.HaveBuff ||
-                //you have max Combo Points and less than 8 seconds remaining.
-                (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
+                                                                         //you have max Combo Points and less than 8 seconds remaining.
+                                                                         (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
             {
                 if (CastHealingTouch() || ObjectManager.Me.Energy < 40)
                     return;
@@ -1358,10 +1359,10 @@ public class DruidFeral
             if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood &&
                 //it isn't on the target or
                 (!Rake.TargetHaveBuffFromMe ||
-                //it has less than 5 seconds remaining and
-                (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
-                //you have the Blood Talons Buff.
-                ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
+                 //it has less than 5 seconds remaining and
+                 (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
+                  //you have the Blood Talons Buff.
+                  ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
                 if (ObjectManager.Me.Energy < 35)
                     return;
@@ -1387,10 +1388,10 @@ public class DruidFeral
                 if (MySettings.UseRip && Rip.IsSpellUsable && Rip.IsHostileDistanceGood &&
                     //it isn't on the target or
                     (!Rip.TargetHaveBuffFromMe ||
-                    //it has less than 8 seconds remaining and
-                    (ObjectManager.Target.UnitAura(Rip.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 &&
-                     //you have Blood Talons Buff.
-                     ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
+                     //it has less than 8 seconds remaining and
+                     (ObjectManager.Target.UnitAura(Rip.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 &&
+                      //you have Blood Talons Buff.
+                      ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
                 {
                     if (CastHealingTouch() || ObjectManager.Me.Energy < 30)
                         return;
@@ -1721,7 +1722,7 @@ public class DruidRestoration
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1871,7 +1872,7 @@ public class DruidRestoration
         if (ObjectManager.Target.GetDistance < MySettings.DoAvoidMeleeDistance && ObjectManager.Target.InCombat)
         {
             Logging.WriteFight("Too Close. Moving Back");
-            var maxTimeTimer = new Timer(1000 * 2);
+            var maxTimeTimer = new Timer(1000*2);
             MovementsAction.MoveBackward(true);
             while (ObjectManager.Target.GetDistance < 2 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady)
                 Others.SafeSleep(300);
@@ -1895,7 +1896,7 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             Barkskin.Cast();
-            _onCd = new Timer(1000 * 12);
+            _onCd = new Timer(1000*12);
             return;
         }
         if (MySettings.UseIncapacitatingRoar && (ObjectManager.Me.HealthPercent <= MySettings.UseIncapacitatingRoarBelowPercentage
@@ -1906,14 +1907,14 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             IncapacitatingRoar.Cast();
-            _onCd = new Timer(1000 * 3);
+            _onCd = new Timer(1000*3);
 
             if (MySettings.UseDisplacerBeast && DisplacerBeast.IsSpellUsable && ObjectManager.GetUnitInSpellRange(5 /*, ObjectManager.Me*/) > 0)
                 DisplacerBeast.Cast();
             else
             {
                 Logging.WriteFight("Defensively Moving Away");
-                var maxTimeTimer = new Timer(1000 * 3);
+                var maxTimeTimer = new Timer(1000*3);
                 MovementsAction.MoveBackward(true);
                 if (ObjectManager.Target.InCombat && !maxTimeTimer.IsReady && IncapacitatingRoar.TargetHaveBuff && ObjectManager.GetUnitInSpellRange(5 /*, ObjectManager.Me*/) > 0)
                 {
@@ -1935,7 +1936,7 @@ public class DruidRestoration
         if (MySettings.UseIronbark && ObjectManager.Me.HealthPercent <= MySettings.UseIronbarkBelowPercentage && Ironbark.IsSpellUsable)
         {
             Ironbark.Cast();
-            _onCd = new Timer(1000 * 12);
+            _onCd = new Timer(1000*12);
             return;
         }
         if (MySettings.UseMassEntanglement && (ObjectManager.Me.HealthPercent <= MySettings.UseMassEntanglementBelowPercentage
@@ -1946,14 +1947,14 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             MassEntanglement.Cast();
-            _onCd = new Timer(1000 * 3);
+            _onCd = new Timer(1000*3);
 
             if (MySettings.UseDisplacerBeast && DisplacerBeast.IsSpellUsable && ObjectManager.GetUnitInSpellRange(5 /*, ObjectManager.Me*/) > 0)
                 DisplacerBeast.Cast();
             else
             {
                 Logging.WriteFight("Defensively Moving Away");
-                var maxTimeTimer = new Timer(1000 * 3);
+                var maxTimeTimer = new Timer(1000*3);
                 MovementsAction.MoveBackward(true);
                 if (ObjectManager.Target.GetDistance < 10 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady && MassEntanglement.TargetHaveBuff)
                 {
@@ -1979,7 +1980,7 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             MightyBash.Cast();
-            _onCd = new Timer(1000 * 5);
+            _onCd = new Timer(1000*5);
             return;
         }
         if (MySettings.UseTyphoon && ObjectManager.Me.HealthPercent <= MySettings.UseTyphoonBelowPercentage && Typhoon.IsSpellUsable && Typhoon.IsHostileDistanceGood)
@@ -1989,7 +1990,7 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             Typhoon.Cast();
-            _onCd = new Timer(1000 * 6);
+            _onCd = new Timer(1000*6);
             return;
         }
         if (MySettings.UseUrsolsVortex && ObjectManager.Me.HealthPercent <= MySettings.UseUrsolsVortexBelowPercentage && UrsolsVortex.IsSpellUsable
@@ -2006,7 +2007,7 @@ public class DruidRestoration
             else
             {
                 Logging.WriteFight("Defensively Moving Away");
-                var maxTimeTimer = new Timer(1000 * 4);
+                var maxTimeTimer = new Timer(1000*4);
                 MovementsAction.MoveBackward(true);
                 while (ObjectManager.Target.GetDistance < 10 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady && UrsolsVortex.TargetHaveBuff)
                     Others.SafeSleep(300);
@@ -2030,7 +2031,7 @@ public class DruidRestoration
 
             Others.SafeSleep(1000);
             WarStomp.Cast();
-            _onCd = new Timer(1000 * 2);
+            _onCd = new Timer(1000*2);
         }
     }
 
@@ -2393,7 +2394,7 @@ public class DruidGuardian
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -2504,7 +2505,7 @@ public class DruidGuardian
             //Frenzied Regeneration
             if (FrenziedRegeneration.IsSpellUsable && DefensiveTimer.IsReady && ObjectManager.Me.Rage >= 10 &&
                 (ObjectManager.Me.HealthPercent < MySettings.UseFrenziedRegenerationBelowPercentage ||
-                (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
+                 (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
             {
                 FrenziedRegeneration.CastOnSelf();
             }
@@ -2574,13 +2575,13 @@ public class DruidGuardian
                     if (MightyBash.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseMightyBashBelowPercentage)
                     {
                         MightyBash.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2);
+                        StunTimer = new Timer(1000*2);
                     }
                 }
                 //Mitigate Damage
@@ -2588,17 +2589,17 @@ public class DruidGuardian
                                                         ObjectManager.Me.HealthPercent < MySettings.UseSurvivalInstinctsBelowPercentage))
                 {
                     SurvivalInstincts.Cast();
-                    DefensiveTimer = new Timer(1000 * 6);
+                    DefensiveTimer = new Timer(1000*6);
                 }
                 if (Barkskin.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBarkskinBelowPercentage)
                 {
                     Barkskin.Cast();
-                    DefensiveTimer = new Timer(1000 * 12);
+                    DefensiveTimer = new Timer(1000*12);
                 }
                 if (RageoftheSleeper.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseRageoftheSleeperBelowPercentage)
                 {
                     RageoftheSleeper.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                 }
             }
             //Mitigate Magic Damage for Rage
@@ -2607,11 +2608,11 @@ public class DruidGuardian
                 !MarkofUrsol.HaveBuff)
             {
                 MarkofUrsol.Cast();
-                DefensiveTimer = new Timer(1000 * 6);
+                DefensiveTimer = new Timer(1000*6);
             }
             //Increase Armor for Rage
             if ((ObjectManager.Me.HealthPercent < MySettings.UseIronfurBelowHealthPercentage ||
-                ObjectManager.Me.Rage > MySettings.UseIronfurAboveRagePercentage) &&
+                 ObjectManager.Me.Rage > MySettings.UseIronfurAboveRagePercentage) &&
                 Ironfur.IsSpellUsable && ObjectManager.Me.Rage >= 45)
             {
                 Ironfur.Cast();
@@ -2678,7 +2679,7 @@ public class DruidGuardian
             if (MySettings.UseBristlingFur && BristlingFur.IsSpellUsable && !DefensiveTimer.IsReady)
             {
                 BristlingFur.Cast();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
             }
             return false;
         }
@@ -2694,7 +2695,7 @@ public class DruidGuardian
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-            
+
             //Use Moonfire if you have a Galactic Guardian proc (if you have chosen this talent).
             if (MySettings.UseMoonfire && Moonfire.IsSpellUsable && Moonfire.IsHostileDistanceGood &&
                 ObjectManager.Me.UnitAura(GalacticGuardianBuff.Id).IsValid)

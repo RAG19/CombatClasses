@@ -83,81 +83,81 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Paladin Specialisation checking
+                    #region Paladin Specialisation checking
 
                 case WoWClass.Paladin:
 
-                if (wowSpecialization == WoWSpecialization.PaladinRetribution || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.PaladinRetribution || wowSpecialization == WoWSpecialization.None)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Retribution.xml";
-                        var currentSetting = new PaladinRetribution.PaladinRetributionSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<PaladinRetribution.PaladinRetributionSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Retribution.xml";
+                            var currentSetting = new PaladinRetribution.PaladinRetributionSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<PaladinRetribution.PaladinRetributionSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Loading Paladin Retribution Combat class...");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinRetribution);
+                            new PaladinRetribution();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.PaladinProtection)
                     {
-                        Logging.WriteFight("Loading Paladin Retribution Combat class...");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinRetribution);
-                        new PaladinRetribution();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Protection.xml";
+                            var currentSetting = new PaladinProtection.PaladinProtectionSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<PaladinProtection.PaladinProtectionSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Paladin Protection Combat class...");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinProtection);
+                            new PaladinProtection();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.PaladinHoly)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Holy.xml";
+                            var currentSetting = new PaladinHoly.PaladinHolySettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<PaladinHoly.PaladinHolySettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Paladin Holy Combat class...");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinHoly);
+                            new PaladinHoly();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.PaladinProtection)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Protection.xml";
-                        var currentSetting = new PaladinProtection.PaladinProtectionSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<PaladinProtection.PaladinProtectionSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Paladin Protection Combat class...");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinProtection);
-                        new PaladinProtection();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.PaladinHoly)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Paladin_Holy.xml";
-                        var currentSetting = new PaladinHoly.PaladinHolySettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<PaladinHoly.PaladinHolySettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Paladin Holy Combat class...");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.PaladinHoly);
-                        new PaladinHoly();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -168,7 +168,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -179,7 +179,7 @@ public class Main : ICombatClass
             Logging.WriteDebug(field.Name + " = " + field.GetValue(mySettings));
         }
         Logging.WriteDebug("Loaded " + ObjectManager.Me.WowSpecialization() + " Combat Class " + Version.ToString("0.0###"));
-        
+
         // Last field is intentionnally ommited because it's a backing field.
     }
 }
@@ -261,7 +261,7 @@ public class PaladinHoly
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -307,7 +307,7 @@ public class PaladinHoly
 
     private void Patrolling()
     {
-       if (!ObjectManager.Me.IsMounted)
+        if (!ObjectManager.Me.IsMounted)
         {
             Heal();
         }
@@ -315,7 +315,7 @@ public class PaladinHoly
 
     private void Buffs()
     {
-       if (!ObjectManager.Me.IsMounted)
+        if (!ObjectManager.Me.IsMounted)
         {
             if (MySettings.UseAlchFlask && !ObjectManager.Me.HaveBuff(79638) && !ObjectManager.Me.HaveBuff(79640) && !ObjectManager.Me.HaveBuff(79639)
                 && !ItemsManager.IsItemOnCooldown(75525) && ItemsManager.GetItemCount(75525) > 0)
@@ -472,7 +472,7 @@ public class PaladinHoly
         if (ObjectManager.Target.GetDistance < MySettings.DoAvoidMeleeDistance && ObjectManager.Target.InCombat)
         {
             Logging.WriteFight("Too Close. Moving Back");
-            var maxTimeTimer = new Timer(1000 * 2);
+            var maxTimeTimer = new Timer(1000*2);
             MovementsAction.MoveBackward(true);
             while (ObjectManager.Target.GetDistance < 2 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady)
                 Others.SafeSleep(300);
@@ -627,7 +627,7 @@ public class PaladinProtection
     #endregion
 
     #region Offensive Spells
-    
+
     public readonly Spell AvengersShield = new Spell("Avenger's Shield");
     public readonly Spell BlessedHammer = new Spell("Blessed Hammer");
     public readonly Spell Consecration = new Spell("Consecration");
@@ -693,7 +693,7 @@ public class PaladinProtection
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -828,7 +828,7 @@ public class PaladinProtection
                     ArdentDefender.IsSpellUsable)
                 {
                     ArdentDefender.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Divine Shield
@@ -836,7 +836,7 @@ public class PaladinProtection
                     DivineShield.IsSpellUsable)
                 {
                     DivineShield.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Stun
@@ -845,14 +845,14 @@ public class PaladinProtection
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseHammerofJusticeBelowPercentage &&
                         HammerofJustice.IsSpellUsable && HammerofJustice.IsHostileDistanceGood)
                     {
                         HammerofJustice.Cast();
-                        StunTimer = new Timer(1000 * 6);
+                        StunTimer = new Timer(1000*6);
                         return true;
                     }
                 }
@@ -861,14 +861,14 @@ public class PaladinProtection
                     GuardianOfAncientKings.IsSpellUsable)
                 {
                     GuardianOfAncientKings.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Stoneform
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Shield of the Righteous
@@ -877,7 +877,7 @@ public class PaladinProtection
                     !ShieldOfTheRighteous.HaveBuff)
                 {
                     ShieldOfTheRighteous.Cast();
-                    DefensiveTimer = new Timer(1000 * 4.5);
+                    DefensiveTimer = new Timer(1000*4.5);
                     return true;
                 }
             }
@@ -886,7 +886,7 @@ public class PaladinProtection
                 EyeofTyr.IsSpellUsable && ObjectManager.Me.GetUnitInSpellRange(25f) > 0)
             {
                 EyeofTyr.Cast();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
                 return true;
             }
             return false;
@@ -1026,7 +1026,7 @@ public class PaladinProtection
             if (ObjectManager.Target.GetUnitInSpellRange(5f) == 1)
             {
             }
-            //Multiple Targets
+                //Multiple Targets
             else
             {
             }
@@ -1246,7 +1246,7 @@ public class PaladinRetribution
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1297,7 +1297,7 @@ public class PaladinRetribution
 
     private void Patrolling()
     {
-       if (!ObjectManager.Me.IsMounted)
+        if (!ObjectManager.Me.IsMounted)
         {
             if (MySettings.UseFlaskOrBattleElixir && MySettings.FlaskOrBattleElixir != string.Empty)
                 if (!SpellManager.HaveBuffLua(ItemsManager.GetItemSpell(MySettings.FlaskOrBattleElixir)) &&
@@ -1314,7 +1314,7 @@ public class PaladinRetribution
 
     private void Buffs()
     {
-       if (!ObjectManager.Me.IsMounted)
+        if (!ObjectManager.Me.IsMounted)
         {
             if (MySettings.UseFlaskOrBattleElixir && MySettings.FlaskOrBattleElixir != string.Empty)
                 if (!SpellManager.HaveBuffLua(ItemsManager.GetItemSpell(MySettings.FlaskOrBattleElixir)) &&
@@ -1543,7 +1543,7 @@ public class PaladinRetribution
         if (ObjectManager.Target.GetDistance < MySettings.DoAvoidMeleeDistance && ObjectManager.Target.InCombat)
         {
             Logging.WriteFight("Too Close. Moving Back");
-            var maxTimeTimer = new Timer(1000 * 2);
+            var maxTimeTimer = new Timer(1000*2);
             MovementsAction.MoveBackward(true);
             while (ObjectManager.Target.GetDistance < 2 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady)
                 Others.SafeSleep(300);

@@ -83,83 +83,83 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Mage Specialisation checking
+                    #region Mage Specialisation checking
 
                 case WoWClass.Mage:
 
-                if (wowSpecialization == WoWSpecialization.MageArcane)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.MageArcane)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Arcane.xml";
-                        var currentSetting = new MageArcane.MageArcaneSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<MageArcane.MageArcaneSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Arcane.xml";
+                            var currentSetting = new MageArcane.MageArcaneSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<MageArcane.MageArcaneSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Loading Mage Arcane Combat class...");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageArcane);
+                            new MageArcane();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.MageFire)
                     {
-                        Logging.WriteFight("Loading Mage Arcane Combat class...");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageArcane);
-                        new MageArcane();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Fire.xml";
+                            var currentSetting = new MageFire.MageFireSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<MageFire.MageFireSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Mage Fire Combat class...");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageFire);
+                            new MageFire();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.MageFrost || wowSpecialization == WoWSpecialization.None)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Frost.xml";
+                            var currentSetting = new MageFrost.MageFrostSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<MageFrost.MageFrostSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Mage Frost Combat class...");
+                            InternalRange = 30.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageFrost);
+                            new MageFrost();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.MageFire)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Fire.xml";
-                        var currentSetting = new MageFire.MageFireSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<MageFire.MageFireSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Mage Fire Combat class...");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageFire);
-                        new MageFire();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.MageFrost || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Frost.xml";
-                        var currentSetting = new MageFrost.MageFrostSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<MageFrost.MageFrostSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Mage Frost Combat class...");
-                        InternalRange = 30.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.MageFrost);
-                        new MageFrost();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -290,7 +290,7 @@ public class MageArcane
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -405,7 +405,7 @@ public class MageArcane
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                 }
@@ -413,7 +413,7 @@ public class MageArcane
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Ice Barrier
@@ -865,7 +865,7 @@ public class MageFire
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -980,7 +980,7 @@ public class MageFire
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                 }
@@ -988,7 +988,7 @@ public class MageFire
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Ice Barrier
@@ -1419,7 +1419,7 @@ public class MageFrost
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1534,7 +1534,7 @@ public class MageFrost
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                 }
@@ -1542,7 +1542,7 @@ public class MageFrost
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Ice Barrier

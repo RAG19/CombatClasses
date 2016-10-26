@@ -83,83 +83,83 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Hunter Specialisation checking
+                    #region Hunter Specialisation checking
 
                 case WoWClass.Hunter:
 
-                if (wowSpecialization == WoWSpecialization.HunterMarksmanship)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.HunterMarksmanship)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_Marksmanship.xml";
-                        var currentSetting = new HunterMarksmanship.HunterMarksmanshipSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<HunterMarksmanship.HunterMarksmanshipSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_Marksmanship.xml";
+                            var currentSetting = new HunterMarksmanship.HunterMarksmanshipSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<HunterMarksmanship.HunterMarksmanshipSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Loading Hunter Marksmanship Combat class...");
+                            InternalRange = 40.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterMarksmanship);
+                            new HunterMarksmanship();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.HunterSurvival)
                     {
-                        Logging.WriteFight("Loading Hunter Marksmanship Combat class...");
-                        InternalRange = 40.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterMarksmanship);
-                        new HunterMarksmanship();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_Survival.xml";
+                            var currentSetting = new HunterSurvival.HunterSurvivalSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<HunterSurvival.HunterSurvivalSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Hunter Survival Combat class...");
+                            InternalRange = 40.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterSurvival);
+                            new HunterSurvival();
+                        }
+                        break;
+                    }
+                    if (wowSpecialization == WoWSpecialization.HunterBeastMastery || wowSpecialization == WoWSpecialization.None)
+                    {
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_BeastMastery.xml";
+                            var currentSetting = new HunterBeastMastery.HunterBeastMasterySettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<HunterBeastMastery.HunterBeastMasterySettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading Hunter BeastMastery Combat class...");
+                            InternalRange = 40.0f;
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterBeastMastery);
+                            new HunterBeastMastery();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.HunterSurvival)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_Survival.xml";
-                        var currentSetting = new HunterSurvival.HunterSurvivalSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<HunterSurvival.HunterSurvivalSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Hunter Survival Combat class...");
-                        InternalRange = 40.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterSurvival);
-                        new HunterSurvival();
-                    }
-                    break;
-                }
-                if (wowSpecialization == WoWSpecialization.HunterBeastMastery || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Hunter_BeastMastery.xml";
-                        var currentSetting = new HunterBeastMastery.HunterBeastMasterySettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<HunterBeastMastery.HunterBeastMasterySettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading Hunter BeastMastery Combat class...");
-                        InternalRange = 40.0f;
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.HunterBeastMastery);
-                        new HunterBeastMastery();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -326,7 +326,7 @@ public class HunterMarksmanship
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -446,7 +446,7 @@ public class HunterMarksmanship
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -465,13 +465,13 @@ public class HunterMarksmanship
                 if (BurstingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBurstingShotBelowPercentage && BurstingShot.IsHostileDistanceGood)
                 {
                     BurstingShot.Cast();
-                    CCTimer = new Timer(1000 * 4);
+                    CCTimer = new Timer(1000*4);
                     return true;
                 }
                 if (ConcussiveShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseConcussiveShotBelowPercentage && ConcussiveShot.IsHostileDistanceGood)
                 {
                     ConcussiveShot.Cast();
-                    CCTimer = new Timer(1000 * 6);
+                    CCTimer = new Timer(1000*6);
                     return true;
                 }
                 if (Disengage.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseDisengageBelowPercentage)
@@ -479,13 +479,13 @@ public class HunterMarksmanship
                     MovementsAction.Jump();
                     Disengage.Cast();
                     if (NarrowEscape.HaveBuff || Posthaste.HaveBuff)
-                        CCTimer = new Timer(1000 * 8);
+                        CCTimer = new Timer(1000*8);
                     return true;
                 }
                 if (BindingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBindingShotBelowPercentage && BindingShot.IsHostileDistanceGood)
                 {
                     BindingShot.Cast();
-                    CCTimer = new Timer(1000 * 5);
+                    CCTimer = new Timer(1000*5);
                     return true;
                 }
                 if (FeignDeath.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFeignDeathBelowPercentage)
@@ -531,52 +531,52 @@ public class HunterMarksmanship
                     switch (MySettings.UsePet)
                     {
                         case 1:
-                        if (CallPet1.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet1.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet1.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet1.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 2:
-                        if (CallPet2.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet2.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet2.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet2.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 3:
-                        if (CallPet3.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet3.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet3.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet3.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 4:
-                        if (CallPet4.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet4.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet4.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet4.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 5:
-                        if (CallPet5.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet5.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet5.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet5.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         default:
-                        break;
+                            break;
                     }
 
                     //Revive Pet
@@ -714,7 +714,7 @@ public class HunterMarksmanship
             //Cast Aimed Shot when Target has Vulnerable Dot or you have 80+ Focus.
             if (MySettings.UseAimedShot && AimedShot.IsSpellUsable && AimedShot.IsHostileDistanceGood &&
                 (ObjectManager.Target.UnitAura(Vulnerable.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 1000 ||
-                ObjectManager.Me.Focus >= 80))
+                 ObjectManager.Me.Focus >= 80))
             {
                 if (ObjectManager.Me.Focus < 30)
                     return false;
@@ -923,7 +923,7 @@ public class HunterBeastMastery
     #endregion
 
     #region Talents
-    
+
     private readonly Spell BeastCleave = new Spell("Beast Cleave");
     private readonly Spell NarrowEscape = new Spell("Narrow Escape");
     private readonly Spell Posthaste = new Spell("Posthaste");
@@ -1036,7 +1036,7 @@ public class HunterBeastMastery
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1158,12 +1158,12 @@ public class HunterBeastMastery
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                     if (Intimidation.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseIntimidationBelowPercentage)
                     {
                         Intimidation.Cast();
-                        CCTimer = new Timer(1000 * 5);
+                        CCTimer = new Timer(1000*5);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -1182,7 +1182,7 @@ public class HunterBeastMastery
                 if (ConcussiveShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseConcussiveShotBelowPercentage && ConcussiveShot.IsHostileDistanceGood)
                 {
                     ConcussiveShot.Cast();
-                    CCTimer = new Timer(1000 * 6);
+                    CCTimer = new Timer(1000*6);
                     return true;
                 }
                 if (Disengage.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseDisengageBelowPercentage)
@@ -1190,13 +1190,13 @@ public class HunterBeastMastery
                     MovementsAction.Jump();
                     Disengage.Cast();
                     if (NarrowEscape.HaveBuff || Posthaste.HaveBuff)
-                        CCTimer = new Timer(1000 * 8);
+                        CCTimer = new Timer(1000*8);
                     return true;
                 }
                 if (BindingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBindingShotBelowPercentage && BindingShot.IsHostileDistanceGood)
                 {
                     BindingShot.Cast();
-                    CCTimer = new Timer(1000 * 5);
+                    CCTimer = new Timer(1000*5);
                     return true;
                 }
                 if (FeignDeath.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFeignDeathBelowPercentage)
@@ -1242,52 +1242,52 @@ public class HunterBeastMastery
                     switch (MySettings.UsePet)
                     {
                         case 1:
-                        if (CallPet1.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet1.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet1.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet1.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 2:
-                        if (CallPet2.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet2.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet2.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet2.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 3:
-                        if (CallPet3.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet3.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet3.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet3.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 4:
-                        if (CallPet4.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet4.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet4.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet4.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 5:
-                        if (CallPet5.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet5.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet5.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet5.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         default:
-                        break;
+                            break;
                     }
 
                     //Revive Pet
@@ -1368,7 +1368,7 @@ public class HunterBeastMastery
             uint UnitsHitByVolley = ObjectManager.Target.GetUnitInSpellRange(8f);
             if (MySettings.UseVolley && Volley.IsSpellUsable &&
                 ((UnitsHitByVolley > 1 && !VolleyBuff.HaveBuff) ||
-                (UnitsHitByVolley == 1 && !VolleyBuff.HaveBuff)))
+                 (UnitsHitByVolley == 1 && !VolleyBuff.HaveBuff)))
             {
                 Volley.Cast();
             }
@@ -1432,7 +1432,7 @@ public class HunterBeastMastery
             else if (MySettings.UseDireBeast && DireBeast.IsSpellUsable && DireBeast.IsHostileDistanceGood)
             {
                 DireBeast.Cast();
-                DireBeastTimer = new Timer(1000 * 8);
+                DireBeastTimer = new Timer(1000*8);
                 return;
             }
             //Cast Barrage when you have multiple targets.
@@ -1758,7 +1758,7 @@ public class HunterSurvival
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -1880,7 +1880,7 @@ public class HunterSurvival
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -1934,52 +1934,52 @@ public class HunterSurvival
                     switch (MySettings.UsePet)
                     {
                         case 1:
-                        if (CallPet1.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet1.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet1.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet1.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 2:
-                        if (CallPet2.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet2.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet2.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet2.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 3:
-                        if (CallPet3.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet3.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet3.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet3.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 4:
-                        if (CallPet4.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet4.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet4.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet4.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         case 5:
-                        if (CallPet5.IsSpellUsable)
-                        {
-                            DismissPet();
-                            CallPet5.Cast();
-                            Others.SafeSleep(1000 + Usefuls.Latency);
-                        }
-                        break;
+                            if (CallPet5.IsSpellUsable)
+                            {
+                                DismissPet();
+                                CallPet5.Cast();
+                                Others.SafeSleep(1000 + Usefuls.Latency);
+                            }
+                            break;
 
                         default:
-                        break;
+                            break;
                     }
 
                     //Revive Pet
@@ -2161,7 +2161,7 @@ public class HunterSurvival
             if (MySettings.UseHarpoon && Harpoon.IsSpellUsable && Harpoon.IsHostileDistanceGood)
             {
                 Harpoon.Cast();
-                CCTimer = new Timer(1000 * 3);
+                CCTimer = new Timer(1000*3);
                 return;
             }
         }

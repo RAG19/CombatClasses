@@ -83,59 +83,59 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region DemonHunter Specialisation checking
+                    #region DemonHunter Specialisation checking
 
                 case WoWClass.DemonHunter:
 
-                if (wowSpecialization == WoWSpecialization.DemonHunterVengeance || wowSpecialization == WoWSpecialization.None)
-                {
-                    if (configOnly)
+                    if (wowSpecialization == WoWSpecialization.DemonHunterVengeance || wowSpecialization == WoWSpecialization.None)
                     {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\DemonHunter_Vengeance.xml";
-                        var currentSetting = new DemonHunterVengeance.DemonHunterVengeanceSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
+                        if (configOnly)
                         {
-                            currentSetting = Settings.Load<DemonHunterVengeance.DemonHunterVengeanceSettings>(currentSettingsFile);
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\DemonHunter_Vengeance.xml";
+                            var currentSetting = new DemonHunterVengeance.DemonHunterVengeanceSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DemonHunterVengeance.DemonHunterVengeanceSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
                         }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
+                        else
+                        {
+                            Logging.WriteFight("Loading DemonHunter Vengeance Combat class...");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DemonHunterVengeance);
+                            new DemonHunterVengeance();
+                        }
+                        break;
                     }
-                    else
+                    if (wowSpecialization == WoWSpecialization.DemonHunterHavoc)
                     {
-                        Logging.WriteFight("Loading DemonHunter Vengeance Combat class...");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DemonHunterVengeance);
-                        new DemonHunterVengeance();
+                        if (configOnly)
+                        {
+                            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\DemonHunter_Havoc.xml";
+                            var currentSetting = new DemonHunterHavoc.DemonHunterHavocSettings();
+                            if (File.Exists(currentSettingsFile) && !resetSettings)
+                            {
+                                currentSetting = Settings.Load<DemonHunterHavoc.DemonHunterHavocSettings>(currentSettingsFile);
+                            }
+                            currentSetting.ToForm();
+                            currentSetting.Save(currentSettingsFile);
+                        }
+                        else
+                        {
+                            Logging.WriteFight("Loading DemonHunter Havoc Combat class...");
+                            EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DemonHunterHavoc);
+                            new DemonHunterHavoc();
+                        }
+                        break;
                     }
                     break;
-                }
-                if (wowSpecialization == WoWSpecialization.DemonHunterHavoc)
-                {
-                    if (configOnly)
-                    {
-                        string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\DemonHunter_Havoc.xml";
-                        var currentSetting = new DemonHunterHavoc.DemonHunterHavocSettings();
-                        if (File.Exists(currentSettingsFile) && !resetSettings)
-                        {
-                            currentSetting = Settings.Load<DemonHunterHavoc.DemonHunterHavocSettings>(currentSettingsFile);
-                        }
-                        currentSetting.ToForm();
-                        currentSetting.Save(currentSettingsFile);
-                    }
-                    else
-                    {
-                        Logging.WriteFight("Loading DemonHunter Havoc Combat class...");
-                        EquipmentAndStats.SetPlayerSpe(WoWSpecialization.DemonHunterHavoc);
-                        new DemonHunterHavoc();
-                    }
-                    break;
-                }
-                break;
 
-                #endregion
+                    #endregion
 
                 default:
-                Dispose();
-                break;
+                    Dispose();
+                    break;
             }
         }
         catch
@@ -146,7 +146,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -268,7 +268,7 @@ public class DemonHunterHavoc
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -554,7 +554,7 @@ public class DemonHunterHavoc
                     return;
                 }
             }
-            //Multiple Target
+                //Multiple Target
             else
             {
                 if (MySettings.UseFuryoftheIllidari && FuryoftheIllidari.IsSpellUsable && FuryoftheIllidari.IsHostileDistanceGood &&
@@ -840,7 +840,7 @@ public class DemonHunterVengeance
             {
                 if (!ObjectManager.Me.IsDeadMe)
                 {
-                   if (!ObjectManager.Me.IsMounted)
+                    if (!ObjectManager.Me.IsMounted)
                     {
                         if (Fight.InFight && ObjectManager.Me.Target > 0)
                         {
@@ -949,13 +949,13 @@ public class DemonHunterVengeance
                                                   ObjectManager.Me.HealthPercent < MySettings.UseDemonSpikesBelowPercentage))
                 {
                     DemonSpikes.Cast();
-                    DefensiveTimer = new Timer(1000 * 6);
+                    DefensiveTimer = new Timer(1000*6);
                     return true;
                 }
                 if (FieryBrand.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFieryBrandBelowPercentage)
                 {
                     FieryBrand.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -970,7 +970,7 @@ public class DemonHunterVengeance
                 !EmpowerWards.HaveBuff)
             {
                 EmpowerWards.Cast();
-                DefensiveTimer = new Timer(1000 * 6);
+                DefensiveTimer = new Timer(1000*6);
                 return true;
             }
             return false;
@@ -1017,7 +1017,7 @@ public class DemonHunterVengeance
 
             //Growl
             if (MySettings.UseTorment && Torment.IsSpellUsable && Torment.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 Torment.Cast();
                 return;
@@ -1097,13 +1097,13 @@ public class DemonHunterVengeance
                     if (MySettings.UseSigilofFlame && SigilofFlame.IsSpellUsable && SigilofFlame.IsHostileDistanceGood)
                     {
                         SigilofFlame.Cast();
-                        SigilofFlameTimer = new Timer(1000 * 8);
+                        SigilofFlameTimer = new Timer(1000*8);
                         return;
                     }
                     if (FlameCrash.HaveBuff && MySettings.UseInfernalStrike && InfernalStrike.IsSpellUsable && InfernalStrike.IsHostileDistanceGood)
                     {
                         InfernalStrike.Cast();
-                        SigilofFlameTimer = new Timer(1000 * 8);
+                        SigilofFlameTimer = new Timer(1000*8);
                         return;
                     }
                 }
@@ -1113,7 +1113,7 @@ public class DemonHunterVengeance
                     return;
                 }
             }
-            //Multiple Target
+                //Multiple Target
             else
             {
                 if (MySettings.UseSpiritBomb && SpiritBomb.IsSpellUsable && SpiritBomb.IsHostileDistanceGood &&
@@ -1138,13 +1138,13 @@ public class DemonHunterVengeance
                     if (MySettings.UseSigilofFlame && SigilofFlame.IsSpellUsable && SigilofFlame.IsHostileDistanceGood)
                     {
                         SigilofFlame.CastAtPosition(ObjectManager.Target.Position);
-                        SigilofFlameTimer = new Timer(1000 * 8);
+                        SigilofFlameTimer = new Timer(1000*8);
                         return;
                     }
                     if (FlameCrash.HaveBuff && MySettings.UseInfernalStrike && InfernalStrike.IsSpellUsable && InfernalStrike.IsHostileDistanceGood)
                     {
                         InfernalStrike.CastAtPosition(ObjectManager.Target.Position);
-                        SigilofFlameTimer = new Timer(1000 * 8);
+                        SigilofFlameTimer = new Timer(1000*8);
                         return;
                     }
                 }
@@ -1162,7 +1162,7 @@ public class DemonHunterVengeance
                 {
                     InfernalStrike.CastAtPosition(ObjectManager.Target.Position);
                     if (FlameCrash.HaveBuff)
-                        SigilofFlameTimer = new Timer(1000 * 8);
+                        SigilofFlameTimer = new Timer(1000*8);
                     return;
                 }
             }
