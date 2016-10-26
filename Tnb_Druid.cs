@@ -928,7 +928,6 @@ public class DruidFeral
 
     #region Healing Spells
 
-    private readonly Spell HealingTouch = new Spell("Healing Touch");
     private readonly Spell Regrowth = new Spell("Regrowth");
     private readonly Spell Rejuvenation = new Spell("Rejuvenation");
     private readonly Spell Renewal = new Spell("Renewal"); //No GCD
@@ -949,7 +948,7 @@ public class DruidFeral
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach; // 1.5
         Main.InternalAggroRange = Main.InternalRange;
-        Main.InternalLightHealingSpell = HealingTouch;
+        Main.InternalLightHealingSpell = Regrowth;
         MySettings = DruidFeralSettings.GetSettings();
         Main.DumpCurrentSettings<DruidFeralSettings>(MySettings);
         UInt128 lastTarget = 0;
@@ -1108,12 +1107,12 @@ public class DruidFeral
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            //Cast Healing Touch when it would expire before you could use it or
+            //Cast Regrowth when it would expire before you could use it or
             if (ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).AuraTimeLeftInMs < 2000 ||
                 //you have less than 10% Health
                 ObjectManager.Me.Health < 10)
             {
-                if (CastHealingTouch())
+                if (CastRegrowth())
                     return true;
             }
             //Renewal
@@ -1302,7 +1301,7 @@ public class DruidFeral
                 //you have max Combo Points and less than 8 seconds remaining.
                 (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
             {
-                if (CastHealingTouch() || ObjectManager.Me.Energy < 40)
+                if (CastRegrowth() || ObjectManager.Me.Energy < 40)
                     return;
                 SavageRoar.Cast();
                 return;
@@ -1314,7 +1313,7 @@ public class DruidFeral
                 //Rip is active and has less than 8 seconds remaining
                 ObjectManager.Target.AuraIsActiveAndExpireInLessThanMs(Rip.Id, 8000))
             {
-                if (CastHealingTouch() || ObjectManager.Me.Energy < 25)
+                if (CastRegrowth() || ObjectManager.Me.Energy < 25)
                     return;
                 FerociousBite.Cast();
                 return;
@@ -1328,7 +1327,7 @@ public class DruidFeral
                  //you have Blood Talons Buff.
                  ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
-                if (CastHealingTouch() || ObjectManager.Me.Energy < 30)
+                if (CastRegrowth() || ObjectManager.Me.Energy < 30)
                     return;
                 Rip.Cast();
                 return;
@@ -1340,7 +1339,7 @@ public class DruidFeral
                 //you have the Savage Roar Buff (if talented).
                 (!SavageRoar.KnownSpell || ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).IsValid))
             {
-                if (CastHealingTouch())
+                if (CastRegrowth())
                     return;
                 //you have the Bloodtalons Buff (if talented) and
                 if ((!Bloodtalons.HaveBuff || ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid))
@@ -1402,7 +1401,7 @@ public class DruidFeral
                 //your Rip Buff has more than 10 seconds remaining.
                 (!MySettings.UseRip || !Rip.KnownSpell || ObjectManager.Target.UnitAura(Rip.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 10000))
             {
-                if (CastHealingTouch() || ObjectManager.Me.Energy < 25)
+                if (CastRegrowth() || ObjectManager.Me.Energy < 25)
                     return;
                 FerociousBite.Cast();
                 return;
@@ -1459,10 +1458,10 @@ public class DruidFeral
         }
     }
 
-    private bool CastHealingTouch()
+    private bool CastRegrowth()
     {
         //Cast Healing Touch when
-        if (MySettings.UseHealingTouch && HealingTouch.IsSpellUsable &&
+        if (MySettings.UseRegrowth && Regrowth.IsSpellUsable &&
             //you have the Predatory Swiftness Buff
             ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id, ObjectManager.Me.Guid).IsValid)
         {
@@ -1479,17 +1478,17 @@ public class DruidFeral
                     var currentPlayer = new WoWPlayer(obj.GetBaseAddress);
                     if (!currentPlayer.IsValid || !currentPlayer.IsAlive)
                         continue;
-                    if (currentPlayer.HealthPercent < lowestHpPlayer.HealthPercent && CombatClass.InSpellRange(currentPlayer, 0, HealingTouch.MaxRangeFriend))
+                    if (currentPlayer.HealthPercent < lowestHpPlayer.HealthPercent && CombatClass.InSpellRange(currentPlayer, 0, Regrowth.MaxRangeFriend))
                         lowestHpPlayer = currentPlayer;
                 }
                 if (lowestHpPlayer.Guid > 0)
                 {
                     Logging.WriteFight("Healing " + lowestHpPlayer.Name);
-                    HealingTouch.Cast(false, true, false, lowestHpPlayer.GetUnitId());
+                    Regrowth.Cast(false, true, false, lowestHpPlayer.GetUnitId());
                     return true;
                 }
             }
-            HealingTouch.CastOnSelf();
+            Regrowth.CastOnSelf();
             return true;
         }
         return false;
@@ -1544,7 +1543,7 @@ public class DruidFeral
         //public bool UseWildCharge = true;
 
         /* Healing Spells */
-        public bool UseHealingTouch = true;
+        public bool UseRegrowth = true;
         public int UseRestorationAffinityBelowPercentage = 25;
 
         /* Utility Cooldowns */
@@ -1593,7 +1592,7 @@ public class DruidFeral
             AddControlInWinForm("Use Mighty Bash", "UseMightyBashBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
             AddControlInWinForm("Use SurvivalInstincts", "UseSurvivalInstinctsBelowPercentage", "Defensive Cooldowns", "BelowPercentage", "Life");
             /* Healing Spells */
-            AddControlInWinForm("Use Healing Touch", "UseHealingTouch", "Healing Spells");
+            AddControlInWinForm("Use Regrowth", "UseRegrowth", "Healing Spells");
             AddControlInWinForm("Use Restoration Affinity", "UseRestorationAffinityBelowPercentage", "Healing Spells", "BelowPercentage", "Life");
             /* Utility Cooldowns */
             AddControlInWinForm("Use Dash", "UseDash", "Utility Cooldowns");
