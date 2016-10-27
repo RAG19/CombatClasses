@@ -312,7 +312,7 @@ public class DruidBalance
     {
         Main.InternalRange = 45f;
         Main.InternalAggroRange = 45f;
-        Main.InternalLightHealingSpell = HealingTouch;
+        Main.InternalLightHealingSpell = Regrowth;
         MySettings = DruidBalanceSettings.GetSettings();
         Main.DumpCurrentSettings<DruidBalanceSettings>(MySettings);
         UInt128 lastTarget = 0;
@@ -445,10 +445,11 @@ public class DruidBalance
             {
                 Renewal.CastOnSelf();
             }
-            //Healing Touch
-            if (HealingTouch.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseHealingTouchBelowPercentage)
+            //Regrowth
+            if (Regrowth.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseRegrowthBelowPercentage &&
+                !Regrowth.HaveBuff)
             {
-                HealingTouch.CastOnSelf();
+                Regrowth.CastOnSelf();
                 return;
             }
 
@@ -462,11 +463,10 @@ public class DruidBalance
                     Rejuvenation.CastOnSelf();
                     return;
                 }
-                //Regrowth
-                if (Regrowth.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseRegrowthBelowPercentage &&
-                    !Regrowth.HaveBuff)
+                //Healing Touch
+                if (HealingTouch.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseHealingTouchBelowPercentage)
                 {
-                    Regrowth.CastOnSelf();
+                    HealingTouch.CastOnSelf();
                     return;
                 }
             }
@@ -845,6 +845,7 @@ public class DruidFeral
     private readonly WoWItem _secondTrinket = EquippedItems.GetEquippedItem(WoWInventorySlot.INVTYPE_TRINKET, 2);
 
     private bool CombatMode = true;
+    private bool EmptyLoop = false;
 
     private Timer StunTimer = new Timer(0);
 
@@ -1287,14 +1288,15 @@ public class DruidFeral
             //Logging
             if ((SavageRoar.KnownSpell && !ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).IsValid) ||
                 (Bloodtalons.HaveBuff && ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid) ||
-                ObjectManager.Me.ComboPoint >= 5)
+                ObjectManager.Me.ComboPoint >= 5 && EmptyLoop)
             {
                 string log = "";
                 log += (SavageRoar.KnownSpell && !ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).IsValid) ? "Savage Roar isn't active! " : "";
-                log += (Bloodtalons.HaveBuff && ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid) ? BloodtalonsBuff.BuffStack + " Bloodtalons Stack active! " : "";
-                log += "Combo points: " + ObjectManager.Me.ComboPoint;
-                Logging.Write(log);
+                log += (Bloodtalons.HaveBuff && ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid) ? ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).AuraCount + " Bloodtalons Stack active! " : "";
+                log += "Combo points: " + ObjectManager.Me.ComboPoint + " Energy: " + ObjectManager.Me.Energy;
+                Logging.WriteDebug(log);
             }
+            EmptyLoop = false;
 
             //1. Maintain Savage Roar when you don't have the Buff or
             if (MySettings.UseSavageRoar && SavageRoar.IsSpellUsable && (!SavageRoar.HaveBuff ||
@@ -1342,7 +1344,7 @@ public class DruidFeral
                 if (CastRegrowth())
                     return;
                 //you have the Bloodtalons Buff (if talented) and
-                if ((!Bloodtalons.HaveBuff || ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid))
+                if (!Bloodtalons.HaveBuff || ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)
                 {
                     //Apply Tigers Fury when
                     if (MySettings.UseTigersFury && TigersFury.IsSpellUsable &&
@@ -1451,6 +1453,7 @@ public class DruidFeral
                     return;
                 }
             }
+            EmptyLoop = true;
         }
         finally
         {
@@ -2202,7 +2205,7 @@ public class DruidGuardian
     {
         Main.InternalRange = ObjectManager.Me.GetCombatReach;
         Main.InternalAggroRange = Main.InternalRange;
-        Main.InternalLightHealingSpell = HealingTouch;
+        Main.InternalLightHealingSpell = Regrowth;
         MySettings = DruidGuardianSettings.GetSettings();
         Main.DumpCurrentSettings<DruidGuardianSettings>(MySettings);
         UInt128 lastTarget = 0;
