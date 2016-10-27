@@ -1608,7 +1608,7 @@ public class MageFrost
             }
             //Cast Summon Water Elemental if it's not alive
             if (MySettings.UseSummonWaterElemental && SummonWaterElemental.IsSpellUsable &&
-                ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid)
+                (ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid))
             {
                 Logging.WriteDebug("Pet: Health == " + ObjectManager.Pet.Health + ", Guid == " + ObjectManager.Pet.Guid + ", IsValid == " + ObjectManager.Pet.IsValid);
                 SummonWaterElemental.Cast();
