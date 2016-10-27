@@ -1288,7 +1288,7 @@ public class MageFire
 
         public static MageFireSettings GetSettings()
         {
-            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Frost.xml";
+            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Fire.xml";
             if (File.Exists(currentSettingsFile))
             {
                 return
@@ -1605,8 +1605,8 @@ public class MageFrost
                 BloodFury.Cast();
             }
             //Cast Summon Water Elemental if it's not alive
-            if (MySettings.UseSummonWaterElemental && SummonWaterElemental.IsSpellUsable &&
-                (ObjectManager.Pet.Health == 0 || ObjectManager.Pet.Guid == 0 || !ObjectManager.Pet.IsValid))
+            if (MySettings.UseSummonWaterElemental && (!ObjectManager.Pet.IsValid || ObjectManager.Pet.IsDead) &&
+                SummonWaterElemental.IsSpellUsable)
             {
                 Logging.WriteDebug("Pet: Health == " + ObjectManager.Pet.Health + ", Guid == " + ObjectManager.Pet.Guid + ", IsValid == " + ObjectManager.Pet.IsValid);
                 SummonWaterElemental.Cast();
@@ -1895,7 +1895,7 @@ public class MageFrost
 
         public static MageFrostSettings GetSettings()
         {
-            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Fire.xml";
+            string currentSettingsFile = Application.StartupPath + "\\CombatClasses\\Settings\\Mage_Frost.xml";
             if (File.Exists(currentSettingsFile))
             {
                 return
