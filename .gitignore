@@ -5,7 +5,20 @@
 !.gitignore
 !script.pl
 !template.latex
-!*.cs
+!Tnb_API.cs
+!Tnb_Deathknight.cs
+!Tnb_DemonHunter.cs
+!Tnb_Druid.cs
+!Tnb_Hunter.cs
+!Tnb_Mage.cs
+!Tnb_Monk.cs
+!Tnb_Paladin.cs
+!Tnb_Priest.cs
+!Tnb_Rogue.cs
+!Tnb_Shaman.cs
+!Tnb_Template.cs
+!Tnb_Warlock.cs
+!Tnb_Warrior.cs
 
 # ...even if they are in subdirectories
 !*/
