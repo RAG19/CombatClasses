@@ -676,8 +676,8 @@ public class RogueAssassination
 
             //1. Maintain Rupture when
             if (MySettings.UseRupture && Rupture.IsSpellUsable && Rupture.IsHostileDistanceGood &&
-                //you have max combo points and it has 8 or less seconds remaining
-                GetFreeComboPoints() == 0 && ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000)
+                //you have 3+ combo points and Rupture isn't on the target.
+                ObjectManager.Me.ComboPoint >= 3 && !Rupture.TargetHaveBuffFromMe)
             {
                 //it won't reset Exsanguinate
                 if (!Rupture.TargetHaveBuffFromMe || !RuptureHasExsanguinateBuff)
@@ -699,6 +699,19 @@ public class RogueAssassination
             {
                 Vanish.Cast();
                 return;
+            }
+            //1b. Maintain Rupture when
+            if (MySettings.UseRupture && Rupture.IsSpellUsable && Rupture.IsHostileDistanceGood &&
+                //you have max combo points and it has 8 or less seconds remaining
+                GetFreeComboPoints() == 0 && ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000)
+            {
+                //it won't reset Exsanguinate
+                if (!Rupture.TargetHaveBuffFromMe || !RuptureHasExsanguinateBuff)
+                {
+                    RuptureHasExsanguinateBuff = false;
+                    Rupture.Cast();
+                    return;
+                }
             }
             //4. Maintain Garrote Dot when it is off cooldown and
             if (MySettings.UseGarrote && Garrote.IsSpellUsable && Garrote.IsHostileDistanceGood &&
