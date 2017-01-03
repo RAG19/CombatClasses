@@ -27,7 +27,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
-    internal static float Version = 1.001f;
+    internal static float Version = 1.002f;
 
     #region ICombatClass Members
 
@@ -1340,13 +1340,13 @@ public class MageFrost
 
     private readonly Spell BrainFreezeProc = new Spell(190446);
     private readonly Spell FingersofFrost = new Spell(112965);
-    private readonly Spell FingersofFrostProc = new Spell(44544); 
+    private readonly Spell FingersofFrostProc = new Spell(44544);
 
     #endregion
 
     #region Dots
 
-    private readonly Spell WintersChill = new Spell("Winter's Chill");
+    private readonly Spell WintersChill = new Spell(228358); //Flurry freeze
 
     #endregion
 
@@ -1710,6 +1710,7 @@ public class MageFrost
             }
             //6. Cast Frost Bomb if talented and
             if (MySettings.UseFrostBomb && FrostBomb.IsSpellUsable && FrostBomb.IsHostileDistanceGood &&
+                !FrostBomb.TargetHaveBuffFromMe &&
                 //you will trigger it with 2 charges of Fingers of Frost.
                 ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 2)
             {
@@ -1718,7 +1719,7 @@ public class MageFrost
             }
             //5b. Cast Ice Lance if
             if (MySettings.UseIceLance && IceLance.IsSpellUsable && IceLance.IsHostileDistanceGood &&
-                //you have 3 charges of Fingers of Frost.
+                //you have 2 charges of Fingers of Frost.
                 ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 2)
             {
                 IceLance.Cast();
