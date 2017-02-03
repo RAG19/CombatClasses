@@ -251,6 +251,7 @@ public class RogueAssassination
     private readonly Spell Mutilate = new Spell("Mutilate");
     private readonly Spell Hemorrhage = new Spell("Hemorrhage");
     private readonly Spell Rupture = new Spell("Rupture");
+    private readonly Spell SinisterStrike = new Spell("Sinister Strike");
 
     #endregion
 
@@ -764,6 +765,12 @@ public class RogueAssassination
             if (MySettings.UseMutilate && Mutilate.IsSpellUsable && Mutilate.IsHostileDistanceGood)
             {
                 Mutilate.Cast();
+                return;
+            }
+            //9. Cast Sinister Strike.
+            if (MySettings.UseMutilate && !Mutilate.KnownSpell && SinisterStrike.IsSpellUsable && SinisterStrike.IsHostileDistanceGood)
+            {
+                SinisterStrike.Cast();
                 return;
             }
         }
