@@ -385,13 +385,15 @@ public class RogueAssassination
             Logging.WriteFight("Combat:");
             CombatMode = true;
         }
+
         if (StealthBuff.HaveBuff)
             Stealth();
         else
         {
             Healing();
-            if (Defensive() || AggroManagement() || Offensive())
-                return;
+            Defensive();
+            AggroManagement();
+            Offensive();
             Rotation();
         }
     }
@@ -546,7 +548,7 @@ public class RogueAssassination
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-            
+
             //Cast Tricks of the Trade on Tank when
             if (ObjectManager.Me.HealthPercent < MySettings.UseTricksoftheTradeBelowPercentage && TricksoftheTrade.IsSpellUsable
                 //you are in a Group and
@@ -567,7 +569,7 @@ public class RogueAssassination
                         tank = currentPlayer;
                 }
                 //the Tank has more than 20% Health
-                if (tank.HealthPercent > 20)
+                if (tank.HealthPercent > 20 && CombatClass.InSpellRange(tank, TricksoftheTrade.MinRangeFriend, TricksoftheTrade.MaxRangeFriend))
                     TricksoftheTrade.Cast(false, true, false, tank.GetUnitId());
             }
             return false;
@@ -695,7 +697,7 @@ public class RogueAssassination
             //3. Activate Vanish when you aren't in stealth and
             if (MySettings.UseVanish && Vanish.IsSpellUsable && !StealthBuff.HaveBuff &&
                 //you have max combo points
-                GetFreeComboPoints() == 0)
+                GetFreeComboPoints() == 0)// && !SpellManager.GetAllSpellsOnCooldown.Exists(entry => entry.SpellId == 1856))
             {
                 Vanish.Cast();
                 return;
@@ -1663,8 +1665,9 @@ public class RogueSubtlety
             CombatMode = true;
         }
         Healing();
-        if (Defensive() || AggroManagement() || Offensive())
-            return;
+        Defensive();
+        AggroManagement();
+        Offensive();
         Rotation();
     }
 
@@ -1785,7 +1788,7 @@ public class RogueSubtlety
                         tank = currentPlayer;
                 }
                 //the Tank has more than 20% Health
-                if (tank.HealthPercent > 20)
+                if (tank.HealthPercent > 20 && CombatClass.InSpellRange(tank, TricksoftheTrade.MinRangeFriend, TricksoftheTrade.MaxRangeFriend))
                     TricksoftheTrade.Cast(false, true, false, tank.GetUnitId());
             }
             return false;
