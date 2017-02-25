@@ -6,6 +6,7 @@
 !script.pl
 !template.latex
 !Tnb_API.cs
+!Tnb_HealerClass.cs
 !Tnb_Deathknight.cs
 !Tnb_DemonHunter.cs
 !Tnb_Druid.cs
