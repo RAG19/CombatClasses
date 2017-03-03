@@ -580,7 +580,7 @@ public class HunterMarksmanship
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.IsValid)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
@@ -1291,7 +1291,7 @@ public class HunterBeastMastery
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.IsValid)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
@@ -1983,7 +1983,7 @@ public class HunterSurvival
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.IsValid)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
