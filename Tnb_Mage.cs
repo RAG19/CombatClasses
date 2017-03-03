@@ -1153,7 +1153,7 @@ public class MageFire
                 return;
             }
             //4-5. Cast Phoenix's Flames when
-            if (MySettings.UsePhoenixsFlames && PhoenixsFlames.IsSpellUsable && Combustion.IsHostileDistanceGood &&
+            if (MySettings.UsePhoenixsFlames && PhoenixsFlames.IsSpellUsable && PhoenixsFlames.IsHostileDistanceGood &&
                 //it has 2 charges or there are 3 or more targets stacked
                 (PhoenixsFlames.GetSpellCharges >= 2 || ObjectManager.Target.GetUnitInSpellRange(5f) >= 3))
             {
