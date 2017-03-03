@@ -699,10 +699,10 @@ public class DruidRestoration
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (!Target.IsStunned && (DefensiveTimer.IsReady || Me.HealthPercent < 20))
+            if (DefensiveTimer.IsReady || Me.HealthPercent < 20)
             {
                 //Stun
-                if (Target.IsStunnable)
+                if (Target.IsStunnable && !Target.IsStunned)
                 {
                     if (Me.HealthPercent < MySettings.UseMightyBashBelowPercentage && MightyBash.IsSpellUsable && MightyBash.IsHostileDistanceGood)
                     {
@@ -1147,7 +1147,6 @@ public class PaladinHoly
     private bool CombatMode = true;
 
     private Timer DefensiveTimer = new Timer(0);
-    private Timer StunTimer = new Timer(0);
 
     private List<WoWPlayer> Tanks = new List<WoWPlayer>();
     private Timer ScanForTanksTimer = new Timer(0);
@@ -1207,7 +1206,7 @@ public class PaladinHoly
 
     private readonly Spell BlessingofProtection = new Spell("Blessing of Protection");
     private readonly Spell BlessingofSacrifice = new Spell("Blessing of Sacrifice"); //No GCD
-    private readonly Spell DivineProtection = new Spell("Divine Protection");
+    private readonly Spell DivineProtection = new Spell(498);
     private readonly Spell DivineShield = new Spell("Divine Shield");
 
     #endregion
@@ -1463,37 +1462,37 @@ public class PaladinHoly
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (StunTimer.IsReady && (DefensiveTimer.IsReady || ObjectManager.Me.HealthPercent < 20))
+            if (DefensiveTimer.IsReady || ObjectManager.Me.HealthPercent < 20)
             {
                 //Stun
-                if (ObjectManager.Target.IsStunnable)
+                if (ObjectManager.Target.IsStunnable && !ObjectManager.Target.IsStunned)
                 {
-                    if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsHostileDistanceGood)
+                    if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2);
+                        return true;
                     }
                 }
                 //Mitigate Damage
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000 * 8);   
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDivineProtectionBelowPercentage &&
-                    DivineProtection.IsSpellUsable && !Target.HaveBuff(Forbearance.Id))
+                    DivineProtection.IsSpellUsable && !ObjectManager.Me.HaveBuff(Forbearance.Id))
                 {
-                    DivineProtection.Cast();
+                    DivineProtection.CastOnSelf();
                     DefensiveTimer = new Timer(1000 * 8);
                     return false;
                 }
             }
             //Mitigate Damage in Emergency Situations
             if (ObjectManager.Me.HealthPercent < MySettings.UseDivineShieldBelowPercentage &&
-                DivineShield.IsSpellUsable && !Target.HaveBuff(Forbearance.Id))
+                DivineShield.IsSpellUsable && !ObjectManager.Me.HaveBuff(Forbearance.Id))
             {
-                DivineShield.Cast();
+                DivineShield.CastOnSelf();
                 DefensiveTimer = new Timer(1000 * 8);
                 return true;
             }
@@ -1931,7 +1930,6 @@ public class ShamanRestoration
     private bool CombatMode = true;
 
     private Timer DefensiveTimer = new Timer(0);
-    private Timer StunTimer = new Timer(0);
 
     private WoWPlayer Tank = new WoWPlayer(0);
     private WoWPlayer Target = new WoWPlayer(0);
@@ -2205,15 +2203,14 @@ public class ShamanRestoration
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            if (StunTimer.IsReady && (DefensiveTimer.IsReady || ObjectManager.Me.HealthPercent < 20))
+            if (DefensiveTimer.IsReady || ObjectManager.Me.HealthPercent < 20)
             {
                 //Stun
-                if (ObjectManager.Target.IsStunnable)
+                if (ObjectManager.Target.IsStunnable && !ObjectManager.Target.IsStunned)
                 {
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
                         return true;
                     }
                 }
