@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Paladin Specialisation checking
+                    #region Paladin Specialisation checking
 
                 case WoWClass.Paladin:
 
@@ -153,7 +153,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -168,7 +168,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -234,7 +234,7 @@ public class PaladinHoly
     private readonly Spell JudgmentofLightDebuff = new Spell(196941);
 
     #endregion
-    
+
     #region Artifact Spells
 
     private readonly Spell TyrsDeliverance = new Spell("Tyr's Deliverance");
@@ -459,7 +459,7 @@ public class PaladinHoly
                     DivineShield.IsSpellUsable)
                 {
                     DivineShield.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Stun
@@ -468,14 +468,14 @@ public class PaladinHoly
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseHammerofJusticeBelowPercentage &&
                         HammerofJustice.IsSpellUsable && HammerofJustice.IsHostileDistanceGood)
                     {
                         HammerofJustice.Cast();
-                        StunTimer = new Timer(1000 * 6);
+                        StunTimer = new Timer(1000*6);
                         return true;
                     }
                 }
@@ -483,7 +483,7 @@ public class PaladinHoly
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -919,7 +919,7 @@ public class PaladinProtection
                     ArdentDefender.IsSpellUsable)
                 {
                     ArdentDefender.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Divine Shield
@@ -927,7 +927,7 @@ public class PaladinProtection
                     DivineShield.IsSpellUsable)
                 {
                     DivineShield.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Stun
@@ -936,14 +936,14 @@ public class PaladinProtection
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseHammerofJusticeBelowPercentage &&
                         HammerofJustice.IsSpellUsable && HammerofJustice.IsHostileDistanceGood)
                     {
                         HammerofJustice.Cast();
-                        StunTimer = new Timer(1000 * 6);
+                        StunTimer = new Timer(1000*6);
                         return true;
                     }
                 }
@@ -952,14 +952,14 @@ public class PaladinProtection
                     GuardianOfAncientKings.IsSpellUsable)
                 {
                     GuardianOfAncientKings.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Stoneform
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Shield of the Righteous
@@ -968,7 +968,7 @@ public class PaladinProtection
                     !ShieldOfTheRighteous.HaveBuff)
                 {
                     ShieldOfTheRighteous.Cast();
-                    DefensiveTimer = new Timer(1000 * 4.5);
+                    DefensiveTimer = new Timer(1000*4.5);
                     return true;
                 }
             }
@@ -977,7 +977,7 @@ public class PaladinProtection
                 EyeofTyr.IsSpellUsable && ObjectManager.Me.GetUnitInSpellRange(25f) > 0)
             {
                 EyeofTyr.Cast();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
                 return true;
             }
             return false;
@@ -1618,7 +1618,7 @@ public class PaladinRetribution
         if (ObjectManager.Target.GetDistance < MySettings.DoAvoidMeleeDistance && ObjectManager.Target.InCombat)
         {
             Logging.WriteFight("Too Close. Moving Back");
-            var maxTimeTimer = new Timer(1000 * 2);
+            var maxTimeTimer = new Timer(1000*2);
             MovementsAction.MoveBackward(true);
             while (ObjectManager.Target.GetDistance < 2 && ObjectManager.Target.InCombat && !maxTimeTimer.IsReady)
                 Others.SafeSleep(300);

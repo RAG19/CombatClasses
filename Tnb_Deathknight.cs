@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region DeathKnight Specialisation checking
+                    #region DeathKnight Specialisation checking
 
                 case WoWClass.DeathKnight:
 
@@ -155,7 +155,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -449,13 +449,13 @@ public class DeathknightBlood
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseAsphyxiateBelowPercentage && Asphyxiate.IsSpellUsable)
                     {
                         Asphyxiate.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -463,43 +463,43 @@ public class DeathknightBlood
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseBloodMirrorBelowPercentage && BloodMirror.IsSpellUsable && BloodMirror.IsHostileDistanceGood)
                 {
                     BloodMirror.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDancingRuneWeaponBelowPercentage && DancingRuneWeapon.IsSpellUsable)
                 {
                     DancingRuneWeapon.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseMarkofBloodBelowPercentage && MarkofBlood.IsSpellUsable && MarkofBlood.IsHostileDistanceGood)
                 {
                     MarkofBlood.Cast();
-                    DefensiveTimer = new Timer(1000 * 25);
+                    DefensiveTimer = new Timer(1000*25);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseRuneTapBelowPercentage && RuneTap.IsSpellUsable)
                 {
                     RuneTap.Cast();
-                    DefensiveTimer = new Timer(1000 * 3);
+                    DefensiveTimer = new Timer(1000*3);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseTombstoneBelowPercentage && Tombstone.IsSpellUsable)
                 {
                     Tombstone.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseVampiricBloodBelowPercentage && VampiricBlood.IsSpellUsable)
                 {
                     VampiricBlood.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                     return true;
                 }
             }
@@ -507,7 +507,7 @@ public class DeathknightBlood
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;
@@ -564,21 +564,21 @@ public class DeathknightBlood
 
             //Dark Command
             if (MySettings.UseDarkCommand && DarkCommand.IsSpellUsable && DarkCommand.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 DarkCommand.Cast();
                 return true;
             }
             //Death Grip
             if (MySettings.UseDeathGrip && DeathGrip.IsSpellUsable && DeathGrip.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 DeathGrip.Cast();
                 return true;
             }
             //Gorefiend's Grasp
             if (MySettings.UseGorefiendsGrasp && GorefiendsGrasp.IsSpellUsable && GorefiendsGrasp.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 GorefiendsGrasp.Cast();
                 return true;
@@ -1019,7 +1019,7 @@ public class DeathknightFrost
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                 }
@@ -1027,7 +1027,7 @@ public class DeathknightFrost
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -1035,7 +1035,7 @@ public class DeathknightFrost
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;
@@ -1159,7 +1159,7 @@ public class DeathknightFrost
                     return;
                 }
             }
-            //Multiple Targets
+                //Multiple Targets
             else
             {
                 if (MySettings.UseFrostscythe && Frostscythe.IsSpellUsable && Frostscythe.IsHostileDistanceGood)
@@ -1531,13 +1531,13 @@ public class DeathknightUnholy
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseAsphyxiateBelowPercentage && Asphyxiate.IsSpellUsable)
                     {
                         Asphyxiate.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -1545,7 +1545,7 @@ public class DeathknightUnholy
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -1553,7 +1553,7 @@ public class DeathknightUnholy
             if (ObjectManager.Me.HealthPercent < MySettings.UseAntiMagicShellBelowPercentage && AntiMagicShell.IsSpellUsable)
             {
                 AntiMagicShell.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             return false;

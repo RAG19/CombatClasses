@@ -73,7 +73,7 @@ public class Main : IHealerClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Non healer classes detection
+                    #region Non healer classes detection
 
                 case WoWClass.DeathKnight:
                 case WoWClass.Mage:
@@ -89,9 +89,9 @@ public class Main : IHealerClass
                     Logging.WriteFight(error);
                     break;
 
-                #endregion
+                    #endregion
 
-                #region Druid Specialisation checking
+                    #region Druid Specialisation checking
 
                 case WoWClass.Druid:
 
@@ -124,9 +124,9 @@ public class Main : IHealerClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
-                #region Paladin Specialisation checking
+                    #region Paladin Specialisation checking
 
                 case WoWClass.Paladin:
 
@@ -159,9 +159,9 @@ public class Main : IHealerClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
-                #region Shaman Specialisation checking
+                    #region Shaman Specialisation checking
 
                 case WoWClass.Shaman:
 
@@ -195,9 +195,9 @@ public class Main : IHealerClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
-                #region Priest Specialisation checking
+                    #region Priest Specialisation checking
 
                 case WoWClass.Priest:
 
@@ -250,9 +250,9 @@ public class Main : IHealerClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
-                #region Monk Specialisation checking
+                    #region Monk Specialisation checking
 
                 case WoWClass.Monk:
 
@@ -285,7 +285,7 @@ public class Main : IHealerClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -300,7 +300,7 @@ public class Main : IHealerClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -315,7 +315,6 @@ public class Main : IHealerClass
         // Last field is intentionnally ommited because it's a backing field.
     }
 }
-
 
 #region Diagnostics
 
@@ -356,7 +355,7 @@ public static class Diagnostics
         long ellapsedTime = stopwatch.ElapsedMilliseconds;
         timeMin = (ellapsedTime < timeMin) ? ellapsedTime : timeMin;
         timeMax = (ellapsedTime > timeMax) ? ellapsedTime : timeMax;
-        timeAverage = ((timeAverage * count) + ellapsedTime) / ++count;
+        timeAverage = ((timeAverage*count) + ellapsedTime)/++count;
         if (log)
         {
             Logging.WriteFileOnly("Time = {Ellapsed: " + ellapsedTime + ", Min: " + timeMin + ", Max: " + timeMax + ", Average: " + timeAverage + "} Loop: " + count);
@@ -526,7 +525,7 @@ public class DruidRestoration
             DamagedPlayers.Add(Me);
             PartyHpMedian = Me.HealthPercent;
         }
-        //Setup Group
+            //Setup Group
         else
         {
             int alivePlayers = 0;
@@ -555,7 +554,6 @@ public class DruidRestoration
                     if (currentPlayer.HealthPercent < 100)
                     {
                         DamagedPlayers.Add(currentPlayer);
-
                     }
 
                     //Add Tank
@@ -593,7 +591,7 @@ public class DruidRestoration
 
         //Restart Scan For Tanks Interval
         if (ScanForTanksTimer.IsReady)
-            ScanForTanksTimer = new Timer(1000 * 60);
+            ScanForTanksTimer = new Timer(1000*60);
     }
 
     // For Movement Spells (always return after Casting)
@@ -755,21 +753,21 @@ public class DruidRestoration
             // Activate Incarnation: Tree of Life (Enhance upcoming Heal Spells)
             if ((PartyHpMedian < MySettings.UseIncarnationBelowPartyPercentage ||
                  Tank.HealthPercent < MySettings.UseIncarnationBelowTankPercentage) &&
-                 Incarnation.IsSpellUsable)
+                Incarnation.IsSpellUsable)
             {
                 Incarnation.Cast();
             }
             // Activate Berserking (+15% Haste for 10 sec)
             if ((PartyHpMedian < MySettings.UseBerserkingBelowPartyPercentage ||
                  Tank.HealthPercent < MySettings.UseBerserkingBelowTankPercentage) &&
-                 Berserking.IsSpellUsable)
+                Berserking.IsSpellUsable)
             {
                 Berserking.Cast();
             }
             // Activate Essence of G'Hanir (Double healing from Hots for 8 seconds)
             if ((PartyHpMedian < MySettings.UseEssenceofGHanirBelowPartyPercentage ||
                  Tank.HealthPercent < MySettings.UseEssenceofGHanirBelowTankPercentage) &&
-                 EssenceofGHanir.IsSpellUsable)
+                EssenceofGHanir.IsSpellUsable)
             {
                 EssenceofGHanir.Cast();
                 return;
@@ -801,7 +799,8 @@ public class DruidRestoration
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            Logging.WriteFileOnly("Tank Healing? " + Tank.Name + "[" + Tank.GetUnitId() + "]: Health =" + Tank.HealthPercent + ", Range = " + Tank.GetDistance + ", Lifebloom = " + Tank.UnitAura(Lifebloom.Ids, Me.Guid).AuraTimeLeftInMs + ", Rejuvenation = " + Tank.UnitAura(Rejuvenation.Ids, Me.Guid).AuraTimeLeftInMs + ", InCombat = " + Tank.InCombat);
+            Logging.WriteFileOnly("Tank Healing? " + Tank.Name + "[" + Tank.GetUnitId() + "]: Health =" + Tank.HealthPercent + ", Range = " + Tank.GetDistance + ", Lifebloom = " +
+                                  Tank.UnitAura(Lifebloom.Ids, Me.Guid).AuraTimeLeftInMs + ", Rejuvenation = " + Tank.UnitAura(Rejuvenation.Ids, Me.Guid).AuraTimeLeftInMs + ", InCombat = " + Tank.InCombat);
 
             // Set Efflorescence
             if (MySettings.UseEfflorescenceAtMainTank && !Tank.GetMove && EfflorescenceTimer.IsReady && Efflorescence.IsSpellUsable &&
@@ -809,7 +808,7 @@ public class DruidRestoration
             {
                 Logging.WriteFileOnly("Tank Healing: Efflorescence");
                 Efflorescence.CastAtPosition(Tank.Position);
-                EfflorescenceTimer = new Timer(1000 * 10/*30*/);
+                EfflorescenceTimer = new Timer(1000*10 /*30*/);
                 return true;
             }
             // Maintain Cenarion Ward
@@ -862,20 +861,26 @@ public class DruidRestoration
 
             // Channel Tranquility
             if ((!Me.GetMove || Me.UnitAura(TranquilMind.Id).IsValid) && Tranquility.IsSpellUsable &&
-                ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseTranquilityDamagedPlayerHealthThreshold && unit.GetDistance <= 40f).Count >= MySettings.UseTranquilityAtDamagedPlayerDensity)
+                ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseTranquilityDamagedPlayerHealthThreshold && unit.GetDistance <= 40f).Count >=
+                MySettings.UseTranquilityAtDamagedPlayerDensity)
             {
                 Tranquility.Cast(true);
                 return true;
             }
 
             // Cast Wild Growth
-            if (WildGrowth.IsSpellUsable && ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseWildGrowthDamagedPlayerHealthThreshold && unit.GetDistance <= 30f).Count >= MySettings.UseWildGrowthAtDamagedPlayerDensity)
+            if (WildGrowth.IsSpellUsable &&
+                ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseWildGrowthDamagedPlayerHealthThreshold && unit.GetDistance <= 30f).Count >=
+                MySettings.UseWildGrowthAtDamagedPlayerDensity)
             {
                 WildGrowth.CastOnSelf();
                 return true;
             }
 
-            Logging.WriteFileOnly("No AOE Heal casted. Tranquility would heal " + ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseTranquilityDamagedPlayerHealthThreshold && unit.GetDistance <= 40f).Count + " damaged players. Wild Growth would heal " + ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseWildGrowthDamagedPlayerHealthThreshold && unit.GetDistance <= 30f).Count + " damaged players.");
+            Logging.WriteFileOnly("No AOE Heal casted. Tranquility would heal " +
+                                  ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseTranquilityDamagedPlayerHealthThreshold && unit.GetDistance <= 40f).Count +
+                                  " damaged players. Wild Growth would heal " +
+                                  ObjectManager.GetFriendlyUnits().FindAll(unit => unit.HealthPercent < MySettings.UseWildGrowthDamagedPlayerHealthThreshold && unit.GetDistance <= 30f).Count + " damaged players.");
         }
         catch (Exception e)
         {
@@ -905,7 +910,8 @@ public class DruidRestoration
             bool SwiftmendIsSpellUsable = Swiftmend.IsSpellUsable;
             foreach (WoWPlayer player in DamagedPlayers)
             {
-                Logging.WriteFileOnly(player.Name + "[" + player.GetUnitId() + "]: Health =" + player.HealthPercent.ToString("0.0###") + ", Range = " + player.GetDistance + ", Regrowth = " + player.UnitAura(Regrowth.Ids, Me.Guid).AuraTimeLeftInMs + ", Rejuvenation = " + player.UnitAura(Rejuvenation.Ids, Me.Guid).AuraTimeLeftInMs);
+                Logging.WriteFileOnly(player.Name + "[" + player.GetUnitId() + "]: Health =" + player.HealthPercent.ToString("0.0###") + ", Range = " + player.GetDistance + ", Regrowth = " +
+                                      player.UnitAura(Regrowth.Ids, Me.Guid).AuraTimeLeftInMs + ", Rejuvenation = " + player.UnitAura(Rejuvenation.Ids, Me.Guid).AuraTimeLeftInMs);
 
                 if (player.IsHostile || player.GetDistance > Swiftmend.MaxRangeFriend)
                     continue;
@@ -941,7 +947,6 @@ public class DruidRestoration
             bool RejuvenationIsSpellUsable = Rejuvenation.IsSpellUsable;
             foreach (WoWPlayer player in DamagedPlayers)
             {
-
                 // Maintain Rejuvenation
                 if (player.HealthPercent < MySettings.UseRejuvenationBelowPercentage && RejuvenationIsSpellUsable &&
                     player.UnitAura(Rejuvenation.Ids, Me.Guid).AuraTimeLeftInMs < 5000)
@@ -1284,7 +1289,7 @@ public class PaladinHoly
                             DamagedPlayers = 1;
                             Target = ObjectManager.Me;
                         }
-                        //Setup Group
+                            //Setup Group
                         else
                         {
                             double lowestHp = 100;
@@ -1366,7 +1371,7 @@ public class PaladinHoly
 
                         //Restart Scan For Tanks Interval
                         if (ScanForTanksTimer.IsReady)
-                            ScanForTanksTimer = new Timer(1000 * 60);
+                            ScanForTanksTimer = new Timer(1000*60);
 
                         if (Fight.InFight || PartyHpMedian < 90)
                             Combat();
@@ -1477,14 +1482,14 @@ public class PaladinHoly
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);   
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseDivineProtectionBelowPercentage &&
                     DivineProtection.IsSpellUsable && !ObjectManager.Me.HaveBuff(Forbearance.Id))
                 {
                     DivineProtection.CastOnSelf();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return false;
                 }
             }
@@ -1493,7 +1498,7 @@ public class PaladinHoly
                 DivineShield.IsSpellUsable && !ObjectManager.Me.HaveBuff(Forbearance.Id))
             {
                 DivineShield.CastOnSelf();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
                 return true;
             }
             return false;
@@ -1772,6 +1777,7 @@ public class PaladinHoly
                 playerInSpellRange.Add(player);
         return playerInSpellRange;
     }
+
     //Get Players in Range around Player
     private List<WoWPlayer> GetPlayersInRange(WoWPlayer target, float range)
     {
@@ -2034,7 +2040,7 @@ public class ShamanRestoration
                             DamagedPlayers = 1;
                             Target = ObjectManager.Me;
                         }
-                        //Setup Group
+                            //Setup Group
                         else
                         {
                             double lowestHp = 100;
@@ -2218,7 +2224,7 @@ public class ShamanRestoration
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
             }
@@ -2322,21 +2328,21 @@ public class ShamanRestoration
                 MySettings.UseSpiritLinkTotem && SpiritLinkTotem.KnownSpell)
             {
                 SpiritLinkTotem.CastAtPosition(Target.Position);
-                SpiritLinkTotemCooldown = new Timer(1000 * 180);
+                SpiritLinkTotemCooldown = new Timer(1000*180);
                 return;
             }
             if (PartyHpMedian <= MySettings.UseHealingTideTotemAtPartyPercentage && HealingTideTotemCooldown.IsReady &&
                 MySettings.UseHealingTideTotem && HealingTideTotem.KnownSpell)
             {
                 HealingTideTotem.Cast();
-                HealingTideTotemCooldown = new Timer(1000 * 180);
+                HealingTideTotemCooldown = new Timer(1000*180);
                 return;
             }
             if (HealingStreamTotemCooldown.IsReady && PartyHpMedian <= MySettings.UseHealingStreamTotemAtPartyPercentage &&
                 MySettings.UseHealingStreamTotem && HealingStreamTotem.KnownSpell)
             {
                 HealingStreamTotem.Cast();
-                HealingStreamTotemCooldown = new Timer(1000 * 30);
+                HealingStreamTotemCooldown = new Timer(1000*30);
                 return;
             }
             if (EarthenShieldTotemCooldown.IsReady && Target.HealthPercent <= MySettings.UseEarthenShieldTotemBelowPercentage &&
@@ -2344,7 +2350,7 @@ public class ShamanRestoration
                 MySettings.UseEarthenShieldTotem && EarthenShieldTotem.KnownSpell)
             {
                 EarthenShieldTotem.CastAtPosition(Target.Position);
-                EarthenShieldTotemCooldown = new Timer(1000 * 60);
+                EarthenShieldTotemCooldown = new Timer(1000*60);
                 return;
             }
             if (Target.GetPlayerInSpellRange(10f) >= MySettings.UseHealingRainAtPlayerDensity &&
@@ -2566,7 +2572,7 @@ public class PriestDiscipline
                         // Prioritize me instead. So selfish!
                     }
                 }
-                partyPercentHealthMedian = partyPercentHealthMedian / healingList.Count;
+                partyPercentHealthMedian = partyPercentHealthMedian/healingList.Count;
                 // use partyPercentHealthMedian in the HealingFight() code may be useful.
                 if (!lowestHpPlayer.IsValid || !lowestHpPlayer.IsAlive)
                     continue;
@@ -2681,7 +2687,7 @@ public class PriestHoly
                         // Prioritize me instead. So selfish!
                     }
                 }
-                partyPercentHealthMedian = partyPercentHealthMedian / healingList.Count;
+                partyPercentHealthMedian = partyPercentHealthMedian/healingList.Count;
                 // use partyPercentHealthMedian in the HealingFight() code may be useful.
                 if (!lowestHpPlayer.IsValid || !lowestHpPlayer.IsAlive)
                     continue;
@@ -2800,7 +2806,7 @@ public class MonkMistweaver
                         // Prioritize me instead. So selfish!
                     }
                 }
-                partyPercentHealthMedian = partyPercentHealthMedian / healingList.Count;
+                partyPercentHealthMedian = partyPercentHealthMedian/healingList.Count;
                 // use partyPercentHealthMedian in the HealingFight() code may be useful.
                 if (!lowestHpPlayer.IsValid || !lowestHpPlayer.IsAlive)
                     continue;

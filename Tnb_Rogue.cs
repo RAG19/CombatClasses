@@ -84,7 +84,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Rogue Specialisation checking
+                    #region Rogue Specialisation checking
 
                 case WoWClass.Rogue:
 
@@ -153,7 +153,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -168,7 +168,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -507,14 +507,14 @@ public class RogueAssassination
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000 * 5);
+                    DefensiveTimer = new Timer(1000*5);
                     return true;
                 }
             }
@@ -523,14 +523,14 @@ public class RogueAssassination
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             //Evasion
             if (ObjectManager.Me.HealthPercent < MySettings.UseEvasionBelowPercentage && Evasion.IsSpellUsable)
             {
                 Evasion.Cast();
-                DefensiveTimer = new Timer(1000 * 10);
+                DefensiveTimer = new Timer(1000*10);
                 return true;
             }
             return false;
@@ -698,7 +698,7 @@ public class RogueAssassination
             //3. Activate Vanish when you aren't in stealth and
             if (MySettings.UseVanish && Vanish.IsSpellUsable && !StealthBuff.HaveBuff &&
                 //you have max combo points
-                GetFreeComboPoints() == 0)// && !SpellManager.GetAllSpellsOnCooldown.Exists(entry => entry.SpellId == 1856))
+                GetFreeComboPoints() == 0) // && !SpellManager.GetAllSpellsOnCooldown.Exists(entry => entry.SpellId == 1856))
             {
                 Vanish.Cast();
                 return;
@@ -783,7 +783,7 @@ public class RogueAssassination
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueAssassinationSettings
@@ -1164,14 +1164,14 @@ public class RogueOutlaw
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000 * 5);
+                    DefensiveTimer = new Timer(1000*5);
                     return true;
                 }
             }
@@ -1180,14 +1180,14 @@ public class RogueOutlaw
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             //Riposte
             if (ObjectManager.Me.HealthPercent < MySettings.UseRiposteBelowPercentage && Riposte.IsSpellUsable)
             {
                 Riposte.Cast();
-                DefensiveTimer = new Timer(1000 * 10);
+                DefensiveTimer = new Timer(1000*10);
                 return true;
             }
             return false;
@@ -1374,7 +1374,7 @@ public class RogueOutlaw
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueOutlawSettings
@@ -1732,14 +1732,14 @@ public class RogueSubtlety
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseFeintBelowPercentage &&
                     Feint.IsSpellUsable && ObjectManager.Me.Energy >= 20)
                 {
                     Feint.Cast();
-                    DefensiveTimer = new Timer(1000 * 5);
+                    DefensiveTimer = new Timer(1000*5);
                     return true;
                 }
             }
@@ -1748,14 +1748,14 @@ public class RogueSubtlety
             if (ObjectManager.Me.HealthPercent < MySettings.UseCloakofShadowsBelowPercentage && CloakofShadows.IsSpellUsable)
             {
                 CloakofShadows.Cast();
-                DefensiveTimer = new Timer(1000 * 5);
+                DefensiveTimer = new Timer(1000*5);
                 return true;
             }
             //Evasion
             if (ObjectManager.Me.HealthPercent < MySettings.UseEvasionBelowPercentage && Evasion.IsSpellUsable)
             {
                 Evasion.Cast();
-                DefensiveTimer = new Timer(1000 * 10);
+                DefensiveTimer = new Timer(1000*10);
                 return true;
             }
             return false;
@@ -1932,13 +1932,13 @@ public class RogueSubtlety
                     return;
                 }
                 else if (MySettings.UseBackstap && Backstab.IsSpellUsable &&
-                    ObjectManager.Me.Energy >= 35 && Backstab.IsHostileDistanceGood)
+                         ObjectManager.Me.Energy >= 35 && Backstab.IsHostileDistanceGood)
                 {
                     Backstab.Cast();
                     return;
                 }
             }
-            //Spend combo points if they are capping.
+                //Spend combo points if they are capping.
             else
             {
                 //Apply Enveloping Shadows when
@@ -1983,7 +1983,7 @@ public class RogueSubtlety
     // Checks free combo points before capping
     private int GetFreeComboPoints()
     {
-        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int)ObjectManager.Me.ComboPoint;
+        return ((DeeperStratagem.HaveBuff) ? 6 : 5) - (int) ObjectManager.Me.ComboPoint;
     }
 
     #region Nested type: RogueSubtletySettings

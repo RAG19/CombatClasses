@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Hunter Specialisation checking
+                    #region Hunter Specialisation checking
 
                 case WoWClass.Hunter:
 
@@ -155,7 +155,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -170,7 +170,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -446,7 +446,7 @@ public class HunterMarksmanship
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -465,13 +465,13 @@ public class HunterMarksmanship
                 if (BurstingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBurstingShotBelowPercentage && BurstingShot.IsHostileDistanceGood)
                 {
                     BurstingShot.Cast();
-                    CCTimer = new Timer(1000 * 4);
+                    CCTimer = new Timer(1000*4);
                     return true;
                 }
                 if (ConcussiveShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseConcussiveShotBelowPercentage && ConcussiveShot.IsHostileDistanceGood)
                 {
                     ConcussiveShot.Cast();
-                    CCTimer = new Timer(1000 * 6);
+                    CCTimer = new Timer(1000*6);
                     return true;
                 }
                 if (Disengage.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseDisengageBelowPercentage)
@@ -479,13 +479,13 @@ public class HunterMarksmanship
                     MovementsAction.Jump();
                     Disengage.Cast();
                     if (NarrowEscape.HaveBuff || Posthaste.HaveBuff)
-                        CCTimer = new Timer(1000 * 8);
+                        CCTimer = new Timer(1000*8);
                     return true;
                 }
                 if (BindingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBindingShotBelowPercentage && BindingShot.IsHostileDistanceGood)
                 {
                     BindingShot.Cast();
-                    CCTimer = new Timer(1000 * 5);
+                    CCTimer = new Timer(1000*5);
                     return true;
                 }
                 if (FeignDeath.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFeignDeathBelowPercentage)
@@ -671,7 +671,7 @@ public class HunterMarksmanship
             if (MySettings.UseAMurderofCrows && AMurderofCrows.IsSpellUsable &&
                 AMurderofCrows.IsHostileDistanceGood && !AMurderofCrows.TargetHaveBuff)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 30)
+                if (ObjectManager.Me.Focus < 30)
                     return false;
                 AMurderofCrows.Cast();
                 return true;
@@ -681,7 +681,7 @@ public class HunterMarksmanship
             if (MySettings.UseMarkedShot && MarkedShot.IsSpellUsable && MarkedShot.IsHostileDistanceGood &&
                 ObjectManager.Target.UnitAura(Vulnerable.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 2000)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 30)
+                if (ObjectManager.Me.Focus < 30)
                     return false;
                 MarkedShot.Cast();
                 return true;
@@ -698,7 +698,7 @@ public class HunterMarksmanship
             //Cast Windburst on cooldown.
             if (MySettings.UseWindburst && Windburst.IsSpellUsable && Windburst.IsHostileDistanceGood)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 20)
+                if (ObjectManager.Me.Focus < 20)
                     return false;
                 Windburst.Cast();
                 return true;
@@ -706,7 +706,7 @@ public class HunterMarksmanship
             //Cast Barrage on cooldown.
             if (MySettings.UseBarrage && Barrage.IsSpellUsable && Barrage.IsHostileDistanceGood)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 60)
+                if (ObjectManager.Me.Focus < 60)
                     return false;
                 Barrage.Cast();
                 return true;
@@ -714,9 +714,9 @@ public class HunterMarksmanship
             //Cast Aimed Shot when Target has Vulnerable Dot or you have 80+ Focus.
             if (MySettings.UseAimedShot && AimedShot.IsSpellUsable && AimedShot.IsHostileDistanceGood &&
                 (ObjectManager.Target.UnitAura(Vulnerable.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs > 1000 ||
-                ObjectManager.Me.PowerTypeFocus >= 80))
+                 ObjectManager.Me.Focus >= 80))
             {
-                if (ObjectManager.Me.PowerTypeFocus < 30)
+                if (ObjectManager.Me.Focus < 30)
                     return false;
                 AimedShot.Cast();
                 return true;
@@ -1158,12 +1158,12 @@ public class HunterBeastMastery
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                     if (Intimidation.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseIntimidationBelowPercentage)
                     {
                         Intimidation.Cast();
-                        CCTimer = new Timer(1000 * 5);
+                        CCTimer = new Timer(1000*5);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -1182,7 +1182,7 @@ public class HunterBeastMastery
                 if (ConcussiveShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseConcussiveShotBelowPercentage && ConcussiveShot.IsHostileDistanceGood)
                 {
                     ConcussiveShot.Cast();
-                    CCTimer = new Timer(1000 * 6);
+                    CCTimer = new Timer(1000*6);
                     return true;
                 }
                 if (Disengage.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseDisengageBelowPercentage)
@@ -1190,13 +1190,13 @@ public class HunterBeastMastery
                     MovementsAction.Jump();
                     Disengage.Cast();
                     if (NarrowEscape.HaveBuff || Posthaste.HaveBuff)
-                        CCTimer = new Timer(1000 * 8);
+                        CCTimer = new Timer(1000*8);
                     return true;
                 }
                 if (BindingShot.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBindingShotBelowPercentage && BindingShot.IsHostileDistanceGood)
                 {
                     BindingShot.Cast();
-                    CCTimer = new Timer(1000 * 5);
+                    CCTimer = new Timer(1000*5);
                     return true;
                 }
                 if (FeignDeath.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseFeignDeathBelowPercentage)
@@ -1368,7 +1368,7 @@ public class HunterBeastMastery
             uint UnitsHitByVolley = ObjectManager.Target.GetUnitInSpellRange(8f);
             if (MySettings.UseVolley && Volley.IsSpellUsable &&
                 ((UnitsHitByVolley > 1 && !VolleyBuff.HaveBuff) ||
-                (UnitsHitByVolley == 1 && !VolleyBuff.HaveBuff)))
+                 (UnitsHitByVolley == 1 && !VolleyBuff.HaveBuff)))
             {
                 Volley.Cast();
             }
@@ -1391,7 +1391,7 @@ public class HunterBeastMastery
             if (MySettings.UseAMurderofCrows && AMurderofCrows.IsSpellUsable &&
                 AMurderofCrows.IsHostileDistanceGood && !AMurderofCrows.TargetHaveBuff)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 30)
+                if (ObjectManager.Me.Focus < 30)
                     return;
                 AMurderofCrows.Cast();
                 return;
@@ -1411,7 +1411,7 @@ public class HunterBeastMastery
             if (MySettings.UseMultiShot && MultiShot.IsSpellUsable && MultiShot.IsHostileDistanceGood &&
                 !ObjectManager.Pet.HaveBuff(BeastCleave.Ids) && ObjectManager.Target.GetUnitInSpellRange(8f) > 1)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 40)
+                if (ObjectManager.Me.Focus < 40)
                     return;
                 MultiShot.Cast();
                 return;
@@ -1432,14 +1432,14 @@ public class HunterBeastMastery
             else if (MySettings.UseDireBeast && DireBeast.IsSpellUsable && DireBeast.IsHostileDistanceGood)
             {
                 DireBeast.Cast();
-                DireBeastTimer = new Timer(1000 * 8);
+                DireBeastTimer = new Timer(1000*8);
                 return;
             }
             //Cast Barrage when you have multiple targets.
             if (MySettings.UseBarrage && Barrage.IsSpellUsable && Barrage.IsHostileDistanceGood &&
                 ObjectManager.Target.GetUnitInSpellRange(8f) > 1)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 60)
+                if (ObjectManager.Me.Focus < 60)
                     return;
                 Barrage.Cast();
                 return;
@@ -1448,7 +1448,7 @@ public class HunterBeastMastery
             if (MySettings.UseMultiShot && MultiShot.IsSpellUsable && MultiShot.IsHostileDistanceGood &&
                 SurgeoftheStormgod.HaveBuff && ObjectManager.Target.GetUnitInSpellRange(8f) >= 4)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 40)
+                if (ObjectManager.Me.Focus < 40)
                     return;
                 MultiShot.Cast();
                 return;
@@ -1457,7 +1457,7 @@ public class HunterBeastMastery
             if (MySettings.UseKillCommand && KillCommand.IsSpellUsable &&
                 ObjectManager.Pet.Position.DistanceTo(ObjectManager.Target.Position) <= 25)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 30)
+                if (ObjectManager.Me.Focus < 30)
                     return;
                 KillCommand.Cast();
                 return;
@@ -1471,16 +1471,16 @@ public class HunterBeastMastery
             //Cast Barrage on cooldown.
             if (MySettings.UseBarrage && Barrage.IsSpellUsable && Barrage.IsHostileDistanceGood)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 60)
+                if (ObjectManager.Me.Focus < 60)
                     return;
                 Barrage.Cast();
                 return;
             }
             //Cast Cobra Shot when you have over (default = 90) Focus or Bestial Wrath is active.
-            if (ObjectManager.Me.PowerTypeFocus > MySettings.UseCobraShotAboveValue || BestialWrath.HaveBuff
+            if (ObjectManager.Me.Focus > MySettings.UseCobraShotAboveValue || BestialWrath.HaveBuff
                 && CobraShot.IsSpellUsable && CobraShot.IsHostileDistanceGood)
             {
-                if (ObjectManager.Me.PowerTypeFocus < 40)
+                if (ObjectManager.Me.Focus < 40)
                     return;
                 CobraShot.Cast();
                 return;
@@ -1880,7 +1880,7 @@ public class HunterSurvival
                     if (WarStomp.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage)
                     {
                         WarStomp.Cast();
-                        CCTimer = new Timer(1000 * 2);
+                        CCTimer = new Timer(1000*2);
                     }
                 }
                 if (Stoneform.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage)
@@ -2161,7 +2161,7 @@ public class HunterSurvival
             if (MySettings.UseHarpoon && Harpoon.IsSpellUsable && Harpoon.IsHostileDistanceGood)
             {
                 Harpoon.Cast();
-                CCTimer = new Timer(1000 * 3);
+                CCTimer = new Timer(1000*3);
                 return;
             }
         }

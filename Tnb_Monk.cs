@@ -83,7 +83,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Monk Specialisation checking
+                    #region Monk Specialisation checking
 
                 case WoWClass.Monk:
 
@@ -153,7 +153,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -168,7 +168,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -419,14 +419,14 @@ public class MonkBrewmaster
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseLegSweepBelowPercentage && LegSweep.IsSpellUsable &&
                         ObjectManager.Me.GetUnitInSpellRange(5f) >= 1)
                     {
                         LegSweep.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -434,7 +434,7 @@ public class MonkBrewmaster
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Exploding Keg
@@ -442,7 +442,7 @@ public class MonkBrewmaster
                     ExplodingKeg.IsSpellUsable && ExplodingKeg.IsHostileDistanceGood)
                 {
                     ExplodingKeg.CastAtPosition(ObjectManager.Target.Position);
-                    DefensiveTimer = new Timer(1000 * 3);// Time until the Buff ends
+                    DefensiveTimer = new Timer(1000*3); // Time until the Buff ends
                     return true;
                 }
                 //Dampen Harm
@@ -540,7 +540,7 @@ public class MonkBrewmaster
 
             //Cast Provoke
             if (MySettings.UseProvoke && Provoke.IsSpellUsable && Provoke.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 Provoke.Cast();
                 return;
@@ -965,14 +965,14 @@ public class MonkWindwalker
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseLegSweepBelowPercentage && LegSweep.IsSpellUsable &&
                         ObjectManager.Me.GetUnitInSpellRange(5f) >= 1)
                     {
                         LegSweep.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -980,7 +980,7 @@ public class MonkWindwalker
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Touch of Karma
@@ -988,7 +988,7 @@ public class MonkWindwalker
                     TouchofKarma.IsSpellUsable && TouchofKarma.IsHostileDistanceGood)
                 {
                     TouchofKarma.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                     return true;
                 }
                 //Dampen Harm
@@ -1074,7 +1074,7 @@ public class MonkWindwalker
 
             //Cast Provoke
             if (MySettings.UseProvoke && Provoke.IsSpellUsable && Provoke.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 Provoke.Cast();
                 return;
@@ -1136,7 +1136,7 @@ public class MonkWindwalker
                     return;
                 }
             }
-            //Multiple Target
+                //Multiple Target
             else
             {
                 //Cast Spinning Crane Kick
@@ -1531,14 +1531,14 @@ public class MonkMistweaver
                     if (ObjectManager.Me.HealthPercent < MySettings.UseWarStompBelowPercentage && WarStomp.IsSpellUsable)
                     {
                         WarStomp.Cast();
-                        StunTimer = new Timer(1000 * 2.5);
+                        StunTimer = new Timer(1000*2.5);
                         return true;
                     }
                     if (ObjectManager.Me.HealthPercent < MySettings.UseLegSweepBelowPercentage && LegSweep.IsSpellUsable &&
                         ObjectManager.Me.GetUnitInSpellRange(5f) >= 1)
                     {
                         LegSweep.Cast();
-                        StunTimer = new Timer(1000 * 5);
+                        StunTimer = new Timer(1000*5);
                         return true;
                     }
                 }
@@ -1546,7 +1546,7 @@ public class MonkMistweaver
                 if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
                 {
                     Stoneform.Cast();
-                    DefensiveTimer = new Timer(1000 * 8);
+                    DefensiveTimer = new Timer(1000*8);
                     return true;
                 }
                 //Dampen Harm
@@ -1624,7 +1624,7 @@ public class MonkMistweaver
 
             //Cast Provoke
             if (MySettings.UseProvoke && Provoke.IsSpellUsable && Provoke.IsHostileDistanceGood &&
-               !ObjectManager.Target.IsTargetingMe)
+                !ObjectManager.Target.IsTargetingMe)
             {
                 Provoke.Cast();
                 return;

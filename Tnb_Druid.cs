@@ -86,7 +86,7 @@ public class Main : ICombatClass
             WoWSpecialization wowSpecialization = ObjectManager.Me.WowSpecialization(true);
             switch (ObjectManager.Me.WowClass)
             {
-                #region Druid Specialisation checking
+                    #region Druid Specialisation checking
 
                 case WoWClass.Druid:
 
@@ -178,7 +178,7 @@ public class Main : ICombatClass
                     }
                     break;
 
-                #endregion
+                    #endregion
 
                 default:
                     Dispose();
@@ -193,7 +193,7 @@ public class Main : ICombatClass
 
     internal static void DumpCurrentSettings<T>(object mySettings)
     {
-        mySettings = mySettings is T ? (T)mySettings : default(T);
+        mySettings = mySettings is T ? (T) mySettings : default(T);
         BindingFlags bindingFlags = BindingFlags.Public |
                                     BindingFlags.NonPublic |
                                     BindingFlags.Instance |
@@ -248,7 +248,7 @@ public static class Diagnostics
         long ellapsedTime = stopwatch.ElapsedMilliseconds;
         timeMin = (ellapsedTime < timeMin) ? ellapsedTime : timeMin;
         timeMax = (ellapsedTime > timeMax) ? ellapsedTime : timeMax;
-        timeAverage = ((timeAverage * count) + ellapsedTime) / ++count;
+        timeAverage = ((timeAverage*count) + ellapsedTime)/++count;
         if (log)
         {
             Logging.WriteFileOnly("Time = {Ellapsed: " + ellapsedTime + ", Min: " + timeMin + ", Max: " + timeMax + ", Average: " + timeAverage + "} Loop: " + count);
@@ -366,7 +366,7 @@ public class DruidBalance
         MySettings = DruidBalanceSettings.GetSettings();
         Main.DumpCurrentSettings<DruidBalanceSettings>(MySettings);
         UInt128 lastTarget = 0;
-        
+
         Diagnostics.Init("Balance Druid");
 
         while (Main.InternalLoop)
@@ -1239,7 +1239,8 @@ public class DruidFeral
                 //1. Priority: Rake
                 if (MySettings.UseRake && Rake.IsSpellUsable && Rake.IsHostileDistanceGood && ObjectManager.Target.IsStunnable)
                 {
-                    Logging.WriteDebug("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood + ", Target Distance: " + ObjectManager.Target.GetDistance + ", CombatReach - Me: " + ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach + ", Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
+                    Logging.WriteDebug("Rake IsHostileDistanceGood: " + Rake.IsHostileDistanceGood + ", Target Distance: " + ObjectManager.Target.GetDistance + ", CombatReach - Me: " +
+                                       ObjectManager.Me.GetCombatReach + ", Target: " + ObjectManager.Target.GetCombatReach + ", Rake MaxRangeHostile: " + Rake.MaxRangeHostile + " (Tooltip: Melee)");
                     Rake.Cast();
                     return;
                 }
@@ -1393,7 +1394,7 @@ public class DruidFeral
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-            
+
             WoWPlayer me = ObjectManager.Me;
 
             if (MySettings.UseTrinketOne && !ItemsManager.IsItemOnCooldown(_firstTrinket.Entry) && ItemsManager.IsItemUsable(_firstTrinket.Entry))
@@ -1425,7 +1426,7 @@ public class DruidFeral
             }
             //Apply Tiger's Fury when
             if (MySettings.UseTigersFury && TigersFury.IsSpellUsable && (me.EnergyPercentage < 20 ||
-                me.EnergyPercentage < 40 && !me.UnitAura(ClearcastingBuff.Id).IsValid))
+                                                                         me.EnergyPercentage < 40 && !me.UnitAura(ClearcastingBuff.Id).IsValid))
             {
                 TigersFury.Cast();
                 return;
@@ -1450,20 +1451,25 @@ public class DruidFeral
             if (MySettings.LogBuffs)
             {
                 string log = "";
-                log += ObjectManager.Me.UnitAura(SavageRoarBuff.Id).IsValid ? "Savage Roar is active and has " + ObjectManager.Me.UnitAura(SavageRoarBuff.Id).AuraTimeLeftInMs / 1000 + " seconds remaining. " : "";
-                log += ObjectManager.Me.UnitAura(TigersFury.Id).IsValid ? "Tiger's Fury is active and has " + ObjectManager.Me.UnitAura(TigersFury.Id).AuraTimeLeftInMs / 1000 + " seconds remaining. " : "";
-                log += ObjectManager.Me.UnitAura(BloodtalonsBuff.Id).IsValid ? ObjectManager.Me.UnitAura(BloodtalonsBuff.Id).AuraCount + " Bloodtalons Stack active, which have " + ObjectManager.Me.UnitAura(SavageRoarBuff.Id).AuraTimeLeftInMs / 1000 + " seconds remaining. " : "";
-                log += ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).IsValid ? "Predatory Swiftness is active and has " + ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).AuraTimeLeftInMs / 1000 + " seconds remaining. " : "";
-                log += ObjectManager.Me.UnitAura(Berserk.Id).IsValid ? "Berserk is active and has " + ObjectManager.Me.UnitAura(Berserk.Id).AuraTimeLeftInMs / 1000 + " seconds remaining. " : "";
-                log += "Combo points: " + ObjectManager.Me.ComboPoint + "/" + ObjectManager.Me.MaxComboPoint + ", Energy: " + ObjectManager.Me.Energy + "/" + ObjectManager.Me.MaxEnergy + " Mana: " + ObjectManager.Me.Mana + "/" + ObjectManager.Me.MaxMana;
+                log += ObjectManager.Me.UnitAura(SavageRoarBuff.Id).IsValid ? "Savage Roar is active and has " + ObjectManager.Me.UnitAura(SavageRoarBuff.Id).AuraTimeLeftInMs/1000 + " seconds remaining. " : "";
+                log += ObjectManager.Me.UnitAura(TigersFury.Id).IsValid ? "Tiger's Fury is active and has " + ObjectManager.Me.UnitAura(TigersFury.Id).AuraTimeLeftInMs/1000 + " seconds remaining. " : "";
+                log += ObjectManager.Me.UnitAura(BloodtalonsBuff.Id).IsValid
+                    ? ObjectManager.Me.UnitAura(BloodtalonsBuff.Id).AuraCount + " Bloodtalons Stack active, which have " + ObjectManager.Me.UnitAura(SavageRoarBuff.Id).AuraTimeLeftInMs/1000 + " seconds remaining. "
+                    : "";
+                log += ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).IsValid
+                    ? "Predatory Swiftness is active and has " + ObjectManager.Me.UnitAura(PredatorySwiftnessBuff.Id).AuraTimeLeftInMs/1000 + " seconds remaining. "
+                    : "";
+                log += ObjectManager.Me.UnitAura(Berserk.Id).IsValid ? "Berserk is active and has " + ObjectManager.Me.UnitAura(Berserk.Id).AuraTimeLeftInMs/1000 + " seconds remaining. " : "";
+                log += "Combo points: " + ObjectManager.Me.ComboPoint + "/" + ObjectManager.Me.MaxComboPoint + ", Energy: " + ObjectManager.Me.Energy + "/" + ObjectManager.Me.MaxEnergy + " Mana: " +
+                       ObjectManager.Me.Mana + "/" + ObjectManager.Me.MaxMana;
                 Logging.WriteFileOnly(log);
             }
             EmptyLoop = false;
 
             //1. Maintain Savage Roar when you don't have the Buff or
             if (MySettings.UseSavageRoar && (!SavageRoar.HaveBuff ||
-                //you have max Combo Points and less than 8 seconds remaining.
-                (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
+                                             //you have max Combo Points and less than 8 seconds remaining.
+                                             (ObjectManager.Me.ComboPoint == 5 && ObjectManager.Me.UnitAura(SavageRoarBuff.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000)))
             {
                 if (CastRegrowth() || ObjectManager.Me.Energy < 40)
                     return;
@@ -1492,10 +1498,10 @@ public class DruidFeral
             if (MySettings.UseRip && Rip.IsHostileDistanceGood &&
                 //it isn't on the target or
                 ObjectManager.Me.ComboPoint >= 5 && (!Rip.TargetHaveBuffFromMe ||
-                //it has less than 8 seconds remaining and
-                (ObjectManager.Target.UnitAura(Rip.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 &&
-                 //you have Blood Talons Buff.
-                 ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
+                                                     //it has less than 8 seconds remaining and
+                                                     (ObjectManager.Target.UnitAura(Rip.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 8000 &&
+                                                      //you have Blood Talons Buff.
+                                                      ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
                 if (CastRegrowth() || ObjectManager.Me.Energy < 30)
                     return;
@@ -1541,10 +1547,10 @@ public class DruidFeral
             if (MySettings.UseRake && Rake.IsHostileDistanceGood &&
                 //it isn't on the target or
                 (!Rake.TargetHaveBuffFromMe ||
-                //it has less than 5 seconds remaining and
-                (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
-                //you have the Blood Talons Buff.
-                ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
+                 //it has less than 5 seconds remaining and
+                 (ObjectManager.Target.UnitAura(Rake.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs < 5000 &&
+                  //you have the Blood Talons Buff.
+                  ObjectManager.Me.UnitAura(BloodtalonsBuff.Id, ObjectManager.Me.Guid).IsValid)))
             {
                 if (ObjectManager.Me.Energy < 35)
                     return;
@@ -2114,14 +2120,14 @@ public class DruidRestoration
             if (ObjectManager.Me.HealthPercent < MySettings.UseStoneformBelowPercentage && Stoneform.IsSpellUsable)
             {
                 Stoneform.Cast();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
                 return true;
             }
             //Barkskin
             if (Barkskin.IsSpellUsable && ObjectManager.Me.HealthPercent < MySettings.UseBarkskinBelowPercentage)
             {
                 Barkskin.Cast();
-                DefensiveTimer = new Timer(1000 * 12);
+                DefensiveTimer = new Timer(1000*12);
                 return true;
             }
             //Ironbark 
@@ -2129,7 +2135,7 @@ public class DruidRestoration
                 Ironbark.IsSpellUsable && ObjectManager.Me.UnitAura(Ironbark.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs < 4000)
             {
                 Ironbark.CastOnSelf();
-                DefensiveTimer = new Timer(1000 * 12);
+                DefensiveTimer = new Timer(1000*12);
                 return true;
             }
             return false;
@@ -2182,7 +2188,7 @@ public class DruidRestoration
         try
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
-            
+
             //Maintain Moonfire and Sunfire Dots
             if (MySettings.UseMoonfire && Moonfire.IsSpellUsable && Moonfire.IsHostileDistanceGood && !Moonfire.TargetHaveBuff)
             {
@@ -2538,7 +2544,7 @@ public class DruidGuardian
             //Frenzied Regeneration
             if (FrenziedRegeneration.IsSpellUsable && DefensiveTimer.IsReady && ObjectManager.Me.Rage >= 10 &&
                 (ObjectManager.Me.HealthPercent < MySettings.UseFrenziedRegenerationBelowPercentage ||
-                (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
+                 (FrenziedRegeneration.GetSpellCharges == 2 && ObjectManager.Me.HealthPercent < 90)))
             {
                 FrenziedRegeneration.CastOnSelf();
             }
@@ -2617,20 +2623,20 @@ public class DruidGuardian
                 }
                 //Mitigate Damage
                 if (SurvivalInstincts.IsSpellUsable && (SurvivalInstincts.GetSpellCharges == 2 ||
-                    ObjectManager.Me.HealthPercent < MySettings.UseSurvivalInstinctsBelowPercentage))
+                                                        ObjectManager.Me.HealthPercent < MySettings.UseSurvivalInstinctsBelowPercentage))
                 {
                     SurvivalInstincts.Cast();
-                    DefensiveTimer = new Timer(1000 * 6);
+                    DefensiveTimer = new Timer(1000*6);
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseRageoftheSleeperBelowPercentage && RageoftheSleeper.IsSpellUsable)
                 {
                     RageoftheSleeper.Cast();
-                    DefensiveTimer = new Timer(1000 * 10);
+                    DefensiveTimer = new Timer(1000*10);
                 }
                 if (ObjectManager.Me.HealthPercent < MySettings.UseBarkskinBelowPercentage && Barkskin.IsSpellUsable)
                 {
                     Barkskin.Cast();
-                    DefensiveTimer = new Timer(1000 * 12);
+                    DefensiveTimer = new Timer(1000*12);
                 }
             }
             //Mitigate Magic Damage for Rage
@@ -2641,7 +2647,7 @@ public class DruidGuardian
             }
             //Increase Armor for Rage
             if ((ObjectManager.Me.HealthPercent < MySettings.UseIronfurBelowHealthPercentage ||
-                ObjectManager.Me.Rage > MySettings.UseIronfurAboveRagePercentage) &&
+                 ObjectManager.Me.Rage > MySettings.UseIronfurAboveRagePercentage) &&
                 Ironfur.IsSpellUsable)
             {
                 Ironfur.Cast();
@@ -2668,7 +2674,7 @@ public class DruidGuardian
                 Incarnation.Cast();
                 return true;
             }
-            if (MySettings.UseBearForm && /*BearForm.IsSpellUsable && */!BearForm.HaveBuff) //IsSpellUsable sometimes false for no reason
+            if (MySettings.UseBearForm && /*BearForm.IsSpellUsable && */ !BearForm.HaveBuff) //IsSpellUsable sometimes false for no reason
             {
                 BearForm.Cast();
                 return true;
@@ -2708,7 +2714,7 @@ public class DruidGuardian
             if (MySettings.UseBristlingFur && BristlingFur.IsSpellUsable && !DefensiveTimer.IsReady)
             {
                 BristlingFur.Cast();
-                DefensiveTimer = new Timer(1000 * 8);
+                DefensiveTimer = new Timer(1000*8);
             }
             return false;
         }
