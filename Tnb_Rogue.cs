@@ -1938,7 +1938,7 @@ public class RogueSubtlety
                     return;
                 }
             }
-                //Spend combo points if they are capping.
+            //Spend combo points if they are capping.
             else
             {
                 //Apply Enveloping Shadows when
