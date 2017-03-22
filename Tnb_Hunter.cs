@@ -523,6 +523,10 @@ public class HunterMarksmanship
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
+            // Skip if Pet Management isn't possible
+            if (!MountTask.CanManagePet)
+                return;
+
             // Dismiss Pet when nessecary
             if (Quest.GetSetDismissPet)
             {
@@ -588,7 +592,7 @@ public class HunterMarksmanship
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsableIgnoreUnknown && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
@@ -1242,6 +1246,10 @@ public class HunterBeastMastery
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
+            // Skip if Pet Management isn't possible
+            if (!MountTask.CanManagePet)
+                return;
+
             // Dismiss Pet when nessecary
             if (Quest.GetSetDismissPet)
             {
@@ -1307,7 +1315,7 @@ public class HunterBeastMastery
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsableIgnoreUnknown && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
@@ -1942,6 +1950,10 @@ public class HunterSurvival
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
+            // Skip if Pet Management isn't possible
+            if (!MountTask.CanManagePet)
+                return;
+
             // Dismiss Pet when nessecary
             if (Quest.GetSetDismissPet)
             {
@@ -2007,7 +2019,7 @@ public class HunterSurvival
                     }
 
                     //Revive Pet
-                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsable && ObjectManager.Pet.Health <= 0)
+                    if (MySettings.UseRevivePet && RevivePet.IsSpellUsableIgnoreUnknown && ObjectManager.Pet.Health <= 0)
                     {
                         if (MySettings.UseCombatRevive || !ObjectManager.Me.InCombat)
                         {
