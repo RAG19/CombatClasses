@@ -28,7 +28,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
-    internal static string Version = "7.2.5.a";
+    internal static string Version = "7.2.5.b";
 
     #region ICombatClass Members
 
@@ -665,7 +665,7 @@ public class RogueAssassination
 
             //1. Maintain Rupture when you have max combo points
             if (MySettings.UseRupture && Rupture.IsSpellUsable && Rupture.IsHostileDistanceGood &&
-                GetFreeComboPoints() == 0 && !Rupture.TargetHaveBuffFromMe)
+                GetFreeComboPoints() == 0 && ObjectManager.Target.UnitAura(Rupture.Ids, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 8000)
             {
                 //it won't reset Exsanguinate
                 if (!Rupture.TargetHaveBuffFromMe || !RuptureHasExsanguinateBuff)
@@ -742,8 +742,8 @@ public class RogueAssassination
                 ToxicBlade.Cast();
                 return;
             }
-            //7. Maintain Envenom when you have max combo points and 80 or more energy
-            if (GetFreeComboPoints() == 0 && ObjectManager.Me.Energy >= 80 && !Envenom.HaveBuff)
+            //7. Maintain Envenom when you have max combo points
+            if (GetFreeComboPoints() == 0 && !Envenom.HaveBuff)
             {
                 if (MySettings.UseDeathfromAbove && DeathfromAbove.IsSpellUsable &&
                     DeathfromAbove.IsHostileDistanceGood)
@@ -771,16 +771,19 @@ public class RogueAssassination
                 return;
             }
             //9. Cast Mutilate.
-            if (MySettings.UseMutilate && Mutilate.IsSpellUsable && Mutilate.IsHostileDistanceGood)
+            if (MySettings.UseMutilate && GetFreeComboPoints() > 0)
             {
-                Mutilate.Cast();
-                return;
-            }
-            // Cast Sinister Strike.
-            if (MySettings.UseMutilate && !Mutilate.KnownSpell && SinisterStrike.IsSpellUsable && SinisterStrike.IsHostileDistanceGood)
-            {
-                SinisterStrike.Cast();
-                return;
+                if (Mutilate.IsSpellUsable && Mutilate.IsHostileDistanceGood)
+                {
+                    Mutilate.Cast();
+                    return;
+                }
+                if (!Mutilate.KnownSpell && SinisterStrike.IsSpellUsable &&
+                    SinisterStrike.IsHostileDistanceGood)
+                {
+                    SinisterStrike.Cast();
+                    return;
+                }
             }
         }
         finally
