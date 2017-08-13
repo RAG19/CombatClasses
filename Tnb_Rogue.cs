@@ -28,7 +28,7 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
-    internal static string Version = "7.2.5.b";
+    internal static string Version = "7.2.5.c";
 
     #region ICombatClass Members
 
@@ -229,6 +229,7 @@ public class RogueAssassination
     private readonly Spell DeadlyPoison = new Spell("Deadly Poison"); //No GCD
     private readonly Spell LeechingPoison = new Spell("Leeching Poison"); //No GCD
     private readonly Spell ElaboratePlanningBuff = new Spell(193641);
+    private readonly Spell SurgeofToxins = new Spell(192424);
 
     #endregion
 
@@ -644,6 +645,23 @@ public class RogueAssassination
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
+            //Maintain Surge of Toxins when Vendetta is active
+            if (GetFreeComboPoints() >= 3 && Vendetta.TargetHaveBuffFromMe &&
+                ObjectManager.Target.UnitAura(SurgeofToxins.Id, ObjectManager.Me.Guid).AuraTimeLeftInMs <= 1000)
+            {
+                if (MySettings.UseDeathfromAbove && DeathfromAbove.IsSpellUsable &&
+                    DeathfromAbove.IsHostileDistanceGood)
+                {
+                    DeathfromAbove.Cast();
+                    return;
+                }
+                if (MySettings.UseEnvenom && Envenom.IsSpellUsable && Envenom.IsHostileDistanceGood)
+                {
+                    Envenom.Cast();
+                    return;
+                }
+            }
+            
             //Cast Kidney Shot when you have X combo points and
             if (ObjectManager.Me.ComboPoint > MySettings.UseKidneyShotAboveComboPoints && KidneyShot.IsSpellUsable
                 && ObjectManager.Me.Energy >= 25 && KidneyShot.IsHostileDistanceGood &&
