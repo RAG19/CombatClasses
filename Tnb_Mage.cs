@@ -27,7 +27,6 @@ public class Main : ICombatClass
     internal static float InternalAggroRange = 5.0f;
     internal static bool InternalLoop = true;
     internal static Spell InternalLightHealingSpell;
-    internal static float Version = 1.02f;
 
     #region ICombatClass Members
 
@@ -180,7 +179,7 @@ public class Main : ICombatClass
             FieldInfo field = mySettings.GetType().GetFields(bindingFlags)[i];
             Logging.WriteDebug(field.Name + " = " + field.GetValue(mySettings));
         }
-        Logging.WriteDebug("Loaded " + ObjectManager.Me.WowSpecialization() + " Combat Class " + Version.ToString("0.0###"));
+        Logging.WriteDebug("Loaded " + ObjectManager.Me.WowSpecialization() + " Combat Class.");
 
         // Last field is intentionnally ommited because it's a backing field.
     }
@@ -191,6 +190,8 @@ public class Main : ICombatClass
 public class MageArcane
 {
     private static MageArcaneSettings MySettings = MageArcaneSettings.GetSettings();
+
+    private static string Version = "7.1.0.a";
 
     #region General Timers & Variables
 
@@ -284,6 +285,8 @@ public class MageArcane
         Main.DumpCurrentSettings<MageArcaneSettings>(MySettings);
         UInt128 lastTarget = 0;
 
+        Logging.WriteDebug("Started MageArcane " + Version);
+
         while (Main.InternalLoop)
         {
             try
@@ -326,7 +329,7 @@ public class MageArcane
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
+        if (MountTask.CanUseSpeedModifiers && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -761,6 +764,8 @@ public class MageFire
 {
     private static MageFireSettings MySettings = MageFireSettings.GetSettings();
 
+    private static string Version = "7.1.0.a";
+
     #region General Timers & Variables
 
     private readonly WoWItem _firstTrinket = EquippedItems.GetEquippedItem(WoWInventorySlot.INVTYPE_TRINKET);
@@ -860,6 +865,8 @@ public class MageFire
         Main.DumpCurrentSettings<MageFireSettings>(MySettings);
         UInt128 lastTarget = 0;
 
+        Logging.WriteDebug("Started MageFire " + Version);
+
         while (Main.InternalLoop)
         {
             try
@@ -902,7 +909,7 @@ public class MageFire
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
+        if (MountTask.CanUseSpeedModifiers && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -1264,7 +1271,7 @@ public class MageFire
 
         public MageFireSettings()
         {
-            ConfigWinForm("Mage Frost Settings");
+            ConfigWinForm("Mage Fire Settings");
             /* Professions & Racials */
             //AddControlInWinForm("Use Arcane Torrent", "UseArcaneTorrent", "Professions & Racials");
             AddControlInWinForm("Use Berserking", "UseBerserking", "Professions & Racials");
@@ -1323,6 +1330,8 @@ public class MageFrost
 {
     private static MageFrostSettings MySettings = MageFrostSettings.GetSettings();
 
+    private static string Version = "7.3.0.a";
+
     #region General Timers & Variables
 
     private readonly WoWItem _firstTrinket = EquippedItems.GetEquippedItem(WoWInventorySlot.INVTYPE_TRINKET);
@@ -1372,13 +1381,16 @@ public class MageFrost
     #region Artifact Spells
 
     private readonly Spell Ebonbolt = new Spell("Ebonbolt");
+    private readonly Spell FreezingRainProc = new Spell(240555);
 
     #endregion
 
     #region Offensive Spells
 
     private readonly Spell Blizzard = new Spell("Blizzard");
+    private readonly Spell CometStorm = new Spell("Comet Storm");
     private readonly Spell Flurry = new Spell("Flurry"); //No GCD
+    private bool FlurryPrepared = false;
     private readonly Spell Frostbolt = new Spell("Frostbolt");
     private readonly Spell FrostBomb = new Spell("Frost Bomb");
     private readonly Spell FrozenTouch = new Spell("Frozen Touch");
@@ -1433,6 +1445,8 @@ public class MageFrost
         Main.DumpCurrentSettings<MageFrostSettings>(MySettings);
         UInt128 lastTarget = 0;
 
+        Logging.WriteDebug("Started MageFrost " + Version);
+
         while (Main.InternalLoop)
         {
             try
@@ -1475,7 +1489,7 @@ public class MageFrost
             CombatMode = false;
         }
 
-        if (ObjectManager.Me.GetMove && !Usefuls.PlayerUsingVehicle)
+        if (MountTask.CanUseSpeedModifiers && !Usefuls.PlayerUsingVehicle)
         {
             //Movement Buffs
             if (!Darkflight.HaveBuff) // doesn't stack
@@ -1684,12 +1698,6 @@ public class MageFrost
             {
                 TimeWarp.Cast();
             }
-            //Cast Mirror Image when you have 2 charges of Fingers of Frost.
-            if (MySettings.UseMirrorImage && MirrorImage.IsSpellUsable &&
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount == 2)
-            {
-                MirrorImage.Cast();
-            }
             //Cast Cold Snap
             int spellsOnCD = 0;
             spellsOnCD += SpellManager.IsSpellOnCooldown(FrostNova.Ids, FrostNova.CategoryId, FrostNova.StartRecoveryCategoryId) ? 1 : 0;
@@ -1717,166 +1725,144 @@ public class MageFrost
         {
             Memory.WowMemory.GameFrameLock(); // !!! WARNING - DONT SLEEP WHILE LOCKED - DO FINALLY(GameFrameUnLock()) !!!
 
-            //Use Ice Floes if you have to move //TODO: and have no instant casts to burn.
-            if (ObjectManager.Me.GetMove && !IceFloes.HaveBuff)
-            {
-                //Cast Ice Floes
-                if (MySettings.UseIceFloes && IceFloes.IsSpellUsable)
-                {
-                    IceFloes.Cast();
-                    return;
-                }
-            }
-
-            //11b. Cast Ice Lance if
+            //1. Cast Ice Lance if Winter's Chill is applied.
             if (MySettings.UseIceLance && IceLance.IsSpellUsable && IceLance.IsHostileDistanceGood &&
-                //the Winter's Chill Dot is on the Target
-                WintersChill.TargetHaveBuff)
+                WintersChill.TargetHaveBuffFromMe)
             {
                 IceLance.Cast();
                 return;
             }
-            //12b. Cast Frostbolt if
-            if (MySettings.UseFrostbolt && Frostbolt.IsSpellUsable && Frostbolt.IsHostileDistanceGood &&
-                //the Water Jet Dot is on the Target and you have less than 2 charges of Fingers of Frost.
-                WaterJet.TargetHaveBuff && ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount < 2)
-            {
-                Frostbolt.Cast();
-                return;
-            }
-
-            //1. Cast Rune of Power if talented and it is at 2 charges.
-            if (MySettings.UseRuneofPower && RuneofPower.IsSpellUsable && RuneofPower.GetSpellCharges == 2)
+            //2. Cast Rune of Power if talented and it is at 2 charges or Icy Veins is off cooldown.
+            if (MySettings.UseRuneofPower && RuneofPower.IsSpellUsable &&
+                (RuneofPower.GetSpellCharges == 2 || IcyVeins.IsSpellUsable) &&
+                CheckIceFloes())
             {
                 RuneofPower.CastAtPosition(ObjectManager.Me.Position);
                 return;
             }
-            //2. Cast Icy Veins if it is off cooldown.
+            //3. Cast Icy Veins when available.
             if (MySettings.UseIcyVeins && IcyVeins.IsSpellUsable)
             {
                 IcyVeins.Cast();
                 return;
             }
-            //3. Cast Ray of Frost if
+            //4. Cast Mirror Image when available.
+            if (MySettings.UseMirrorImage && MirrorImage.IsSpellUsable)
+            {
+                MirrorImage.Cast();
+            }
+            //5. Cast Ice Nova  after your Ice Lance cast when Winter's Chill is applied to the target.
+            if (MySettings.UseIceNova && IceNova.IsSpellUsable && IceNova.IsHostileDistanceGood &&
+                WintersChill.TargetHaveBuffFromMe)
+            {
+                IceNova.Cast();
+            }
+            //6. Cast Frozen Orb when available.
+            if (MySettings.UseFrozenOrb && FrozenOrb.IsSpellUsable && FrozenOrb.IsHostileDistanceGood &&
+                CheckIceFloes())
+            {
+                FrozenOrb.Cast();
+                return;
+            }
+            //7. Cast Ray of Frost if Icy Veins or Rune of Power is active.
             if (MySettings.UseRayofFrost && RayofFrost.IsSpellUsable && RayofFrost.IsHostileDistanceGood &&
-                //your Rune of Power is down.
-                RuneofPower.HaveBuff)
+                (IcyVeins.HaveBuff || RuneofPower.HaveBuff) &&
+                CheckIceFloes())
             {
                 RayofFrost.Cast();
                 return;
             }
-            //4. Cast Rune of Power if talented and
+            //8. Cast Rune of Power if talented, before periods where you will deal high burst damage.
             if (MySettings.UseRuneofPower && RuneofPower.IsSpellUsable && !RuneofPower.HaveBuff &&
-                //you will deal high burst damage.
                 (ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 2 ||
-                 (ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 1 && Ebonbolt.IsSpellUsable) ||
-                 FrozenOrb.IsSpellUsable))
+                (ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 1 && Ebonbolt.IsSpellUsable) ||
+                FrozenOrb.IsSpellUsable) &&
+                CheckIceFloes())
             {
                 RuneofPower.CastAtPosition(ObjectManager.Me.Position);
                 return;
             }
-            //5. Cast Ice Lance if
+            //9. Cast Flurry when you have Brain Freeze available.
+            if (MySettings.UseFlurry && Flurry.IsSpellUsable && Flurry.IsHostileDistanceGood &&
+                ObjectManager.Me.UnitAura(BrainFreezeProc.Id).IsValid &&
+                CheckIceFloes())
+            {
+                Flurry.Cast();
+                return;
+            }
+            //10. Cast Blizzard if 2+ targets are present and the Freezing Rain trait is active.
+            if (MySettings.UseBlizzard && Blizzard.IsSpellUsable && Blizzard.IsHostileDistanceGood &&
+                ObjectManager.Target.GetUnitInSpellRange(8f) >= 2 && FreezingRainProc.HaveBuff &&
+                CheckIceFloes())
+            {
+                Blizzard.CastAtPosition(ObjectManager.Target.Position);
+            }
+            //11. Cast Frost Bomb if talented and you will trigger it with atleast 1 charge of Fingers of Frost.
+            if (MySettings.UseFrostBomb && FrostBomb.IsSpellUsable && FrostBomb.IsHostileDistanceGood &&
+                !FrostBomb.TargetHaveBuffFromMe && ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 1 &&
+                CheckIceFloes())
+            {
+                FrostBomb.Cast();
+                return;
+            }
+            //12. Cast Ice Lance if you have 3 charges of Fingers of Frost.
             if (MySettings.UseIceLance && IceLance.IsSpellUsable && IceLance.IsHostileDistanceGood &&
-                //you have 3 charges of Fingers of Frost.
                 ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 3)
             {
                 IceLance.Cast();
                 return;
             }
-            //6. Cast Frost Bomb if talented and
-            if (MySettings.UseFrostBomb && FrostBomb.IsSpellUsable && FrostBomb.IsHostileDistanceGood &&
-                !FrostBomb.TargetHaveBuffFromMe &&
-                //you will trigger it with 2 charges of Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 2)
-            {
-                FrostBomb.Cast();
-                return;
-            }
-            //5b. Cast Ice Lance if
-            if (MySettings.UseIceLance && IceLance.IsSpellUsable && IceLance.IsHostileDistanceGood &&
-                //you have 2 charges of Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 2)
-            {
-                IceLance.Cast();
-                return;
-            }
-            //7. Cast Frozen Orb if it is off cooldown.
-            if (MySettings.UseFrozenOrb && FrozenOrb.IsSpellUsable && FrozenOrb.IsHostileDistanceGood)
-            {
-                FrozenOrb.Cast();
-                return;
-            }
-            //8. Cast Freeze from your Water Elemental if //TODO: check if we have to workaround to cast pet spells
-            if (MySettings.UseFreeze && Freeze.IsSpellUsable &&
-                // it will hit at least 2 adds 
-                ObjectManager.Pet.GetUnitInSpellRange(8f) >= 2)
-            {
-                Freeze.Cast();
-                return;
-            }
-            //9. Cast Frozen Touch if talented and
-            if (MySettings.UseFrozenTouch && FrozenTouch.IsSpellUsable &&
-                //you have 1 or less Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount <= 1)
-            {
-                FrozenTouch.Cast();
-                return;
-            }
-            //10. Cast Ebonbolt if it is off cooldown and
+            //13. Cast Ebonbolt without Brain Freeze.
             if (MySettings.UseEbonbolt && Ebonbolt.IsSpellUsable && Ebonbolt.IsHostileDistanceGood &&
-                //you have 1 or less Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount <= 1)
+                !ObjectManager.Me.UnitAura(BrainFreezeProc.Id).IsValid &&
+                CheckIceFloes())
             {
                 Ebonbolt.Cast();
                 return;
             }
-            //11. Cast Flurry if
-            if (MySettings.UseFlurry && Flurry.IsSpellUsable && Flurry.IsHostileDistanceGood &&
-                //Brain Freeze is active and
-                ObjectManager.Me.UnitAura(BrainFreezeProc.Id).IsValid &&
-                //you have 1 or less Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount <= 1)
+            //14. Cast Frozen Orb when available.
+            if (MySettings.UseFrozenOrb && FrozenOrb.IsSpellUsable && FrozenOrb.IsHostileDistanceGood &&
+                CheckIceFloes())
             {
-                Flurry.Cast();
+                FrozenOrb.Cast();
                 return;
             }
-            //12. Cast Water Jet from your Water Elemental if //TODO: check if we have to workaround to cast pet spells
-            if (MySettings.UseFreeze && Freeze.IsSpellUsable &&
-                //you have no charges of Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount == 0)
-            {
-                WaterJet.Cast();
-                return;
-            }
-            //13. Cast Ice Nova if talented.
-            if (MySettings.UseIceNova && IceNova.IsSpellUsable && IceNova.IsHostileDistanceGood)
+            //15. Cast Ice Nova when available.
+            if (MySettings.UseIceNova && IceNova.IsSpellUsable && IceNova.IsHostileDistanceGood &&
+                WintersChill.TargetHaveBuffFromMe)
             {
                 IceNova.Cast();
             }
-            //14. Cast Blizzard if
-            if (MySettings.UseBlizzard && Blizzard.IsSpellUsable && Blizzard.IsHostileDistanceGood &&
-                //more than 4 targets will be hit or
-                (ObjectManager.Target.GetUnitInSpellRange(8f) > 4 ||
-                 //you are talented into Arctic Gale.
-                 ArcticGale.HaveBuff))
+            //16. Cast Ice Nova if talented.
+            if (MySettings.UseCometStorm && CometStorm.IsSpellUsable && CometStorm.IsHostileDistanceGood)
             {
-                Blizzard.Cast();
+                CometStorm.Cast();
             }
-            //15. Cast Ice Lance if
+            //17. Cast Blizzard if 2+ targets are present or you are talented into Arctic Gale.
+            if (MySettings.UseBlizzard && Blizzard.IsSpellUsable && Blizzard.IsHostileDistanceGood &&
+                (ObjectManager.Target.GetUnitInSpellRange(8f) >= 2 || ArcticGale.HaveBuff) &&
+                CheckIceFloes())
+            {
+                Blizzard.CastAtPosition(ObjectManager.Target.Position);
+            }
+            //18. (Frozen Mass isn't supported)
+            //Cast Frostbolt if Glacial Spike is ready and you do not have a Brain Freeze proc while Frozen Mass (the 2-piece proc) is active. You want to fish for the Brain Freeze proc as long as possible, providing you still have time remaining on the buff to cast Glacial Spike into Flurry.
+            //19. Cast Ice Lance if you have a charge of Fingers of Frost.
             if (MySettings.UseIceLance && IceLance.IsSpellUsable && IceLance.IsHostileDistanceGood &&
-                //you have 1 charge of Fingers of Frost.
-                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount == 1)
+                ObjectManager.Me.UnitAura(FingersofFrostProc.Id).AuraCount >= 1)
             {
                 IceLance.Cast();
                 return;
             }
-            //16. Cast Glacial Spike if talented and available.
-            if (MySettings.UseGlacialSpike && GlacialSpike.IsSpellUsable && GlacialSpike.IsHostileDistanceGood)
+            //20. Cast Glacial Spike if talented and available.
+            if (MySettings.UseGlacialSpike && GlacialSpike.IsSpellUsable && GlacialSpike.IsHostileDistanceGood &&
+                CheckIceFloes())
             {
                 GlacialSpike.Cast();
             }
-            //16. Cast Frostbolt as a filler spell.
-            if (MySettings.UseFrostbolt && Frostbolt.IsSpellUsable && Frostbolt.IsHostileDistanceGood)
+            //21. Cast Frostbolt as a filler spell.
+            if (MySettings.UseFrostbolt && Frostbolt.IsSpellUsable && Frostbolt.IsHostileDistanceGood &&
+                CheckIceFloes())
             {
                 Frostbolt.Cast();
             }
@@ -1885,6 +1871,20 @@ public class MageFrost
         {
             Memory.WowMemory.GameFrameUnLock();
         }
+    }
+
+    private bool CheckIceFloes()
+    {
+        //Check Movement
+        if (!ObjectManager.Me.GetMove || IceFloes.HaveBuff)
+            return true;
+        //Cast Ice Floes
+        if (MySettings.UseIceFloes && IceFloes.IsSpellUsable)
+        {
+            IceFloes.Cast();
+            return true;
+        }
+        return false;
     }
 
     //private int GetFreeFoFCharges()
@@ -1911,6 +1911,7 @@ public class MageFrost
 
         /* Offensive Spells */
         public bool UseBlizzard = true;
+        public bool UseCometStorm = true;
         public bool UseFlurry = true;
         public bool UseFreeze = true;
         public bool UseFrostbolt = true;
@@ -1945,7 +1946,7 @@ public class MageFrost
 
         public MageFrostSettings()
         {
-            ConfigWinForm("Mage Fire Settings");
+            ConfigWinForm("Mage Frost Settings");
             /* Professions & Racials */
             //AddControlInWinForm("Use Arcane Torrent", "UseArcaneTorrent", "Professions & Racials");
             AddControlInWinForm("Use Berserking", "UseBerserking", "Professions & Racials");
@@ -1958,6 +1959,7 @@ public class MageFrost
             AddControlInWinForm("Use Ebonbolt", "UseEbonbolt", "Artifact Spells");
             /* Offensive Spells */
             AddControlInWinForm("Use Blizzard", "UseBlizzard", "Offensive Spells");
+            AddControlInWinForm("Use Comet Storm", "UseCometStorm", "Offensive Spells");
             AddControlInWinForm("Use Cold Snap when this many cooldowns will be reseted", "UseColdSnapWhenSpellsOnCD", "Offensive Spells");
             AddControlInWinForm("Use Flurry", "UseFlurry", "Offensive Spells");
             AddControlInWinForm("Use Freeze", "UseFreeze", "Offensive Spells");
